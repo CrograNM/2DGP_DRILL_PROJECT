@@ -56,10 +56,17 @@ def render_world():
 open_canvas()
 reset_world()
 # game loop
+global delayCount
+delayCount = 0
+
 while running:
     handle_events()
     update_world()
     render_world()
-    delay(0.1)
+    delay(0.01)
+    if delayCount < 10:
+        delayCount += 1
+    else :
+        delayCount = 0
 # finalization code
 close_canvas()
