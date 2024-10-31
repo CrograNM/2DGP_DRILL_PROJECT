@@ -26,6 +26,7 @@ def reset_world():
 
     global ground
     global player
+    global monster_1
     #global team
     global world
 
@@ -37,6 +38,7 @@ def reset_world():
 
     player = Player()
     world.append(player)
+
 
 
 
