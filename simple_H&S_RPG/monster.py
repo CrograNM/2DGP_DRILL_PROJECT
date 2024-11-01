@@ -88,7 +88,7 @@ class Monster:
         self.player = player  # player 참조
 
         self.state_machine = StateMachine(self)
-        self.state_machine.start(Attack)
+        self.state_machine.start(Run)
         self.state_machine.set_transitions(
             {
                 Run: {mob_close : Attack},
