@@ -6,6 +6,8 @@ from state_machine import StateMachine
 class Run:
     @staticmethod
     def enter(mob, e):
+        mob.face_dir = 1
+        mob.frame = 0
         pass
 
     @staticmethod
@@ -14,10 +16,20 @@ class Run:
 
     @staticmethod
     def do(mob):
+        if mob.delayCount < 5:
+            mob.delayCount += 1
+        else:
+            mob.delayCount = 0
+            mob.frame = (mob.frame + 1) % 6
+        #mob.x += mob.dir * 3
         pass
 
     @staticmethod
     def draw(mob):
+        if mob.face_dir == 1:
+            mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, '', mob.x, mob.y, 144, 96)
+        else:
+            mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, 'h', mob.x, mob.y, 144, 96)
         pass
 
 class Monster:
@@ -26,6 +38,7 @@ class Monster:
         self.delayCount = 0
         self.frame = 0
         self.dir = 0
+        self.face_dir = 1
         self.action = 0
         self.image_Run = load_image('monster_Run.png')
         self.state_machine = StateMachine(self)

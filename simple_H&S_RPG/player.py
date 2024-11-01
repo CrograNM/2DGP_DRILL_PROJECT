@@ -122,6 +122,7 @@ class Player:
         self.delayCount = 0
         self.frame = 0
         self.dir = 0
+        self.face_dir = 1
         self.action = 0
         self.image_Idle = load_image('character_Idle.png')
         self.image_Run = load_image('character_Run.png')
