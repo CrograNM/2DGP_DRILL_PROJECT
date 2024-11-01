@@ -29,7 +29,7 @@ class Run:
             mob.frame = (mob.frame + 1) % 12
 
             # 충분히 거리가 가까워지면 공격 모션을 진행
-            if mob.player.x - 50 < mob.x < mob.player.x + 50:
+            if mob.player.x - 80 < mob.x < mob.player.x + 80:
                 mob.state_machine.add_event(('MOB_CLOSE', 0))
             else:
                 # player.x 위치를 추적하여 mob.dir 설정
@@ -66,7 +66,7 @@ class Attack:
             mob.delayCount += 1
         else:
             mob.delayCount = 0
-            mob.frame = (mob.frame + 1) % 8
+            mob.frame = mob.frame + 1
 
         if mob.frame == 8:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
