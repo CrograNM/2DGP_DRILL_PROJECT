@@ -102,9 +102,9 @@ class Run:
     @staticmethod
     def draw(player):
         if player.face_dir == 1:
-            player.image_Run.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, '', player.x, player.y, 84, 84)
+            player.image_Run.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, '', player.x + 5, player.y, 84, 84)
         else:
-            player.image_Run.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, 'h', player.x, player.y, 84, 84)
+            player.image_Run.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, 'h', player.x - 5, player.y, 84, 84)
 
 class Player:
     def __init__(self):

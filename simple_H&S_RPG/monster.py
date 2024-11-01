@@ -39,9 +39,9 @@ class Run:
     @staticmethod
     def draw(mob):
         if mob.face_dir == -1:
-            mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, '', mob.x, mob.y, 144, 96)
+            mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
         else:
-            mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, 'h', mob.x, mob.y, 144, 96)
+            mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
         pass
 
 class Monster:
