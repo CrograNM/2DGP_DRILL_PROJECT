@@ -39,8 +39,8 @@ def reset_world():
     player = Player()
     world.append(player)
 
-    #monster = Monster()
-    #world.append(Monster)
+    monster = Monster()
+    world.append(monster)
 
 
 
