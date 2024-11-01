@@ -28,19 +28,19 @@ class Run:
             mob.delayCount = 0
             mob.frame = (mob.frame + 1) % 12
 
-            # player.x 위치를 추적하여 mob.dir 설정
-            if mob.player.x > mob.x:
-                mob.dir = 1  # player가 오른쪽에 있을 때
-                mob.face_dir = 1
-            elif mob.player.x < mob.x:
-                mob.dir = -1  # player가 왼쪽에 있을 때
-                mob.face_dir = -1
-
-            mob.x += mob.dir * 3
-
             # 충분히 거리가 가까워지면 공격 모션을 진행
             if mob.player.x - 50 < mob.x < mob.player.x + 50:
                 mob.state_machine.add_event(('MOB_CLOSE', 0))
+            else:
+                # player.x 위치를 추적하여 mob.dir 설정
+                if mob.player.x > mob.x:
+                    mob.dir = 1  # player가 오른쪽에 있을 때
+                    mob.face_dir = 1
+                elif mob.player.x < mob.x:
+                    mob.dir = -1  # player가 왼쪽에 있을 때
+                    mob.face_dir = -1
+
+                mob.x += mob.dir * 3
 
     @staticmethod
     def draw(mob):
@@ -68,7 +68,7 @@ class Attack:
             mob.delayCount = 0
             mob.frame = (mob.frame + 1) % 8
 
-        if mob.frame == 7:
+        if mob.frame == 8:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
             pass
 
