@@ -1,5 +1,6 @@
 from pico2d import load_image, get_time
 
+from player import Player
 from state_machine import time_out, space_down, right_down, right_up, left_down, left_up, start_event
 from state_machine import StateMachine
 
@@ -22,6 +23,15 @@ class Run:
         else:
             mob.delayCount = 0
             mob.frame = (mob.frame + 1) % 6
+
+            # player.x 위치를 추적하여 mob.dir 설정
+            if mob.player.x > mob.x:
+                mob.dir = 1  # player가 오른쪽에 있을 때
+                mob.face_dir = 1
+            elif mob.player.x < mob.x:
+                mob.dir = -1  # player가 왼쪽에 있을 때
+                mob.face_dir = -1
+
             mob.x += mob.dir * 3
 
         pass
@@ -35,7 +45,7 @@ class Run:
         pass
 
 class Monster:
-    def __init__(self):
+    def __init__(self, player):
         self.x, self.y = 600, 90
         self.delayCount = 0
         self.frame = 0
@@ -43,6 +53,9 @@ class Monster:
         self.face_dir = 1
         self.action = 0
         self.image_Run = load_image('monster_Run.png')
+
+        self.player = player  # player 참조
+
         self.state_machine = StateMachine(self)
         self.state_machine.start(Run)
         self.state_machine.set_transitions(
