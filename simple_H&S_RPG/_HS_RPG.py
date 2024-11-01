@@ -3,7 +3,6 @@ from pico2d import *
 from player import Player
 from ground import Ground
 
-
 # Game object class here
 # class 드래그 후 우클릭 -> 리팩터링(이동)
 
