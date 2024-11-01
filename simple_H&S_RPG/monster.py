@@ -1,7 +1,7 @@
 from pico2d import load_image, get_time
 
 from player import Player
-from state_machine import time_out, space_down, right_down, right_up, left_down, left_up, start_event
+from state_machine import mob_close
 from state_machine import StateMachine
 
 class Run:
@@ -34,6 +34,10 @@ class Run:
 
             mob.x += mob.dir * 3
 
+            # 충분히 거리가 가까워지면 공격 모션을 진행
+            if mob.player.x - 50 < mob.x < mob.player.x + 50:
+                mob.state_machine.add_event(('MOB_CLOSE', 0))
+
         pass
 
     @staticmethod
@@ -43,6 +47,7 @@ class Run:
         else:
             mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
         pass
+
 class Attack:
     @staticmethod
     def enter(mob, e):
@@ -86,7 +91,7 @@ class Monster:
         self.state_machine.start(Attack)
         self.state_machine.set_transitions(
             {
-                Run: {},
+                Run: {mob_close : Attack},
                 Attack: {}
                 # ,Attack: {}, Hit: {}
             }

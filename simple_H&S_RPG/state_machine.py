@@ -2,6 +2,8 @@
 #상태 이벤트 e = (종류, 실제값) 튜플로 정의
 from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_RIGHT, SDLK_LEFT
 
+def mob_close(e):
+    return e[0] == 'MOB_CLOSE'
 
 def space_down(e): # e가 spaceDown인지 판단? True/False
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
