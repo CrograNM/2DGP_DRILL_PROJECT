@@ -22,7 +22,7 @@ class Run:
             mob.delayCount += 1
         else:
             mob.delayCount = 0
-            mob.frame = (mob.frame + 1) % 6
+            mob.frame = (mob.frame + 1) % 12
 
             # player.x 위치를 추적하여 mob.dir 설정
             if mob.player.x > mob.x:
@@ -43,6 +43,31 @@ class Run:
         else:
             mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
         pass
+class Attack:
+    @staticmethod
+    def enter(mob, e):
+        mob.frame = 0
+        pass
+
+    @staticmethod
+    def exit(mob, e):
+        pass
+
+    @staticmethod
+    def do(mob):
+        if mob.delayCount < 5:
+            mob.delayCount += 1
+        else:
+            mob.delayCount = 0
+            mob.frame = (mob.frame + 1) % 8
+
+    @staticmethod
+    def draw(mob):
+        if mob.face_dir == -1:
+            mob.image_Attack.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
+        else:
+            mob.image_Attack.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
+        pass
 
 class Monster:
     def __init__(self, player):
@@ -53,14 +78,16 @@ class Monster:
         self.face_dir = 1
         self.action = 0
         self.image_Run = load_image('monster_Run.png')
+        self.image_Attack = load_image('monster_Attack.png')
 
         self.player = player  # player 참조
 
         self.state_machine = StateMachine(self)
-        self.state_machine.start(Run)
+        self.state_machine.start(Attack)
         self.state_machine.set_transitions(
-            {   #상태 변환 테이블 : 더블 Dict로 구현
-                Run: {}
+            {
+                Run: {},
+                Attack: {}
                 # ,Attack: {}, Hit: {}
             }
         )
