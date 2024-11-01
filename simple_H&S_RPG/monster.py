@@ -1,14 +1,18 @@
 from pico2d import load_image, get_time
 
 from player import Player
-from state_machine import mob_close
+from state_machine import mob_close, mob_attack_end
 from state_machine import StateMachine
 
 class Run:
     @staticmethod
     def enter(mob, e):
-        mob.face_dir = -1
-        mob.dir = -1
+        if mob.player.x > mob.x:
+            mob.dir = 1  # player가 오른쪽에 있을 때
+            mob.face_dir = 1
+        elif mob.player.x < mob.x:
+            mob.dir = -1  # player가 왼쪽에 있을 때
+            mob.face_dir = -1
         mob.frame = 0
         pass
 
@@ -38,8 +42,6 @@ class Run:
             if mob.player.x - 50 < mob.x < mob.player.x + 50:
                 mob.state_machine.add_event(('MOB_CLOSE', 0))
 
-        pass
-
     @staticmethod
     def draw(mob):
         if mob.face_dir == -1:
@@ -65,6 +67,10 @@ class Attack:
         else:
             mob.delayCount = 0
             mob.frame = (mob.frame + 1) % 8
+
+        if mob.frame == 7:
+            mob.state_machine.add_event(('MOB_ATTACK_END', 0))
+            pass
 
     @staticmethod
     def draw(mob):
@@ -92,7 +98,7 @@ class Monster:
         self.state_machine.set_transitions(
             {
                 Run: {mob_close : Attack},
-                Attack: {}
+                Attack: {mob_attack_end : Run}
                 # ,Attack: {}, Hit: {}
             }
         )

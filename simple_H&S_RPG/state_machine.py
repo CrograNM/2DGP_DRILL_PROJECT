@@ -5,6 +5,9 @@ from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_RIGHT, SDLK_LEFT
 def mob_close(e):
     return e[0] == 'MOB_CLOSE'
 
+def mob_attack_end(e):
+    return e[0] == 'MOB_ATTACK_END'
+
 def space_down(e): # e가 spaceDown인지 판단? True/False
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 
