@@ -22,7 +22,7 @@ class Run:
 
 class Monster:
     def __init__(self):
-        self.x, self.y = 400, 90
+        self.x, self.y = 600, 90
         self.delayCount = 0
         self.frame = 0
         self.dir = 0
