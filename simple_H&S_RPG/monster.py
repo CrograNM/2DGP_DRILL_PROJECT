@@ -3,6 +3,20 @@ from pico2d import load_image, get_time
 from player import Player
 from state_machine import mob_close, mob_attack_end
 from state_machine import StateMachine
+import game_framework
+
+# Monster Run Speed
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# Monster Action Speed
+TIME_PER_ACTION = 0.75
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION_RUN = 12
+FRAMES_PER_ACTION_ATTACK = 9
 
 class Run:
     @staticmethod
@@ -22,32 +36,28 @@ class Run:
 
     @staticmethod
     def do(mob):
-        if mob.delayCount < 5:
-            mob.delayCount += 1
+        mob.frame = (mob.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
+
+        # 충분히 거리가 가까워지면 공격 모션을 진행
+        if mob.player.x - 80 < mob.x < mob.player.x + 80:
+            mob.state_machine.add_event(('MOB_CLOSE', 0))
         else:
-            mob.delayCount = 0
-            mob.frame = (mob.frame + 1) % 12
+            # player.x 위치를 추적하여 mob.dir 설정
+            if mob.player.x > mob.x:
+                mob.dir = 1  # player가 오른쪽에 있을 때
+                mob.face_dir = 1
+            elif mob.player.x < mob.x:
+                mob.dir = -1  # player가 왼쪽에 있을 때
+                mob.face_dir = -1
 
-            # 충분히 거리가 가까워지면 공격 모션을 진행
-            if mob.player.x - 80 < mob.x < mob.player.x + 80:
-                mob.state_machine.add_event(('MOB_CLOSE', 0))
-            else:
-                # player.x 위치를 추적하여 mob.dir 설정
-                if mob.player.x > mob.x:
-                    mob.dir = 1  # player가 오른쪽에 있을 때
-                    mob.face_dir = 1
-                elif mob.player.x < mob.x:
-                    mob.dir = -1  # player가 왼쪽에 있을 때
-                    mob.face_dir = -1
-
-                mob.x += mob.dir * 3
+            mob.x += mob.dir * RUN_SPEED_PPS * game_framework.frame_time
 
     @staticmethod
     def draw(mob):
         if mob.face_dir == -1:
-            mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
+            mob.image_Run.clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
         else:
-            mob.image_Run.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
+            mob.image_Run.clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
         pass
 
 class Attack:
@@ -62,23 +72,16 @@ class Attack:
 
     @staticmethod
     def do(mob):
-        if mob.delayCount < 5:
-            mob.delayCount += 1
-        else:
-            mob.delayCount = 0
-            mob.frame = mob.frame + 1
-
-        if mob.frame == 8:
+        mob.frame = mob.frame + FRAMES_PER_ACTION_ATTACK * ACTION_PER_TIME * game_framework.frame_time
+        if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
-            pass
 
     @staticmethod
     def draw(mob):
         if mob.face_dir == -1:
-            mob.image_Attack.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
+            mob.image_Attack.clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
         else:
-            mob.image_Attack.clip_composite_draw(mob.frame * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
-        pass
+            mob.image_Attack.clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
 
 class Monster:
     def __init__(self, player):

@@ -14,7 +14,8 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # Player Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION_IDLE = 4
+FRAMES_PER_ACTION_RUN = 6
 
 class Idle:
     @staticmethod
@@ -39,20 +40,16 @@ class Idle:
 
     @staticmethod
     def do(player):
-        if player.delayCount < 5:
-            player.delayCount += 1
-        else:
-            player.delayCount = 0
-            player.frame = (player.frame + 1) % 4
+        player.frame = (player.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
         # if get_time() - player.start_time > 3:
         #     player.state_machine.add_event(('TIME_OUT', 0))
 
     @staticmethod
     def draw(player):
         if player.face_dir == 1:
-            player.image_Idle.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, '', player.x, player.y, 84, 84)
+            player.image_Idle.clip_composite_draw(int(player.frame) * 42, 0, 42, 42, 0, '', player.x, player.y, 84, 84)
         else:
-            player.image_Idle.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, 'h', player.x, player.y, 84, 84)
+            player.image_Idle.clip_composite_draw(int(player.frame) * 42, 0, 42, 42, 0, 'h', player.x, player.y, 84, 84)
 
 class Run:
     @staticmethod
@@ -70,19 +67,15 @@ class Run:
 
     @staticmethod
     def do(player):
-        if player.delayCount < 5:
-            player.delayCount += 1
-        else:
-            player.delayCount = 0
-            player.frame = (player.frame + 1) % 6
+        player.frame = (player.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
         player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
 
     @staticmethod
     def draw(player):
         if player.face_dir == 1:
-            player.image_Run.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, '', player.x + 5, player.y, 84, 84)
+            player.image_Run.clip_composite_draw(int(player.frame) * 42, 0, 42, 42, 0, '', player.x + 5, player.y, 84, 84)
         else:
-            player.image_Run.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, 'h', player.x - 5, player.y, 84, 84)
+            player.image_Run.clip_composite_draw(int(player.frame) * 42, 0, 42, 42, 0, 'h', player.x - 5, player.y, 84, 84)
 
 class Player:
     def __init__(self):
