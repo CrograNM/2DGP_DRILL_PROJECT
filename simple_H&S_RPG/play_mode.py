@@ -22,7 +22,7 @@ def handle_events():
             player.handle_event(event)
 
 
-def reset_world():
+def init():
     global running
 
     global ground
@@ -41,27 +41,29 @@ def reset_world():
     monster = Monster(player)
     game_world.add_object(monster, 1)  # 포그라운드 깊이에 그린다 (앞)
 
+def finish():
+    pass
 
-def update_world():
+def update():
     game_world.update()
 
 
-def render_world():
+def draw():
     clear_canvas()
     game_world.render()
     update_canvas()
 
 
 open_canvas()
-reset_world()
+init()
 # game loop
 global delayCount
 delayCount = 0
 
 while running:
     handle_events()
-    update_world()
-    render_world()
+    update()
+    draw()
     delay(0.01)
     if delayCount < 10:
         delayCount += 1
