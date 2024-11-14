@@ -4,6 +4,7 @@ from player import Player
 from ground import Ground
 from monster import Monster
 import game_world
+import game_framework
 
 # Game object class here
 # class 드래그 후 우클릭 -> 리팩터링(이동)
@@ -15,9 +16,9 @@ def handle_events():
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
-            running = False
+            game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
+            game_framework.quit()
         else:
             player.handle_event(event)
 
