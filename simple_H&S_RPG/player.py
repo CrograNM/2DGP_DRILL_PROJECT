@@ -1,7 +1,15 @@
-from pico2d import load_image, get_time
+from pico2d import load_image, get_time, load_font
 
 from state_machine import time_out, space_down, right_down, right_up, left_down, left_up, start_event
 from state_machine import StateMachine
+import game_framework
+
+# Player Run Speed
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 20.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 class Idle:
     @staticmethod
@@ -97,7 +105,7 @@ class Run:
         else:
             player.delayCount = 0
             player.frame = (player.frame + 1) % 6
-        player.x += player.dir * 3
+        player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
 
     @staticmethod
     def draw(player):
@@ -125,6 +133,8 @@ class Player:
                 Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, space_down: Idle}
             }
         )
+        self.font = load_font('ENCR10B.TTF', 16)
+        self.hp = 100
     def update(self):
         self.state_machine.update()
 
@@ -136,3 +146,4 @@ class Player:
 
     def draw(self):
         self.state_machine.draw()
+        self.font.draw(self.x - 60, self.y + 50, f'(HP: {self.hp})', (255, 0, 0))

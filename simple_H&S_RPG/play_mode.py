@@ -48,6 +48,7 @@ def finish():
 
 def update():
     game_world.update()
+    delay(0.01)
 
 def draw():
     clear_canvas()
