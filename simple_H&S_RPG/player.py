@@ -11,6 +11,11 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+# Player Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
+
 class Idle:
     @staticmethod
     def enter(player, e):
@@ -27,7 +32,6 @@ class Idle:
         player.frame = 0
         player.delayCount = 0
         player.start_time = get_time()
-        pass
 
     @staticmethod
     def exit(player, e):
@@ -40,9 +44,8 @@ class Idle:
         else:
             player.delayCount = 0
             player.frame = (player.frame + 1) % 4
-        if get_time() - player.start_time > 3:
-            player.state_machine.add_event(('TIME_OUT', 0))
-        pass
+        # if get_time() - player.start_time > 3:
+        #     player.state_machine.add_event(('TIME_OUT', 0))
 
     @staticmethod
     def draw(player):
@@ -50,39 +53,6 @@ class Idle:
             player.image_Idle.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, '', player.x, player.y, 84, 84)
         else:
             player.image_Idle.clip_composite_draw(player.frame * 42, 0, 42, 42, 0, 'h', player.x, player.y, 84, 84)
-
-class Sleep:
-    @staticmethod
-    def enter(player, e):
-        if start_event(e):
-            player.face_dir = -1
-            player.action = 0
-        player.frame = 0
-        player.delayCount = 0
-
-    @staticmethod
-    def exit(player, e):
-        pass
-
-    @staticmethod
-    def do(player):
-        if player.delayCount < 5:
-            player.delayCount += 1
-        else:
-            player.delayCount = 0
-            player.frame = (player.frame + 1) % 4
-        pass
-
-    @staticmethod
-    def draw(player):
-        if player.face_dir == 1:
-            player.image_Idle.clip_composite_draw(player.frame * 42, 0, 42, 42,
-                                                  3.141592 / 2, 
-                                                  '',  
-                                                  player.x - 60, player.y - 20, 84, 84)
-        else:
-            player.image_Idle.clip_composite_draw(player.frame * 42, 0, 42, 42,
-                                                  -3.141592 / 2, 'h', player.x + 60, player.y - 20, 84, 84)
 
 class Run:
     @staticmethod
@@ -125,12 +95,11 @@ class Player:
         self.image_Idle = load_image('character_Idle.png')
         self.image_Run = load_image('character_Run.png')
         self.state_machine = StateMachine(self)
-        self.state_machine.start(Sleep) 
+        self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {   #상태 변환 테이블 : 더블 Dict로 구현
-                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out: Sleep},
-                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
-                Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, space_down: Idle}
+                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run},
+                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
             }
         )
         self.font = load_font('ENCR10B.TTF', 16)
