@@ -3,6 +3,7 @@ from pico2d import *
 from player import Player
 from ground import Ground
 from monster import Monster
+import game_world
 
 # Game object class here
 # class 드래그 후 우클릭 -> 리팩터링(이동)
@@ -28,33 +29,26 @@ def reset_world():
     global player
     global monster
     #global team
-    global world
 
     running = True
-    world = []
 
     ground = Ground()
-    world.append(ground)
+    game_world.add_object(ground, 0)  # 백그라운드 깊이에 그린다 (뒤)
 
     player = Player()
-    world.append(player)
+    game_world.add_object(player, 1)  # 포그라운드 깊이에 그린다 (앞)
 
     monster = Monster(player)
-    world.append(monster)
-
-
+    game_world.add_object(monster, 1)  # 포그라운드 깊이에 그린다 (앞)
 
 
 def update_world():
-    for o in world:
-        o.update()
-    pass
+    game_world.update()
 
 
 def render_world():
     clear_canvas()
-    for o in world:
-        o.draw()
+    game_world.render()
     update_canvas()
 
 
