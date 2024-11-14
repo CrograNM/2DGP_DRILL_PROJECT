@@ -25,3 +25,7 @@ def remove_object(o):
             return # 지우는 미션은 달성, 다른 요소는 체크할 필요가 없다
 
     print('에러: 존재하지 않은 객체를 지우려는 중')
+
+def clear():
+    for layer in world:
+        layer.clear()

@@ -5,6 +5,7 @@ from ground import Ground
 from monster import Monster
 import game_world
 import game_framework
+import title_mode
 
 # Game object class here
 # class 드래그 후 우클릭 -> 리팩터링(이동)
@@ -18,10 +19,9 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            game_framework.quit()
+            game_framework.change_mode(title_mode)
         else:
             player.handle_event(event)
-
 
 def init():
     global running
@@ -43,13 +43,19 @@ def init():
     game_world.add_object(monster, 1)  # 포그라운드 깊이에 그린다 (앞)
 
 def finish():
+    game_world.clear()
     pass
 
 def update():
     game_world.update()
 
-
 def draw():
     clear_canvas()
     game_world.render()
     update_canvas()
+
+def pause():
+    pass
+
+def resume():
+    pass
