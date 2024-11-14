@@ -1,4 +1,4 @@
-from pico2d import load_image, get_time, load_font
+from pico2d import *
 
 from state_machine import time_out, space_down, right_down, right_up, left_down, left_up, start_event
 from state_machine import StateMachine
@@ -16,6 +16,8 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION_IDLE = 4
 FRAMES_PER_ACTION_RUN = 6
+
+PLAYER_SIZE = 42
 
 class Idle:
     @staticmethod
@@ -47,9 +49,11 @@ class Idle:
     @staticmethod
     def draw(player):
         if player.face_dir == 1:
-            player.image_Idle.clip_composite_draw(int(player.frame) * 42, 0, 42, 42, 0, '', player.x, player.y, 84, 84)
+            player.image_Idle.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                  0, '', player.x, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
         else:
-            player.image_Idle.clip_composite_draw(int(player.frame) * 42, 0, 42, 42, 0, 'h', player.x, player.y, 84, 84)
+            player.image_Idle.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                  0, 'h', player.x, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
 
 class Run:
     @staticmethod
@@ -73,9 +77,11 @@ class Run:
     @staticmethod
     def draw(player):
         if player.face_dir == 1:
-            player.image_Run.clip_composite_draw(int(player.frame) * 42, 0, 42, 42, 0, '', player.x + 5, player.y, 84, 84)
+            player.image_Run.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                 0, '', player.x + 5, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
         else:
-            player.image_Run.clip_composite_draw(int(player.frame) * 42, 0, 42, 42, 0, 'h', player.x - 5, player.y, 84, 84)
+            player.image_Run.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                 0, 'h', player.x - 5, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
 
 class Player:
     def __init__(self):
@@ -108,4 +114,8 @@ class Player:
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(self.x - 60, self.y + 50, f'(HP: {self.hp})', (255, 0, 0))
+        self.font.draw(10, 580, f'(HP: {self.hp})', (255, 0, 0))
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return self.x - PLAYER_SIZE*0.7, self.y - PLAYER_SIZE, self.x + PLAYER_SIZE*0.7, self.y + PLAYER_SIZE*0.5
