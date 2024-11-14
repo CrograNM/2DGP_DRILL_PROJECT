@@ -1,4 +1,4 @@
-from pico2d import load_image, get_time
+from pico2d import *
 
 from player import Player
 from state_machine import mob_close, mob_attack_end
@@ -18,9 +18,12 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION_RUN = 12
 FRAMES_PER_ACTION_ATTACK = 9
 
+MONSTER_SIZE = 48
+
 class Run:
     @staticmethod
     def enter(mob, e):
+        mob.current_state = 'Run'
         if mob.player.x > mob.x:
             mob.dir = 1  # player가 오른쪽에 있을 때
             mob.face_dir = 1
@@ -63,6 +66,7 @@ class Run:
 class Attack:
     @staticmethod
     def enter(mob, e):
+        mob.current_state = 'Attack'
         mob.frame = 0
         pass
 
@@ -85,7 +89,7 @@ class Attack:
 
 class Monster:
     def __init__(self, player):
-        self.x, self.y = 600, 90
+        self.x, self.y = 600, 95
         self.delayCount = 0
         self.frame = 0
         self.dir = 0
@@ -93,6 +97,7 @@ class Monster:
         self.action = 0
         self.image_Run = load_image('monster_Run.png')
         self.image_Attack = load_image('monster_Attack.png')
+        self.current_state = None
 
         self.player = player  # player 참조
 
@@ -115,3 +120,10 @@ class Monster:
 
     def draw(self):
         self.state_machine.draw()
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        if self.current_state == 'Run':
+            return self.x - MONSTER_SIZE*0.7, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE*0.7, self.y + MONSTER_SIZE*0.5
+        elif self.current_state == 'Attack':
+            return self.x - MONSTER_SIZE * 1.8, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE * 1.8, self.y + MONSTER_SIZE * 0.5
