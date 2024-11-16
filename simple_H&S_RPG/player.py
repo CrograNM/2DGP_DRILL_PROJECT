@@ -1,8 +1,8 @@
 from pico2d import *
-
-from state_machine import time_out, space_down, right_down, right_up, left_down, left_up, start_event
-from state_machine import StateMachine
+from state_machine import *
 import game_framework
+import game_world
+import skill
 
 # Player Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -16,6 +16,7 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION_IDLE = 4
 FRAMES_PER_ACTION_RUN = 6
+FRAMES_PER_ACTION_ATTACK = 6
 
 PLAYER_SIZE = 42
 
@@ -23,21 +24,19 @@ class Idle:
     @staticmethod
     def enter(player, e):
         if start_event(e):
-            player.action = 0
             player.face_dir = -1
         elif right_down(e) or left_up(e):
-            player.action = 0
             player.face_dir = -1
         elif left_down(e) or right_up(e):
-            player.action = 0
             player.face_dir = 1
 
         player.frame = 0
-        player.delayCount = 0
         player.start_time = get_time()
 
     @staticmethod
     def exit(player, e):
+        # if ctrl_down(e):
+            # player.skill()
         pass
 
     @staticmethod
@@ -59,10 +58,10 @@ class Run:
     @staticmethod
     def enter(player, e):
         if right_down(e) or left_up(e):  
-            player.dir, player.action = 1, 0
+            player.dir = 1
             player.face_dir = 1
         elif left_down(e) or right_up(e): 
-            player.dir, player.action = -1, 0
+            player.dir = -1
             player.face_dir = -1
 
     @staticmethod
@@ -83,6 +82,37 @@ class Run:
             player.image_Run.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
                                                  0, 'h', player.x - 5, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
 
+class Attack:
+    @staticmethod
+    def enter(player, e):
+        if right_down(e) or left_up(e):
+            player.dir = 1
+            player.face_dir = 1
+        elif left_down(e) or right_up(e):
+            player.dir = -1
+            player.face_dir = -1
+        player.frame = 0
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.x += player.face_dir * RUN_SPEED_PPS * game_framework.frame_time * 3
+        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * ACTION_PER_TIME * game_framework.frame_time)
+        if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
+             player.state_machine.add_event(('TIME_OUT', 0))
+
+    @staticmethod
+    def draw(player):
+        if player.face_dir == 1:
+            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                  0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+        else:
+            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                  0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+
 class Player:
     def __init__(self):
         self.x, self.y = 200, 90
@@ -90,19 +120,22 @@ class Player:
         self.frame = 0
         self.dir = 0
         self.face_dir = 1
-        self.action = 0
+        #self.action = 0
         self.image_Idle = load_image('resource/player/character_Idle.png')
         self.image_Run = load_image('resource/player/character_Run.png')
+        self.image_Attack = load_image('resource/player/character_SquatAttack.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {   #상태 변환 테이블 : 더블 Dict로 구현
-                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run},
-                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
+                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, ctrl_down : Attack}, #ctrl_down : Idle
+                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, ctrl_down : Attack },
+                Attack: {time_out : Idle}
             }
         )
         self.font = load_font('resource/ENCR10B.TTF', 16)
         self.hp = 100
+
     def update(self):
         self.state_machine.update()
 
@@ -125,3 +158,7 @@ class Player:
         if group == 'player:monster':
             self.hp -= 10
         pass
+
+    def skill(self, num):
+        self.skill_1 = skill.Skill_lightening(self.x, self.y)
+        game_world.add_object(self.skill_1)

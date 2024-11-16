@@ -1,6 +1,10 @@
 #이벤트 체크 함수를 정의
 #상태 이벤트 e = (종류, 실제값) 튜플로 정의
-from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_RIGHT, SDLK_LEFT
+from sdl2 import *
+
+
+def ctrl_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and (e[1].key == SDLK_LCTRL or e[1].key == SDLK_RCTRL)
 
 def mob_close(e):
     return e[0] == 'MOB_CLOSE'
