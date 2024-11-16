@@ -10,6 +10,8 @@ FRAMES_PER_ACTION_ATTACK = 10
 
 skill_lightening_width = 320
 skill_lightening_height = 64
+sx, sy = 0 , 0
+
 class Skill_lightening:
     image = None
 

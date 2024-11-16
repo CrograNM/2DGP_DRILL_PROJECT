@@ -20,6 +20,7 @@ FRAMES_PER_ACTION_RUN = 12
 FRAMES_PER_ACTION_ATTACK = 9
 
 MONSTER_SIZE = 48
+sx, sy = 0 , 0
 
 class Run:
     @staticmethod
@@ -102,7 +103,7 @@ class Monster:
                 # Monster.images['Attack'] = load_image('monster_Attack.png')
 
     def __init__(self, player):
-        self.x, self.y = 600, 95
+        self.x, self.y = 600, 108
         self.load_images()
         self.delayCount = 0
         self.frame = 0

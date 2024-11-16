@@ -128,7 +128,7 @@ class Attack:
 
 class Player:
     def __init__(self):
-        self.x, self.y = server.background.w//4, 90
+        self.x, self.y = 200, 103
         self.delayCount = 0
         self.frame = 0
         self.dir = 0
