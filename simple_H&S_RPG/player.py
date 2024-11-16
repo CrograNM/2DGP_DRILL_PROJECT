@@ -77,7 +77,8 @@ class Run:
     @staticmethod
     def do(player):
         player.frame = (player.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
-        player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
+        dx = player.dir * RUN_SPEED_PPS * game_framework.frame_time  # 이동 거리 계산
+        player.move(dx)  # 수정된 move 메서드 호출
 
     @staticmethod
     def draw(player):
@@ -101,8 +102,11 @@ class Attack:
 
     @staticmethod
     def do(player):
-        player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+
         player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * ATTACK_ACTION_PER_TIME * game_framework.frame_time)
+
+        dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        player.move(dx)
 
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
@@ -150,13 +154,18 @@ class Player:
         self.state_machine.update()
 
     def move(self, dx):
+        # 플레이어가 캔버스 내에서 움직이는 범위
+        next_x = self.x + dx  # 이동 후의 위치 계산
+
         # 플레이어가 제한 범위를 벗어났는지 확인
-        if (self.x <= self.left_limit and dx < 0) or (self.x >= self.right_limit and dx > 0):
-            # 배경을 움직이도록 서버에 신호 전달
-            server.background.move_background(dx)
+        if next_x < self.left_limit:  # 왼쪽 한계점보다 왼쪽으로 이동
+            self.x = self.left_limit  # 플레이어 위치 고정
+            server.background.move_background(dx)  # 배경만 이동
+        elif next_x > self.right_limit:  # 오른쪽 한계점보다 오른쪽으로 이동
+            self.x = self.right_limit  # 플레이어 위치 고정
+            server.background.move_background(dx)  # 배경만 이동
         else:
-            # 플레이어 이동
-            self.x += dx
+            self.x += dx  # 플레이어만 이동
 
     def handle_event(self, event):
         self.state_machine.add_event(('INPUT', event))
