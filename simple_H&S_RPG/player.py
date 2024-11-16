@@ -24,7 +24,6 @@ FRAMES_PER_ACTION_RUN = 6
 FRAMES_PER_ACTION_ATTACK = 6
 
 PLAYER_SIZE = 42
-
 sx, sy = 0 , 0
 
 class Idle:
@@ -163,8 +162,8 @@ class Player:
         self.y = clamp(20.0, self.y, server.background.h - 10.0)
 
     def handle_event(self, event):
-        if self.current_state != 'Attack':
-            self.state_machine.add_event(('INPUT', event))
+        #if self.current_state != 'Attack':
+        self.state_machine.add_event(('INPUT', event))
         pass
 
     def draw(self):
@@ -176,6 +175,7 @@ class Player:
         self.state_machine.draw()
         self.font.draw(10, 580, f'(HP: {self.hp})', (255, 0, 0))
         #draw_rectangle(*self.get_bb())
+        draw_rectangle(sx - 10, sy - 10, sx + 10, sy + 10)
 
     def get_bb(self):
         return self.x - PLAYER_SIZE*0.7, self.y - PLAYER_SIZE, self.x + PLAYER_SIZE*0.7, self.y + PLAYER_SIZE*0.5
