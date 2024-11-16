@@ -22,38 +22,39 @@ class InfiniteBackground:
         self.scaled_height = int(self.h * self.scale)
 
     def draw(self):
+        self.image.draw(self.cw//2, self.ch//2)
         # 모든 사분면 그리기
-        self.image.clip_draw_to_origin(
-            int((self.q3l - self.offset_x) % self.w),
-            int((self.q3b - self.offset_y) % self.h),
-            int(self.q3w), int(self.q3h),
-            0, 0,
-            int(self.q3w * self.scale), int(self.q3h * self.scale)
-        )
-
-        self.image.clip_draw_to_origin(
-            int((self.q2l - self.offset_x) % self.w),
-            int((self.q2b - self.offset_y) % self.h),
-            int(self.q2w), int(self.q2h),
-            0, int(self.q3h * self.scale),
-            int(self.q2w * self.scale), int(self.q2h * self.scale)
-        )
-
-        self.image.clip_draw_to_origin(
-            int((self.q4l - self.offset_x) % self.w),
-            int((self.q4b - self.offset_y) % self.h),
-            int(self.q4w), int(self.q4h),
-            int(self.q3w * self.scale), 0,
-            int(self.q4w * self.scale), int(self.q4h * self.scale)
-        )
-
-        self.image.clip_draw_to_origin(
-            int((self.q1l - self.offset_x) % self.w),
-            int((self.q1b - self.offset_y) % self.h),
-            int(self.q1w), int(self.q1h),
-            int(self.q3w * self.scale), int(self.q3h * self.scale),
-            int(self.q1w * self.scale), int(self.q1h * self.scale)
-        )
+        # self.image.clip_draw_to_origin(
+        #     int((self.q3l - self.offset_x) % self.w),
+        #     int((self.q3b - self.offset_y) % self.h),
+        #     int(self.q3w), int(self.q3h),
+        #     0, 0,
+        #     int(self.q3w * self.scale), int(self.q3h * self.scale)
+        # )
+        #
+        # self.image.clip_draw_to_origin(
+        #     int((self.q2l - self.offset_x) % self.w),
+        #     int((self.q2b - self.offset_y) % self.h),
+        #     int(self.q2w), int(self.q2h),
+        #     0, int(self.q3h * self.scale),
+        #     int(self.q2w * self.scale), int(self.q2h * self.scale)
+        # )
+        #
+        # self.image.clip_draw_to_origin(
+        #     int((self.q4l - self.offset_x) % self.w),
+        #     int((self.q4b - self.offset_y) % self.h),
+        #     int(self.q4w), int(self.q4h),
+        #     int(self.q3w * self.scale), 0,
+        #     int(self.q4w * self.scale), int(self.q4h * self.scale)
+        # )
+        #
+        # self.image.clip_draw_to_origin(
+        #     int((self.q1l - self.offset_x) % self.w),
+        #     int((self.q1b - self.offset_y) % self.h),
+        #     int(self.q1w), int(self.q1h),
+        #     int(self.q3w * self.scale), int(self.q3h * self.scale),
+        #     int(self.q1w * self.scale), int(self.q1h * self.scale)
+        # )
 
     def update(self):
         # 사분면 계산 (비율 유지)

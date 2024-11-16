@@ -28,6 +28,7 @@ PLAYER_SIZE = 42
 class Idle:
     @staticmethod
     def enter(player, e):
+        player.current_state = 'Idle'
         player.dir = 0
         if start_event(e):
             player.face_dir = -1
@@ -61,6 +62,7 @@ class Idle:
 class Run:
     @staticmethod
     def enter(player, e):
+        player.current_state = 'Run'
         if right_down(e) or left_up(e):
             player.result_dir = 1
             player.dir = 1
@@ -77,8 +79,9 @@ class Run:
     @staticmethod
     def do(player):
         player.frame = (player.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
-        dx = player.dir * RUN_SPEED_PPS * game_framework.frame_time  # 이동 거리 계산
-        player.move(dx)  # 수정된 move 메서드 호출
+        player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
+        # dx = player.dir * RUN_SPEED_PPS * game_framework.frame_time  # 이동 거리 계산
+        # player.move(dx)  # 수정된 move 메서드 호출
 
     @staticmethod
     def draw(player):
@@ -92,6 +95,7 @@ class Run:
 class Attack:
     @staticmethod
     def enter(player, e):
+        player.current_state = 'Attack'
         player.frame = 0
         player.dir = player.face_dir
         player.skill(1)
@@ -104,9 +108,9 @@ class Attack:
     def do(player):
 
         player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * ATTACK_ACTION_PER_TIME * game_framework.frame_time)
-
-        dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        player.move(dx)
+        player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        # player.move(dx)
 
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
@@ -128,6 +132,7 @@ class Player:
         self.frame = 0
         self.dir = 0
         self.face_dir = 1
+        self.current_state = None
         #self.action = 0
         self.image_Idle = load_image('resource/player/character_Idle.png')
         self.image_Run = load_image('resource/player/character_Run.png')
@@ -146,29 +151,30 @@ class Player:
         self.font = load_font('resource/ENCR10B.TTF', 16)
         self.hp = 100
 
-        self.canvas_width = get_canvas_width()  # 캔버스 너비 저장
-        self.left_limit = self.canvas_width * 0.2  # 20% 좌표
-        self.right_limit = self.canvas_width * 0.8  # 80% 좌표
+        # self.canvas_width = get_canvas_width()  # 캔버스 너비 저장
+        # self.left_limit = self.canvas_width * 0.2  # 20% 좌표
+        # self.right_limit = self.canvas_width * 0.8  # 80% 좌표
 
     def update(self):
         self.state_machine.update()
 
-    def move(self, dx):
-        # 플레이어가 캔버스 내에서 움직이는 범위
-        next_x = self.x + dx  # 이동 후의 위치 계산
-
-        # 플레이어가 제한 범위를 벗어났는지 확인
-        if next_x < self.left_limit:  # 왼쪽 한계점보다 왼쪽으로 이동
-            self.x = self.left_limit  # 플레이어 위치 고정
-            server.background.move_background(dx)  # 배경만 이동
-        elif next_x > self.right_limit:  # 오른쪽 한계점보다 오른쪽으로 이동
-            self.x = self.right_limit  # 플레이어 위치 고정
-            server.background.move_background(dx)  # 배경만 이동
-        else:
-            self.x += dx  # 플레이어만 이동
+    # def move(self, dx):
+    #     # 플레이어가 캔버스 내에서 움직이는 범위
+    #     next_x = self.x + dx  # 이동 후의 위치 계산
+    #
+    #     # 플레이어가 제한 범위를 벗어났는지 확인
+    #     if next_x < self.left_limit:  # 왼쪽 한계점보다 왼쪽으로 이동
+    #         self.x = self.left_limit  # 플레이어 위치 고정
+    #         server.background.move_background(dx)  # 배경만 이동
+    #     elif next_x > self.right_limit:  # 오른쪽 한계점보다 오른쪽으로 이동
+    #         self.x = self.right_limit  # 플레이어 위치 고정
+    #         server.background.move_background(dx)  # 배경만 이동
+    #     else:
+    #         self.x += dx  # 플레이어만 이동
 
     def handle_event(self, event):
-        self.state_machine.add_event(('INPUT', event))
+        if self.current_state != 'Attack':
+            self.state_machine.add_event(('INPUT', event))
         pass
 
     def draw(self):
