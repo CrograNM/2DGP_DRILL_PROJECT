@@ -4,6 +4,8 @@ import game_framework
 import game_world
 from skill import Skill_lightening
 
+import server
+
 # Player Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 20.0  # Km / Hour
@@ -140,8 +142,21 @@ class Player:
         self.font = load_font('resource/ENCR10B.TTF', 16)
         self.hp = 100
 
+        self.canvas_width = get_canvas_width()  # 캔버스 너비 저장
+        self.left_limit = self.canvas_width * 0.2  # 20% 좌표
+        self.right_limit = self.canvas_width * 0.8  # 80% 좌표
+
     def update(self):
         self.state_machine.update()
+
+    def move(self, dx):
+        # 플레이어가 제한 범위를 벗어났는지 확인
+        if (self.x <= self.left_limit and dx < 0) or (self.x >= self.right_limit and dx > 0):
+            # 배경을 움직이도록 서버에 신호 전달
+            server.background.move_background(dx)
+        else:
+            # 플레이어 이동
+            self.x += dx
 
     def handle_event(self, event):
         self.state_machine.add_event(('INPUT', event))

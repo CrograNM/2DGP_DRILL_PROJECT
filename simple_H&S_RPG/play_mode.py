@@ -1,11 +1,14 @@
 from pico2d import *
+import game_world
+import game_framework
 
+import server
 from player import Player
 from ground import Ground
 from monster import Monster
-import game_world
-import game_framework
 import title_mode
+
+from background import InfiniteBackground as Background
 
 # Game object class here
 # class 드래그 후 우클릭 -> 리팩터링(이동)
@@ -18,27 +21,23 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.change_mode(title_mode)
         else:
-            player.handle_event(event)
+            server.player.handle_event(event)
 
 def init():
-    global ground
-    global player
-    global monster
-    #global team
+    # ground = Ground()
+    # game_world.add_object(ground, 0)  # 백그라운드 깊이에 그린다 (뒤)
 
-    running = True
+    server.background = Background()
+    game_world.add_object(server.background, 0)
 
-    ground = Ground()
-    game_world.add_object(ground, 0)  # 백그라운드 깊이에 그린다 (뒤)
+    server.player = Player()
+    game_world.add_object(server.player, 1)  # 포그라운드 깊이에 그린다 (앞)
 
-    player = Player()
-    game_world.add_object(player, 1)  # 포그라운드 깊이에 그린다 (앞)
-
-    monster = Monster(player)
+    monster = Monster(server.player)
     game_world.add_object(monster, 1)  # 포그라운드 깊이에 그린다 (앞)
 
     #충돌 체크
-    game_world.add_collision_pair('player:monster', player, monster)
+    game_world.add_collision_pair('player:monster', server.player, monster)
     # for monster in monsters:
     #     game_world.add_collision_pair('player:monster', player, monster)
 
