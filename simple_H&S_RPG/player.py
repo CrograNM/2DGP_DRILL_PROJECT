@@ -16,6 +16,7 @@ ATTACK_SPEED_PPS = RUN_SPEED_PPS * 20
 # Player Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+ATTACK_ACTION_PER_TIME = ACTION_PER_TIME * 5
 FRAMES_PER_ACTION_IDLE = 4
 FRAMES_PER_ACTION_RUN = 6
 FRAMES_PER_ACTION_ATTACK = 6
@@ -99,7 +100,7 @@ class Attack:
     @staticmethod
     def do(player):
         player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * (ACTION_PER_TIME * 5)* game_framework.frame_time)
+        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * ATTACK_ACTION_PER_TIME * game_framework.frame_time)
 
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
@@ -161,6 +162,6 @@ class Player:
         pass
 
     def skill(self, num):
-        skill_1 = Skill_lightening(self.x, self.y)
+        skill_1 = Skill_lightening(self.x + self.dir*160, self.y, self.dir)
         # game_world.add_collision_pair('zombie:ball', None, ball)
         game_world.add_object(skill_1, 1)
