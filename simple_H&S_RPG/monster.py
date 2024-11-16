@@ -58,9 +58,9 @@ class Run:
     @staticmethod
     def draw(mob):
         if mob.face_dir == -1:
-            mob.image_Run.clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
+            mob.images['Run'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
         else:
-            mob.image_Run.clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
+            mob.images['Run'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
         pass
 
 class Attack:
@@ -83,20 +83,33 @@ class Attack:
     @staticmethod
     def draw(mob):
         if mob.face_dir == -1:
-            mob.image_Attack.clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
+            mob.images['Attack'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
         else:
-            mob.image_Attack.clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
+            mob.images['Attack'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
+
+
+animation_names = ['Run', 'Attack']
 
 class Monster:
+    images = None
+
+    def load_images(self):
+        if Monster.images == None:
+            Monster.images = {}
+            for name in animation_names:
+                Monster.images[name] = load_image("monster_"+ name + ".png")
+                # Monster.images['Attack'] = load_image('monster_Attack.png')
+
     def __init__(self, player):
         self.x, self.y = 600, 95
+        self.load_images()
         self.delayCount = 0
         self.frame = 0
         self.dir = 0
         self.face_dir = 1
         self.action = 0
-        self.image_Run = load_image('monster_Run.png')
-        self.image_Attack = load_image('monster_Attack.png')
+        # self.image_Run = load_image('monster_Run.png')
+        # self.image_Attack = load_image('monster_Attack.png')
         self.current_state = None
 
         self.player = player  # player 참조
@@ -126,4 +139,6 @@ class Monster:
         if self.current_state == 'Run':
             return self.x - MONSTER_SIZE*0.7, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE*0.7, self.y + MONSTER_SIZE*0.5
         elif self.current_state == 'Attack':
+            # 애니메이션에 따라 크기, 위치 변경이 필요함
             return self.x - MONSTER_SIZE * 1.8, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE * 1.8, self.y + MONSTER_SIZE * 0.5
+            
