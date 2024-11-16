@@ -8,7 +8,7 @@ from ground import Ground
 from monster import Monster
 import title_mode
 
-from background import InfiniteBackground as Background
+from background import Background
 
 # Game object class here
 # class 드래그 후 우클릭 -> 리팩터링(이동)
