@@ -2,7 +2,7 @@ from pico2d import *
 from state_machine import *
 import game_framework
 import game_world
-import skill
+from skill import Skill_lightening
 
 # Player Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -10,7 +10,8 @@ RUN_SPEED_KMPH = 20.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
-ATTACK_SPEED_PPS = RUN_SPEED_PPS * 3
+
+ATTACK_SPEED_PPS = RUN_SPEED_PPS * 20
 
 # Player Action Speed
 TIME_PER_ACTION = 0.5
@@ -89,6 +90,7 @@ class Attack:
     def enter(player, e):
         player.frame = 0
         player.dir = player.face_dir
+        player.skill(1)
 
     @staticmethod
     def exit(player, e):
@@ -97,7 +99,7 @@ class Attack:
     @staticmethod
     def do(player):
         player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * ACTION_PER_TIME * game_framework.frame_time)
+        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * (ACTION_PER_TIME * 5)* game_framework.frame_time)
 
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
@@ -131,7 +133,7 @@ class Player:
                        ctrl_down : Attack, ctrl_up : Attack}, #ctrl_down : Idle
                 Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
                       ctrl_down : Attack, ctrl_up : Attack},
-                Attack: {time_out: Idle, right_down : Run, left_down: Run, right_up: Idle, left_up: Idle}
+                Attack: {time_out: Idle}
             }
         )
         self.font = load_font('resource/ENCR10B.TTF', 16)
@@ -159,5 +161,6 @@ class Player:
         pass
 
     def skill(self, num):
-        self.skill_1 = skill.Skill_lightening(self.x, self.y)
-        game_world.add_object(self.skill_1)
+        skill_1 = Skill_lightening(self.x, self.y)
+        # game_world.add_collision_pair('zombie:ball', None, ball)
+        game_world.add_object(skill_1, 1)
