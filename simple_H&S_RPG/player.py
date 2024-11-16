@@ -91,8 +91,8 @@ class Player:
         self.dir = 0
         self.face_dir = 1
         self.action = 0
-        self.image_Idle = load_image('character_Idle.png')
-        self.image_Run = load_image('character_Run.png')
+        self.image_Idle = load_image('resource/player/character_Idle.png')
+        self.image_Run = load_image('resource/player/character_Run.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
@@ -101,7 +101,7 @@ class Player:
                 Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
             }
         )
-        self.font = load_font('ENCR10B.TTF', 16)
+        self.font = load_font('resource/ENCR10B.TTF', 16)
         self.hp = 100
     def update(self):
         self.state_machine.update()
@@ -119,3 +119,9 @@ class Player:
 
     def get_bb(self):
         return self.x - PLAYER_SIZE*0.7, self.y - PLAYER_SIZE, self.x + PLAYER_SIZE*0.7, self.y + PLAYER_SIZE*0.5
+
+    def handle_collision(self, group, other):
+        # fill here
+        if group == 'player:monster':
+            self.hp -= 10
+        pass

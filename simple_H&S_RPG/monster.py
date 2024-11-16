@@ -4,6 +4,7 @@ from player import Player
 from state_machine import mob_close, mob_attack_end
 from state_machine import StateMachine
 import game_framework
+import game_world
 
 # Monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -97,7 +98,7 @@ class Monster:
         if Monster.images == None:
             Monster.images = {}
             for name in animation_names:
-                Monster.images[name] = load_image("monster_"+ name + ".png")
+                Monster.images[name] = load_image("resource/monster/monster_"+ name + ".png")
                 # Monster.images['Attack'] = load_image('monster_Attack.png')
 
     def __init__(self, player):
@@ -141,4 +142,12 @@ class Monster:
         elif self.current_state == 'Attack':
             # 애니메이션에 따라 크기, 위치 변경이 필요함
             return self.x - MONSTER_SIZE * 1.8, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE * 1.8, self.y + MONSTER_SIZE * 0.5
-            
+
+    def handle_collision(self, group, other):
+        # fill here
+        # if group == 'zombie:ball':
+        #     self.size -= 100
+        #     self.y = self.size / 2 + 50
+        #     if self.size <= 0:
+        #         game_world.remove_object(self)
+        pass

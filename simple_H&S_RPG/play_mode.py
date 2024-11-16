@@ -10,10 +10,7 @@ import title_mode
 # Game object class here
 # class 드래그 후 우클릭 -> 리팩터링(이동)
 
-
 def handle_events():
-    global running
-
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -24,8 +21,6 @@ def handle_events():
             player.handle_event(event)
 
 def init():
-    global running
-
     global ground
     global player
     global monster
@@ -42,12 +37,18 @@ def init():
     monster = Monster(player)
     game_world.add_object(monster, 1)  # 포그라운드 깊이에 그린다 (앞)
 
+    #충돌 체크
+    game_world.add_collision_pair('player:monster', player, monster)
+    # for monster in monsters:
+    #     game_world.add_collision_pair('player:monster', player, monster)
+
 def finish():
     game_world.clear()
     pass
 
 def update():
     game_world.update()
+    game_world.handle_collisions()
     delay(0.01)
 
 def draw():
