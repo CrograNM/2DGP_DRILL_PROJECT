@@ -57,6 +57,7 @@ def finish():
     pause_time = 0
     paused_duration = 0
     server.time = 0
+    server.kill_count = 0
     game_world.clear()
 
 def update():

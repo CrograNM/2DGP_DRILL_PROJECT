@@ -1,6 +1,7 @@
 from random import randint
 from pico2d import *
 
+import server
 from player import Player
 from state_machine import mob_close, mob_attack_end
 from state_machine import StateMachine
@@ -158,4 +159,5 @@ class Monster:
         # fill here
         if group == 'monster:skill_1':
             game_world.remove_object(self)
+            server.kill_count += 1
         pass
