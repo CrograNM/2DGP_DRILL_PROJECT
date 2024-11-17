@@ -2,8 +2,15 @@
 #상태 이벤트 e = (종류, 실제값) 튜플로 정의
 from sdl2 import *
 
+def jump_end(e):
+    return e[0] == 'JUMP_END'
+
+def alt_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LALT
+
 def change_state_to_run(e):
     return e[0] == 'CHANGE_STATE_TO_RUN'
+
 def change_state_to_idle(e):
     return e[0] == 'CHANGE_STATE_TO_IDLE'
 

@@ -10,12 +10,12 @@ HEIGHT = 720
 
 # Player Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 20.0  # Km / Hour
+RUN_SPEED_KMPH = 40.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-ATTACK_SPEED_PPS = RUN_SPEED_PPS * 20
+ATTACK_SPEED_PPS = RUN_SPEED_PPS * 10
 
 # Player Action Speed
 TIME_PER_ACTION = 0.5
@@ -25,6 +25,7 @@ BOW_ATTACK_ACTION_PER_TIME = ACTION_PER_TIME * 2
 FRAMES_PER_ACTION_IDLE = 4
 FRAMES_PER_ACTION_RUN = 6
 FRAMES_PER_ACTION_ATTACK = 6
+FRAMES_PER_ACTION_JUMP = 8
 
 PLAYER_SIZE = 42
 sx, sy = 0 , 0
@@ -32,6 +33,8 @@ sx, sy = 0 , 0
 # 전역 변수 추가
 pause_time = 0
 paused_duration = 0
+
+on_ground = 103
 
 class Idle:
     @staticmethod
@@ -54,6 +57,8 @@ class Idle:
 
     @staticmethod
     def do(player):
+        if player.y == on_ground:
+            player.gravity = 0
         player.frame = (player.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
         # if get_time() - player.start_time > 3:
         #     player.state_machine.add_event(('TIME_OUT', 0))
@@ -86,6 +91,9 @@ class Run:
 
     @staticmethod
     def do(player):
+        if player.y == on_ground:
+            player.gravity = 0
+
         player.frame = (player.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
         player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
         # dx = player.dir * RUN_SPEED_PPS * game_framework.frame_time  # 이동 거리 계산
@@ -99,6 +107,76 @@ class Run:
         else:
             player.image_Run.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
                                                  0, 'h', player.x - 5, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
+
+class Jump_run:
+    @staticmethod
+    def enter(player, e):
+        if right_down(e):
+            player.face_dir = 1
+            player.dir = 1
+        elif left_down(e):
+            player.face_dir = -1
+            player.dir = -1
+        if alt_down(e):
+            player.gravity = 18
+        pass
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.frame = (player.frame + FRAMES_PER_ACTION_JUMP * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_JUMP
+        player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
+        player.gravity -= 1
+        if player.y <= on_ground:
+            player.gravity = 0
+            player.y = on_ground
+            player.state_machine.add_event(('JUMP_END', 0))
+
+    @staticmethod
+    def draw(player):
+        if player.face_dir == 1:
+            player.image_Jump.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                 0, '', player.x + 5, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+        else:
+            player.image_Jump.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                 0, 'h', player.x - 5, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+
+class Jump:
+    @staticmethod
+    def enter(player, e):
+        if right_down(e):
+            player.face_dir = 1
+        elif left_down(e):
+            player.face_dir = -1
+        if alt_down(e):
+            player.gravity = 18
+        player.dir = 0
+        pass
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.frame = (player.frame + FRAMES_PER_ACTION_JUMP * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_JUMP
+        player.gravity -= 1
+        if player.y <= on_ground:
+            player.gravity = 0
+            player.y = on_ground
+            player.state_machine.add_event(('JUMP_END', 0))
+
+    @staticmethod
+    def draw(player):
+        if player.face_dir == 1:
+            player.image_Jump.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                  0, '', player.x + 5, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+        else:
+            player.image_Jump.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                  0, 'h', player.x - 5, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
 
 class Attack_Sword:
     @staticmethod
@@ -171,7 +249,7 @@ class Player:
     def __init__(self):
         self.weapon = server.weapon
         self.x, self.y = 200, 103
-        self.delayCount = 0
+        self.gravity = 0
         self.frame = 0
         self.dir = 0
         self.face_dir = 1
@@ -205,9 +283,13 @@ class Player:
             self.state_machine.set_transitions(
                 {   #상태 변환 테이블 : 더블 Dict로 구현
                     Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run,
+                           alt_down : Jump,
                            ctrl_down : Attack_Sword, ctrl_up : Attack_Sword}, #ctrl_down : Idle
                     Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
+                          alt_down: Jump_run,
                           ctrl_down : Attack_Sword, ctrl_up : Attack_Sword},
+                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle},
+                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run},
                     Attack_Sword: {time_out: Idle}
                 }
             )
@@ -215,14 +297,20 @@ class Player:
             self.state_machine.set_transitions(
                 {  # 상태 변환 테이블 : 더블 Dict로 구현
                     Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run,
+                           alt_down: Jump,
                            ctrl_down: Attack_Bow, ctrl_up: Attack_Bow},  # ctrl_down : Idle
                     Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
+                          alt_down: Jump_run,
                           ctrl_down: Attack_Bow, ctrl_up: Attack_Bow},
+                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle},
+                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run},
                     Attack_Bow: {time_out: Idle}
                 }
             )
 
     def update(self):
+        self.y += self.gravity
+
         self.state_machine.update()
         self.time = get_time()
         # 캐릭터 이동 거리 제한
