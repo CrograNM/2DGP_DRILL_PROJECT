@@ -52,7 +52,8 @@ def handle_events():
                 game_framework.pop_mode()
             elif back_button.is_clicked(x, y):
                 print("Back button clicked")
-                game_framework.change_mode(title_mode)
+                game_world.clear()
+                game_framework.push_mode(title_mode)
 
 def pause():pass
 def resume():pass
