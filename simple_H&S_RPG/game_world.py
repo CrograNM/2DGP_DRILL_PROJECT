@@ -2,7 +2,7 @@
 
 # world[0] : 백그라운드 객체들 - 맨 아래에 그릴 객체들
 # world[1] : 포그라운드 객체들 - 위에 그려야 할 객체들
-world = [ [], [] ]
+world = [ [], [], [], [], []]
 
 def add_object(o, depth):
     world[depth].append(o)

@@ -7,6 +7,7 @@ from player import Player
 from ground import Ground
 from monster import Monster
 import title_mode
+import pause_mode
 
 from background import Background
 
@@ -19,7 +20,7 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            game_framework.quit()
+            game_framework.push_mode(pause_mode)
             # game_framework.change_mode(title_mode)
         else:
             server.player.handle_event(event)
