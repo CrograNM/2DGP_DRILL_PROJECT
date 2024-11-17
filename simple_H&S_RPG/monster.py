@@ -45,6 +45,7 @@ class Run:
     @staticmethod
     def do(mob):
         mob.frame = (mob.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
+        mob.ax = mob.x
 
         # 충분히 거리가 가까워지면 공격 모션을 진행
         if mob.player.x - 80 < mob.x < mob.player.x + 80:
@@ -82,6 +83,10 @@ class Attack:
     @staticmethod
     def do(mob):
         mob.frame = mob.frame + FRAMES_PER_ACTION_ATTACK * ACTION_PER_TIME * game_framework.frame_time
+        if int(mob.frame) >= (FRAMES_PER_ACTION_ATTACK - 1) / 2:
+            mob.ax = mob.x + (mob.face_dir * (FRAMES_PER_ACTION_ATTACK - 1) / 2 * 12) - (mob.face_dir * int(mob.frame)%4 * 12)
+        else :
+            mob.ax = mob.x + (mob.face_dir * int(mob.frame) * 12)
         if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
 
@@ -107,6 +112,7 @@ class Monster:
 
     def __init__(self, player):
         self.x, self.y = WIDTH//2 + randint(WIDTH//4,WIDTH//2), 108
+        self.ax, self.ay = self.x, self.y - 20
         self.load_images()
         self.delayCount = 0
         self.frame = 0
@@ -139,19 +145,17 @@ class Monster:
     def draw(self):
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
+        #draw_rectangle(self.ax - 5, self.ay - 5, self.ax + 5, self.ay + 5)
 
     def get_bb(self):
         if self.current_state == 'Run':
             return self.x - MONSTER_SIZE*0.7, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE*0.7, self.y + MONSTER_SIZE*0.5
         elif self.current_state == 'Attack':
             # 애니메이션에 따라 크기, 위치 변경이 필요함
-            return self.x - MONSTER_SIZE * 1.8, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE * 1.8, self.y + MONSTER_SIZE * 0.5
+            return self.ax - 5, self.ay - 5, self.ax + 5, self.ay + 5
 
     def handle_collision(self, group, other):
         # fill here
-        # if group == 'zombie:ball':
-        #     self.size -= 100
-        #     self.y = self.size / 2 + 50
-        #     if self.size <= 0:
-        #         game_world.remove_object(self)
+        if group == 'monster:skill_1':
+            game_world.remove_object(self)
         pass

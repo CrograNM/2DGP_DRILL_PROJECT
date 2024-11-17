@@ -101,7 +101,7 @@ class Attack_Sword:
         player.current_state = 'Attack'
         player.frame = 0
         player.dir = player.face_dir
-        player.skill(1)
+        player.skill_1(1)
 
     @staticmethod
     def exit(player, e):
@@ -219,15 +219,18 @@ class Player:
         # draw_rectangle(sx - 10, sy - 10, sx + 10, sy + 10)
 
     def get_bb(self):
-        return self.x - PLAYER_SIZE*0.7, self.y - PLAYER_SIZE, self.x + PLAYER_SIZE*0.7, self.y + PLAYER_SIZE*0.5
-
+        if self.current_state != 'Attack':
+            return self.x - PLAYER_SIZE*0.7, self.y - PLAYER_SIZE, self.x + PLAYER_SIZE*0.7, self.y + PLAYER_SIZE*0.5
+        else:
+            return 0, 0, 0, 0
     def handle_collision(self, group, other):
         # fill here
         if group == 'player:monster':
             self.hp -= 10
         pass
 
-    def skill(self, num):
+    def skill_1(self, num):
         skill_1 = Skill_lightening(self.x + self.dir*160, self.y, self.dir)
         # game_world.add_collision_pair('zombie:ball', None, ball)
+        game_world.add_collision_pair('monster:skill_1', None, skill_1)
         game_world.add_object(skill_1, 1)

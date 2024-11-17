@@ -38,9 +38,12 @@ class Skill_lightening:
             game_world.remove_object(self)
 
     def get_bb(self):
-        return (self.x - skill_lightening_width / 2, self.y - skill_lightening_height / 2,
-                self.x + skill_lightening_width / 2, self.y + skill_lightening_height / 2)
-        pass
+        if int(self.frame) == 2:
+            return (self.x - skill_lightening_width / 2, self.y - skill_lightening_height / 2,
+                    self.x + skill_lightening_width / 2, self.y + skill_lightening_height / 2)
+        else :
+            return 0,0,0,0
+
 
     def handle_collision(self, group, other):
         pass
