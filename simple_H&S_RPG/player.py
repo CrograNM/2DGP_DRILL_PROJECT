@@ -35,6 +35,7 @@ pause_time = 0
 paused_duration = 0
 
 on_ground = 103
+gravity_set = 15
 
 class Idle:
     @staticmethod
@@ -118,7 +119,7 @@ class Jump_run:
             player.face_dir = -1
             player.dir = -1
         if alt_down(e):
-            player.gravity = 18
+            player.gravity = gravity_set
         pass
 
     @staticmethod
@@ -152,7 +153,7 @@ class Jump:
         elif left_down(e):
             player.face_dir = -1
         if alt_down(e):
-            player.gravity = 18
+            player.gravity = gravity_set
         player.dir = 0
         pass
 

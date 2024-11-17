@@ -18,7 +18,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # Monster Action Speed
 TIME_PER_ACTION = 0.75
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION_RUN = 12
+FRAMES_PER_ACTION_IDLE = 4
 FRAMES_PER_ACTION_ATTACK = 9
 
 MONSTER_SIZE = 48
@@ -29,7 +29,7 @@ HEIGHT = 720
 class Idle:
     @staticmethod
     def enter(mob, e):
-        mob.current_state = 'Run'
+        mob.current_state = 'Idle'
         if mob.player.x > mob.x:
             mob.dir = 1  # player가 오른쪽에 있을 때
             mob.face_dir = 1
@@ -45,28 +45,14 @@ class Idle:
 
     @staticmethod
     def do(mob):
-        mob.frame = (mob.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
-
-        # 충분히 거리가 가까워지면 공격 모션을 진행
-        if mob.player.x - 80 < mob.x < mob.player.x + 80:
-            mob.state_machine.add_event(('MOB_CLOSE', 0))
-        else:
-            # player.x 위치를 추적하여 mob.dir 설정
-            if mob.player.x > mob.x:
-                mob.dir = 1  # player가 오른쪽에 있을 때
-                mob.face_dir = 1
-            elif mob.player.x < mob.x:
-                mob.dir = -1  # player가 왼쪽에 있을 때
-                mob.face_dir = -1
-
-            # mob.x += mob.dir * RUN_SPEED_PPS * game_framework.frame_time
+        mob.frame = (mob.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
 
     @staticmethod
     def draw(mob):
-        if mob.face_dir == -1:
-            mob.images['Run'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144 * 2, 96 * 2)
+        if mob.face_dir == 1:
+            mob.images['Idle'].clip_composite_draw(int(mob.frame) * 67, 0, 67, 50, 0, '', mob.x, mob.y, 67 * 4, 50 * 4)
         else:
-            mob.images['Run'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144 * 2, 96 * 2)
+            mob.images['Idle'].clip_composite_draw(int(mob.frame) * 67, 0, 67, 50, 0, 'h', mob.x, mob.y, 67 * 4, 50 * 4)
         pass
 
 class Attack:
@@ -98,7 +84,8 @@ class Attack:
             mob.images['Attack'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144 * 2, 96 * 2)
 
 
-animation_names = ['Run', 'Attack']
+animation_names = ['Idle', 'Attack']
+# 100, 86, frames = 4
 
 class Boss:
     images = None
@@ -107,11 +94,11 @@ class Boss:
         if Boss.images == None:
             Boss.images = {}
             for name in animation_names:
-                Boss.images[name] = load_image("resource/monster/monster_"+ name + ".png")
+                Boss.images[name] = load_image("resource/boss/" + name + ".png")
                 # Monster.images['Attack'] = load_image('monster_Attack.png')
 
     def __init__(self, player):
-        self.x, self.y = WIDTH//2 + randint(WIDTH//4,WIDTH//2), 108
+        self.x, self.y = WIDTH//2 + 450, 158
         self.ax, self.ay = self.x, self.y - 20
         self.load_images()
         self.delayCount = 0
@@ -119,6 +106,9 @@ class Boss:
         self.dir = 0
         self.face_dir = 1
         self.action = 0
+        self.hp = 100
+
+        self.font = load_font('resource/ENCR10B.TTF', 16)
         # self.image_Run = load_image('monster_Run.png')
         # self.image_Attack = load_image('monster_Attack.png')
         self.current_state = None
@@ -144,11 +134,12 @@ class Boss:
 
     def draw(self):
         self.state_machine.draw()
+        self.font.draw(self.x - 15, self.y + 100, f'{self.hp}', (255, 0, 0))
         draw_rectangle(*self.get_bb())
         #draw_rectangle(self.ax - 5, self.ay - 5, self.ax + 5, self.ay + 5)
 
     def get_bb(self):
-        if self.current_state == 'Run':
+        if self.current_state == 'Idle':
             return self.x - MONSTER_SIZE*0.7, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE*0.7, self.y + MONSTER_SIZE*0.5
         elif self.current_state == 'Attack':
             # 애니메이션에 따라 크기, 위치 변경이 필요함
