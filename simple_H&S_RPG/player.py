@@ -361,7 +361,7 @@ class Player:
         pass
 
     def skill_1(self, num):
-        skill_1 = Skill_lightening(self.x + self.dir*160, self.y - 10, self.dir)
+        skill_1 = Skill_lightening(self.x + self.dir*180, self.y - 10, self.dir)
         # game_world.add_collision_pair('zombie:ball', None, ball)
         game_world.add_collision_pair('monster:skill_1', None, skill_1)
         game_world.add_object(skill_1, 1)

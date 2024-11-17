@@ -25,7 +25,7 @@ class Skill_lightening:
         self.frame = 0
         self.damage = 50
         if Skill_lightening.image == None:
-            Skill_lightening.image = load_image('resource/skill/skill_lightening.png')
+            Skill_lightening.image = load_image('resource/skill/skill_lightening_2.png')
         self.x, self.y, self.dir = x, y, dir
 
     def draw(self):
