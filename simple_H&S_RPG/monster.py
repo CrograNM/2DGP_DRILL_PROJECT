@@ -1,3 +1,4 @@
+from random import randint
 from pico2d import *
 
 from player import Player
@@ -21,6 +22,8 @@ FRAMES_PER_ACTION_ATTACK = 9
 
 MONSTER_SIZE = 48
 # sx, sy = 0 , 0
+WIDTH = 1280
+HEIGHT = 720
 
 class Run:
     @staticmethod
@@ -103,7 +106,7 @@ class Monster:
                 # Monster.images['Attack'] = load_image('monster_Attack.png')
 
     def __init__(self, player):
-        self.x, self.y = 600, 108
+        self.x, self.y = WIDTH//2 + randint(WIDTH//4,WIDTH//2), 108
         self.load_images()
         self.delayCount = 0
         self.frame = 0
