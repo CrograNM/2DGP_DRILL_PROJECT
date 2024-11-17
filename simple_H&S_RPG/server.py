@@ -7,3 +7,4 @@ weapon = None
 time = None
 start_time = 0
 kill_count = 0
+spawn_boss_count = 0

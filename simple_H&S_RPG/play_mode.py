@@ -6,6 +6,7 @@ import server
 from player import Player
 from ground import Ground
 from monster import Monster
+from boss import Boss
 import title_mode
 import pause_mode
 
@@ -14,6 +15,13 @@ from background import Background
 # 전역 변수 추가
 pause_time = 0
 paused_duration = 0
+
+server.spawn_boss_count = 0
+def spawn_boss():
+    boss = Boss(server.player)
+    game_world.add_object(boss, 1)  # 포그라운드 깊이에 추가
+    game_world.add_collision_pair('player:boss', server.player, boss)
+    game_world.add_collision_pair('monster:skill_1', boss, None)
 
 last_spawn_time = 0
 def spawn_monster():
@@ -67,6 +75,9 @@ def update():
         server.time = get_adjusted_time()
     if server.time > 10:
         mode = 'boss'
+        if server.spawn_boss_count == 0:
+            spawn_boss()
+            server.spawn_boss_count += 1
 
     game_world.update()
     game_world.handle_collisions()
