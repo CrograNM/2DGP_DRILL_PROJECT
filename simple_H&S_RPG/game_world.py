@@ -58,3 +58,12 @@ def handle_collisions():
                 if collide(a, b):
                     a.handle_collision(group, b)
                     b.handle_collision(group, a)
+
+
+def objects_at_depth(depth):
+    # 특정 depth의 객체 리스트 반환
+    if 0 <= depth < len(world):
+        return world[depth]
+    else:
+        print(f"에러: 잘못된 depth 접근 - {depth}")
+        return []

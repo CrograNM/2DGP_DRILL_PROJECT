@@ -143,9 +143,13 @@ class Player:
 
         self.font = load_font('resource/ENCR10B.TTF', 16)
 
-        self.image_Idle = load_image('resource/player/character_Idle.png')
-        self.image_Run = load_image('resource/player/character_Run.png')
-        self.image_Attack = load_image('resource/player/character_SquatAttack.png')
+        self.image_Idle = load_image('resource/player/sword_Idle.png')
+        self.image_Run = load_image('resource/player/sword_Run.png')
+        self.image_Attack = load_image('resource/player/sword_SquatAttack.png')
+        if server.weapon == 'Bow':
+            self.image_Idle = load_image('resource/player/bow_Idle.png')
+            self.image_Run = load_image('resource/player/bow_Run.png')
+            self.image_Attack = load_image('resource/player/bow_Attack.png')
 
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
