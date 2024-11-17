@@ -11,8 +11,10 @@ import pause_mode
 
 from background import Background
 
-# Game object class here
-# class 드래그 후 우클릭 -> 리팩터링(이동)
+# 전역 변수 추가
+pause_time = 0
+paused_duration = 0
+time_offset = 0
 
 last_spawn_time = 0
 def spawn_monster():
@@ -49,12 +51,14 @@ def init():
     game_world.add_object(server.player, 1)  # 포그라운드 깊이에 그린다 (앞)
 
 def finish():
+    server.time = 0
     game_world.clear()
 
 def update():
     spawn_monster()
     game_world.update()
     game_world.handle_collisions()
+    server.time = get_adjusted_time()
     delay(0.01)
 
 def draw():
@@ -63,7 +67,17 @@ def draw():
     update_canvas()
 
 def pause():
+    global pause_time
+    pause_time = get_time()  # 일시정지 시점 저장
     pass
 
 def resume():
+    global pause_time, paused_duration
+    if pause_time != 0:
+        paused_duration += get_time() - pause_time  # 누적 일시정지 시간 계산
+        pause_time = 0
     pass
+
+# 시간을 보정하여 반환하는 함수
+def get_adjusted_time():
+    return get_time() - paused_duration

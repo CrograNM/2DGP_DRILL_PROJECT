@@ -28,6 +28,10 @@ FRAMES_PER_ACTION_ATTACK = 6
 PLAYER_SIZE = 42
 sx, sy = 0 , 0
 
+# 전역 변수 추가
+pause_time = 0
+paused_duration = 0
+
 class Idle:
     @staticmethod
     def enter(player, e):
@@ -133,6 +137,7 @@ class Attack_Bow:
 
 class Player:
     def __init__(self):
+        server.time = 0
         self.weapon = server.weapon
         self.x, self.y = 200, 103
         self.delayCount = 0
@@ -186,7 +191,7 @@ class Player:
 
     def update(self):
         self.state_machine.update()
-
+        self.time = get_time()
         # 캐릭터 이동 거리 제한
         if self.x < 10:
             self.x = 10
@@ -210,6 +215,8 @@ class Player:
         #HP
         self.ui_hp.draw(100, HEIGHT - 50, 200, 100)
         self.font.draw(100 + 10, HEIGHT - 17, f'HP: {self.hp}', (255, 0, 0))
+        #TIME
+        self.font.draw(WIDTH - 100, HEIGHT - 17, f'time: {server.time}', (0, 0, 255))
 
         # 카메라 비활성화
         # global sx          
@@ -223,9 +230,10 @@ class Player:
             return self.x - PLAYER_SIZE*0.7, self.y - PLAYER_SIZE, self.x + PLAYER_SIZE*0.7, self.y + PLAYER_SIZE*0.5
         else:
             return 0, 0, 0, 0
+
     def handle_collision(self, group, other):
         # fill here
-        if group == 'player:monster':
+        if group == 'player:monster_attack':
             self.hp -= 10
         pass
 

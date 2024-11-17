@@ -16,6 +16,8 @@ def draw_thick_rectangle(x1, y1, x2, y2, thickness):
         draw_rectangle(x1 - i, y1 - i, x2 + i, y2 + i)
 
 def init():
+    server.time = 0
+
     global background
     global start_button
     global sword_button

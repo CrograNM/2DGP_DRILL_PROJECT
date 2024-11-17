@@ -4,3 +4,4 @@
 player = None
 background = None
 weapon = None
+time = None
