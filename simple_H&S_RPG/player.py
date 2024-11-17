@@ -55,10 +55,10 @@ class Idle:
     def draw(player):
         if player.face_dir == 1:
             player.image_Idle.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, '', sx, sy, PLAYER_SIZE*2, PLAYER_SIZE*2)
+                                                  0, '', player.x, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
         else:
             player.image_Idle.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, 'h', sx, sy, PLAYER_SIZE*2, PLAYER_SIZE*2)
+                                                  0, 'h', player.x, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
 
 class Run:
     @staticmethod
@@ -88,10 +88,10 @@ class Run:
     def draw(player):
         if player.face_dir == 1:
             player.image_Run.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                 0, '', sx + 5, sy, PLAYER_SIZE*2, PLAYER_SIZE*2)
+                                                 0, '', player.x + 5, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
         else:
             player.image_Run.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                 0, 'h', sx - 5, sy, PLAYER_SIZE*2, PLAYER_SIZE*2)
+                                                 0, 'h', player.x - 5, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
 
 class Attack:
     @staticmethod
@@ -121,10 +121,10 @@ class Attack:
     def draw(player):
         if player.face_dir == 1:
             player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, '', sx, sy, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+                                                  0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
         else:
             player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, 'h', sx, sy, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+                                                  0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
 
 class Player:
     def __init__(self):
@@ -158,8 +158,15 @@ class Player:
     def update(self):
         self.state_machine.update()
 
-        self.x = clamp(10.0, self.x, server.background.w - 10.0)
-        self.y = clamp(20.0, self.y, server.background.h - 10.0)
+        # 캐릭터 이동 거리 제한
+        if self.x < 10:
+            self.x = 10
+        elif self.x > 1280 - 10:
+            self.x = 1270
+            
+        # 카메라 비활성화
+        # self.x = clamp(10.0, self.x, server.background.w - 10.0)
+        # self.y = clamp(20.0, self.y, server.background.h - 10.0)
 
     def handle_event(self, event):
         #if self.current_state != 'Attack':
@@ -167,15 +174,16 @@ class Player:
         pass
 
     def draw(self):
-        global sx
-        global sy
-        sx = self.x - server.background.window_left
-        sy = self.y - server.background.window_bottom
-
         self.state_machine.draw()
         self.font.draw(10, 580, f'(HP: {self.hp})', (255, 0, 0))
-        #draw_rectangle(*self.get_bb())
-        draw_rectangle(sx - 10, sy - 10, sx + 10, sy + 10)
+        draw_rectangle(*self.get_bb())
+
+        # 카메라 비활성화
+        # global sx          
+        # global sy
+        # sx = self.x - server.background.window_left
+        # sy = self.y - server.background.window_bottom
+        # draw_rectangle(sx - 10, sy - 10, sx + 10, sy + 10)
 
     def get_bb(self):
         return self.x - PLAYER_SIZE*0.7, self.y - PLAYER_SIZE, self.x + PLAYER_SIZE*0.7, self.y + PLAYER_SIZE*0.5

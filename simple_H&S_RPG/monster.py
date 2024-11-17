@@ -20,7 +20,7 @@ FRAMES_PER_ACTION_RUN = 12
 FRAMES_PER_ACTION_ATTACK = 9
 
 MONSTER_SIZE = 48
-sx, sy = 0 , 0
+# sx, sy = 0 , 0
 
 class Run:
     @staticmethod
