@@ -5,6 +5,9 @@ import game_world
 from skill import Skill_lightening
 import server
 
+WIDTH = 1280
+HEIGHT = 720
+
 # Player Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 20.0  # Km / Hour
@@ -141,7 +144,9 @@ class Player:
         self.hp_max = 100
         self.hp = 100
 
+        # UI 리소스
         self.font = load_font('resource/ENCR10B.TTF', 16)
+        self.ui_hp = load_image('resource/ui/HP.png')
 
         self.image_Idle = load_image('resource/player/sword_Idle.png')
         self.image_Run = load_image('resource/player/sword_Run.png')
@@ -199,8 +204,12 @@ class Player:
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(10, 580, f'(HP: {self.hp})', (255, 0, 0))
         draw_rectangle(*self.get_bb())
+
+        #UI
+        #HP
+        self.ui_hp.draw(100, HEIGHT - 50, 200, 100)
+        self.font.draw(100 + 10, HEIGHT - 17, f'HP: {self.hp}', (255, 0, 0))
 
         # 카메라 비활성화
         # global sx          
