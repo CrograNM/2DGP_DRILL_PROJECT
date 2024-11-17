@@ -17,11 +17,18 @@ def update():
         for o in layer:
             o.update()
 
+def remove_collision_object(o):
+    for pairs in collision_pairs.values():
+        if o in pairs[0]:
+            pairs[0].remove(o)
+        if o in pairs[1]:
+            pairs[1].remove(o)
 
 def remove_object(o):
     for layer in world:
         if o in layer:
             layer.remove(o)
+            remove_collision_object(o)
             return # 지우는 미션은 달성, 다른 요소는 체크할 필요가 없다
 
     print('에러: 존재하지 않은 객체를 지우려는 중')

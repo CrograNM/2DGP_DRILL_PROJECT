@@ -66,6 +66,7 @@ def handle_events():
             x, y = event.x, (HEIGHT - event.y)  # Pico2D에서 y축 방향 보정
             if start_button.is_clicked(x, y):
                 print("Start button clicked")
+                server.kill_count = 0
                 server.start_time = get_time()
                 game_framework.change_mode(play_mode)
             else :
