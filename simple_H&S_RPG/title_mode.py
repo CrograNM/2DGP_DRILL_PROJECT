@@ -9,7 +9,7 @@ from title_pannel import Background, Start_Button, Sword_Button, Bow_Button
 WIDTH = 1280
 HEIGHT = 720
 
-server.weapon = 'Sword'
+server.weapon = 'Bow'
 
 def draw_thick_rectangle(x1, y1, x2, y2, thickness):
     for i in range(thickness):
