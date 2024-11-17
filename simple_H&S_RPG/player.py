@@ -364,10 +364,12 @@ class Player:
         skill_1 = Skill_lightening(self.x + self.dir*180, self.y - 10, self.dir)
         # game_world.add_collision_pair('zombie:ball', None, ball)
         game_world.add_collision_pair('monster:skill_1', None, skill_1)
+        game_world.add_collision_pair('boss:skill_1', None, skill_1)
         game_world.add_object(skill_1, 1)
 
     def skill_2(self, num):
         skill_2 = Skill_bow(self.x + self.dir*20, self.y - 20, self.dir)
         # game_world.add_collision_pair('zombie:ball', None, ball)
         game_world.add_collision_pair('monster:skill_1', None, skill_2) # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
+        game_world.add_collision_pair('boss:skill_1', None, skill_2)
         game_world.add_object(skill_2, 1)

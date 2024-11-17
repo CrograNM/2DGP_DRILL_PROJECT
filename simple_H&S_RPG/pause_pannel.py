@@ -25,6 +25,9 @@ class Button:
         return (self.x - self.width//2 <= mx <= self.x + self.width//2
                 and self.y - self.height//2 <= my <= self.y + self.height//2)
 
+    def update(self):
+        pass
+
 
 class Resume_Button(Button):
     def __init__(self, x, y, width, height):
@@ -42,4 +45,5 @@ class Back_Button(Button):
 
     def draw(self):
         self.image.draw(self.x, self.y)
+
 

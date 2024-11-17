@@ -156,7 +156,8 @@ class Boss:
 
     def handle_collision(self, group, other):
         # fill here
-        if group == 'monster:skill_1':
+        if group == 'boss:skill_1':
             game_world.remove_object(self)
             server.kill_count += 1
+            server.boss_dead = True
         pass

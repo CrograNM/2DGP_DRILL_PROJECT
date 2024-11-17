@@ -67,7 +67,9 @@ def handle_events():
             if start_button.is_clicked(x, y):
                 print("Start button clicked")
                 server.kill_count = 0
+                server.spawn_boss_count = 0
                 server.start_time = get_time()
+                server.boss_dead = False
                 game_world.clear_all()
                 game_framework.change_mode(play_mode)
             else :
