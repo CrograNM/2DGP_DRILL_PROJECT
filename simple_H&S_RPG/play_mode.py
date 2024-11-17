@@ -14,6 +14,8 @@ import title_mode
 import pause_mode
 import result_mode
 
+BOSS_APPEAR_TIME = 1 # 1초 : 테스트용, 나중에 30초, 60초 등으로 설정
+
 # 전역 변수 추가
 pause_time = 0
 paused_duration = 0
@@ -75,7 +77,7 @@ def update():
     if mode == 'monster':
         spawn_monster()
         server.time = get_adjusted_time()
-    if server.time > 1:
+    if server.time > BOSS_APPEAR_TIME:
         mode = 'boss'
         if server.spawn_boss_count == 0:
             spawn_boss()

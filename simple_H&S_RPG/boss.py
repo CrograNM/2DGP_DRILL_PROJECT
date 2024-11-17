@@ -49,7 +49,7 @@ class Idle:
         mob.frame = (mob.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
 
         # 충분히 거리가 가까워지면 공격 모션을 진행
-        if mob.delayCount > 200:
+        if mob.delayCount > 300:
             mob.delayCount = 0
             mob.state_machine.add_event(('MOB_CLOSE', 0))
 
@@ -120,7 +120,7 @@ class Boss:
         self.player = player  # player 참조
 
         self.state_machine = StateMachine(self)
-        self.state_machine.start(Attack)
+        self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
                 Idle: {mob_close : Attack},
