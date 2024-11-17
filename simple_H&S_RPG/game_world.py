@@ -4,6 +4,10 @@
 # world[1] : 포그라운드 객체들 - 위에 그려야 할 객체들
 world = [ [], [], [], [], []]
 
+def clear_all():
+    clear()
+    collision_pairs.clear()
+
 def add_object(o, depth):
     world[depth].append(o)
 

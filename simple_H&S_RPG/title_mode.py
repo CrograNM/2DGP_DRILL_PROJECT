@@ -9,7 +9,7 @@ from title_pannel import Background, Start_Button, Sword_Button, Bow_Button
 WIDTH = 1280
 HEIGHT = 720
 
-server.weapon = 'Bow'
+server.weapon = 'Sword'
 
 def draw_thick_rectangle(x1, y1, x2, y2, thickness):
     for i in range(thickness):
@@ -68,6 +68,7 @@ def handle_events():
                 print("Start button clicked")
                 server.kill_count = 0
                 server.start_time = get_time()
+                game_world.clear_all()
                 game_framework.change_mode(play_mode)
             else :
                 if sword_button.is_clicked(x, y):

@@ -36,7 +36,7 @@ class Start_Button(Button):
 class Sword_Button(Button):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
-        self.image = load_image('resource/title_mode/sword_button_100_100.png')
+        self.image = load_image('resource/title_mode/sword_button_100_100_2.png')
 
     def draw(self):
         self.image.draw(self.x, self.y)
@@ -45,7 +45,7 @@ class Sword_Button(Button):
 class Bow_Button(Button):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
-        self.image = load_image('resource/title_mode/bow_button_100_100.png')
+        self.image = load_image('resource/title_mode/bow_button_100_100_2.png')
 
     def draw(self):
         self.image.draw(self.x, self.y)
