@@ -14,7 +14,6 @@ from background import Background
 # 전역 변수 추가
 pause_time = 0
 paused_duration = 0
-time_offset = 0
 
 last_spawn_time = 0
 def spawn_monster():
@@ -44,6 +43,9 @@ def handle_events():
             server.player.handle_event(event)
 
 def init():
+    global mode
+    mode = 'monster'
+
     server.background = Background()
     game_world.add_object(server.background, 0)
 
@@ -51,14 +53,22 @@ def init():
     game_world.add_object(server.player, 1)  # 포그라운드 깊이에 그린다 (앞)
 
 def finish():
+    global pause_time, paused_duration
+    pause_time = 0
+    paused_duration = 0
     server.time = 0
     game_world.clear()
 
 def update():
-    spawn_monster()
+    global mode
+    if mode == 'monster':
+        spawn_monster()
+        server.time = get_adjusted_time()
+    if server.time > 10:
+        mode = 'boss'
+
     game_world.update()
     game_world.handle_collisions()
-    server.time = get_adjusted_time()
     delay(0.01)
 
 def draw():
@@ -68,16 +78,19 @@ def draw():
 
 def pause():
     global pause_time
-    pause_time = get_time()  # 일시정지 시점 저장
+    pause_time = current_time()  # 일시정지 시점 저장
     pass
 
 def resume():
     global pause_time, paused_duration
     if pause_time != 0:
-        paused_duration += get_time() - pause_time  # 누적 일시정지 시간 계산
+        paused_duration += current_time() - pause_time  # 누적 일시정지 시간 계산
         pause_time = 0
     pass
 
 # 시간을 보정하여 반환하는 함수
 def get_adjusted_time():
-    return get_time() - paused_duration
+    return current_time() - paused_duration
+
+def current_time():
+    return get_time() - server.start_time

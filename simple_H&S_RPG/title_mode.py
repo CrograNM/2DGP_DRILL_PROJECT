@@ -1,4 +1,4 @@
-from pico2d import load_image, get_events, clear_canvas, update_canvas, draw_rectangle
+from pico2d import load_image, get_events, clear_canvas, update_canvas, draw_rectangle, get_time
 from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT
 import game_framework
 import game_world
@@ -66,6 +66,7 @@ def handle_events():
             x, y = event.x, (HEIGHT - event.y)  # Pico2D에서 y축 방향 보정
             if start_button.is_clicked(x, y):
                 print("Start button clicked")
+                server.start_time = get_time()
                 game_framework.change_mode(play_mode)
             else :
                 if sword_button.is_clicked(x, y):

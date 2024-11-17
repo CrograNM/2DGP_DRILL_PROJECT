@@ -5,3 +5,4 @@ player = None
 background = None
 weapon = None
 time = None
+start_time = 0

@@ -137,7 +137,7 @@ class Attack_Bow:
 
 class Player:
     def __init__(self):
-        server.time = 0
+        self.kill_count = 0
         self.weapon = server.weapon
         self.x, self.y = 200, 103
         self.delayCount = 0
@@ -217,6 +217,8 @@ class Player:
         self.font.draw(100 + 10, HEIGHT - 17, f'HP: {self.hp}', (255, 0, 0))
         #TIME
         self.font.draw(WIDTH - 100, HEIGHT - 17, f'time: {server.time}', (0, 0, 255))
+        #KILL
+        self.font.draw(WIDTH - 100, HEIGHT - 35, f'kill: {self.kill_count}', (255, 0, 0))
 
         # 카메라 비활성화
         # global sx          
