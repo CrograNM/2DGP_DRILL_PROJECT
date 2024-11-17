@@ -3,7 +3,6 @@ from state_machine import *
 import game_framework
 import game_world
 from skill import Skill_lightening
-
 import server
 
 # Player Run Speed
@@ -93,7 +92,7 @@ class Run:
             player.image_Run.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
                                                  0, 'h', player.x - 5, player.y, PLAYER_SIZE*2, PLAYER_SIZE*2)
 
-class Attack:
+class Attack_Sword:
     @staticmethod
     def enter(player, e):
         player.current_state = 'Attack'
@@ -126,8 +125,12 @@ class Attack:
             player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
                                                   0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
 
+class Attack_Bow:
+    pass
+
 class Player:
     def __init__(self):
+        self.weapon = server.weapon
         self.x, self.y = 200, 103
         self.delayCount = 0
         self.frame = 0
@@ -139,6 +142,7 @@ class Player:
         self.hp = 100
 
         self.font = load_font('resource/ENCR10B.TTF', 16)
+
         self.image_Idle = load_image('resource/player/character_Idle.png')
         self.image_Run = load_image('resource/player/character_Run.png')
         self.image_Attack = load_image('resource/player/character_SquatAttack.png')
@@ -146,14 +150,30 @@ class Player:
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
-            {   #상태 변환 테이블 : 더블 Dict로 구현
-                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run,
-                       ctrl_down : Attack, ctrl_up : Attack}, #ctrl_down : Idle
-                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
-                      ctrl_down : Attack, ctrl_up : Attack},
-                Attack: {time_out: Idle}
+            {  # 상태 변환 테이블 : 더블 Dict로 구현
+                Idle: { }
             }
         )
+        if server.weapon == 'Sword':
+            self.state_machine.set_transitions(
+                {   #상태 변환 테이블 : 더블 Dict로 구현
+                    Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run,
+                           ctrl_down : Attack_Sword, ctrl_up : Attack_Sword}, #ctrl_down : Idle
+                    Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
+                          ctrl_down : Attack_Sword, ctrl_up : Attack_Sword},
+                    Attack_Sword: {time_out: Idle}
+                }
+            )
+        elif server.weapon == 'Bow':
+            self.state_machine.set_transitions(
+                {  # 상태 변환 테이블 : 더블 Dict로 구현
+                    Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run,
+                           ctrl_down: Attack_Bow, ctrl_up: Attack_Bow},  # ctrl_down : Idle
+                    Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
+                          ctrl_down: Attack_Bow, ctrl_up: Attack_Bow},
+                    Attack_Bow: {time_out: Idle}
+                }
+            )
 
     def update(self):
         self.state_machine.update()
@@ -163,7 +183,7 @@ class Player:
             self.x = 10
         elif self.x > 1280 - 10:
             self.x = 1270
-            
+
         # 카메라 비활성화
         # self.x = clamp(10.0, self.x, server.background.w - 10.0)
         # self.y = clamp(20.0, self.y, server.background.h - 10.0)

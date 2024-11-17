@@ -3,3 +3,4 @@
 
 player = None
 background = None
+weapon = None

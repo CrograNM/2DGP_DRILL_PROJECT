@@ -14,6 +14,7 @@ from background import Background
 # Game object class here
 # class 드래그 후 우클릭 -> 리팩터링(이동)
 
+
 def handle_events():
     events = get_events()
     for event in events:

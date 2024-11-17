@@ -3,12 +3,13 @@ from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDL_MOUSEBUTTON
 import game_framework
 import game_world
 import play_mode
+import server
 from title_pannel import Background, Start_Button, Sword_Button, Bow_Button
 
 WIDTH = 1280
 HEIGHT = 720
 
-choose = 'Sword'
+server.weapon = 'Sword'
 
 def draw_thick_rectangle(x1, y1, x2, y2, thickness):
     for i in range(thickness):
@@ -44,16 +45,15 @@ def update():
 def draw():
     clear_canvas()
     game_world.render()
-    if choose == 'Sword':
+    if server.weapon == 'Sword':
         draw_thick_rectangle(sword_button.x - 50, sword_button.y - 50,
                        sword_button.x + 50, sword_button.y + 50, 3)
-    elif choose == 'Bow' :
+    elif server.weapon == 'Bow' :
         draw_thick_rectangle(bow_button.x - 50, bow_button.y - 50,
                        bow_button.x + 50, bow_button.y + 50, 3)
     update_canvas()
 
 def handle_events():
-    global choose
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -68,10 +68,10 @@ def handle_events():
             else :
                 if sword_button.is_clicked(x, y):
                     print("Sword button clicked")
-                    choose = 'Sword'
+                    server.weapon = 'Sword'
                 elif bow_button.is_clicked(x, y):
                     print("Bow button clicked")
-                    choose = 'Bow'
+                    server.weapon = 'Bow'
 
 def pause():pass
 def resume():pass
