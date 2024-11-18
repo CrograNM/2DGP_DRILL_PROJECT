@@ -14,7 +14,7 @@ import title_mode
 import pause_mode
 import result_mode
 
-BOSS_APPEAR_TIME = 1 # 1초 : 테스트용, 나중에 30초, 60초 등으로 설정
+BOSS_APPEAR_TIME = 10 # 1초 : 테스트용, 나중에 30초, 60초 등으로 설정
 
 # 전역 변수 추가
 pause_time = 0
