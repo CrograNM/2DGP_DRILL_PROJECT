@@ -212,77 +212,8 @@ class Attack_Sword:
             player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
                                                   0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
 
-class Attack_Sword_Idle:
-    @staticmethod
-    def enter(player, e):
-        player.current_state = 'Attack'
-        if server.skill_1_using == False :
-            player.frame = 0
-            player.dir = player.face_dir
-            player.skill_1(1)
-            server.skill_1_using = True
-
-    @staticmethod
-    def exit(player, e):
-        pass
-
-    @staticmethod
-    def do(player):
-
-        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
-        player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # player.move(dx)
-
-        if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
-            player.state_machine.add_event(('TIME_OUT', 0))
-            server.skill_1_using = False
-            pass
-
-    @staticmethod
-    def draw(player):
-        if player.face_dir == 1:
-            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
-        else:
-            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
-
-class Attack_Sword_Run:
-    @staticmethod
-    def enter(player, e):
-        player.current_state = 'Attack'
-        if server.skill_1_using == False:
-            player.frame = 0
-            player.dir = player.face_dir
-            player.skill_1(1)
-            server.skill_1_using = True
-
-    @staticmethod
-    def exit(player, e):
-        pass
-
-    @staticmethod
-    def do(player):
-
-        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
-        player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # player.move(dx)
-
-        if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
-            player.state_machine.add_event(('TIME_OUT', 0))
-            server.skill_1_using = False
-            pass
-
-    @staticmethod
-    def draw(player):
-        if player.face_dir == 1:
-            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
-        else:
-            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+Attack_Sword_I = Attack_Sword
+Attack_Sword_R = Attack_Sword
 
 class Attack_Bow:
     @staticmethod
@@ -357,18 +288,18 @@ class Player:
                 {   #상태 변환 테이블 : 더블 Dict로 구현
                     Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run,
                            alt_down : Jump,
-                           ctrl_down : Attack_Sword_Idle}, #ctrl_down : Idle
+                           ctrl_down : Attack_Sword_I}, #ctrl_down : Idle
                     Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
                           alt_down: Jump_run,
-                          ctrl_down : Attack_Sword_Run},
+                          ctrl_down : Attack_Sword_R},
                     Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle},
                     Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run},
-                    Attack_Sword_Idle: {time_out: Idle,
-                                        right_up : Attack_Sword_Run, left_up : Attack_Sword_Run,
-                                        right_down : Attack_Sword_Run, left_down : Attack_Sword_Run},
-                    Attack_Sword_Run: {time_out: Run,
-                                       right_up : Attack_Sword_Idle, left_up : Attack_Sword_Idle,
-                                       right_down : Attack_Sword_Idle, left_down : Attack_Sword_Idle}
+                    Attack_Sword_I: {time_out: Idle,
+                                        right_up : Attack_Sword_R, left_up : Attack_Sword_R,
+                                        right_down : Attack_Sword_R, left_down : Attack_Sword_R},
+                    Attack_Sword_R: {time_out: Run,
+                                       right_up : Attack_Sword_I, left_up : Attack_Sword_I,
+                                       right_down : Attack_Sword_I, left_down : Attack_Sword_I}
                 }
             )
         elif server.weapon == 'Bow':
