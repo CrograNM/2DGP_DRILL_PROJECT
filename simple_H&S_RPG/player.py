@@ -297,6 +297,7 @@ class Player:
 
         self.hp_max = 100
         self.hp = 100
+        self.dmg = 10
 
         # UI 리소스
         self.font = load_font('resource/ENCR10B.TTF', 16)
