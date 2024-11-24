@@ -164,6 +164,8 @@ class Monster:
     def handle_collision(self, group, other):
         # fill here
         if group == 'monster:skill_1':
-            game_world.remove_object(self)
-            server.kill_count += 1
+            self.hp -= 10
+            if self.hp <= 0:
+                game_world.remove_object(self)
+                server.kill_count += 1
         pass
