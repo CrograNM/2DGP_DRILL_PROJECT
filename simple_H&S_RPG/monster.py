@@ -120,6 +120,11 @@ class Monster:
         self.dir = 0
         self.face_dir = 1
         self.action = 0
+
+        self.hp_max = 100
+        self.hp = 100
+        self.font = load_font('resource/ENCR10B.TTF', 16)
+
         # self.image_Run = load_image('monster_Run.png')
         # self.image_Attack = load_image('monster_Attack.png')
         self.current_state = None
@@ -146,6 +151,7 @@ class Monster:
     def draw(self):
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
+        self.font.draw(self.x - 20, self.y + 30, f'{self.hp}', (255, 0, 0))
         #draw_rectangle(self.ax - 5, self.ay - 5, self.ax + 5, self.ay + 5)
 
     def get_bb(self):
