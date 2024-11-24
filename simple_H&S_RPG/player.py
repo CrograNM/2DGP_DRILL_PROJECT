@@ -400,8 +400,8 @@ class Player:
 
     def handle_collision(self, group, other):
         # fill here
-        if group == 'player:monster_attack':
-            self.hp -= 10
+        # if group == 'player:monster_attack':
+        #     self.hp -= 10
         pass
 
     def skill_1(self, num):
