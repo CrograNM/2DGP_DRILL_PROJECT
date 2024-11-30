@@ -276,8 +276,8 @@ class Attack_Bow:
                 player.skill_2(1)
             elif server.weapon_ABC == 'B':
                 player.skill_Bow_B(1)
-            #elif server.weapon_ABC == 'C':
-                #player.skill_Bow_C(1)
+            elif server.weapon_ABC == 'C':
+                player.skill_Bow_C(1)
             pass
 
     @staticmethod
@@ -428,3 +428,10 @@ class Player:
         game_world.add_collision_pair('monster:skill_1', None, skill_Bow_B) # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
         game_world.add_collision_pair('boss:skill_1', None, skill_Bow_B)
         game_world.add_object(skill_Bow_B, 1)
+
+    def skill_Bow_C(self, num):
+        skill_Bow_C = Skill_bow_C(self.x + self.dir*180, self.y - 10, self.dir)
+        # game_world.add_collision_pair('zombie:ball', None, ball)
+        game_world.add_collision_pair('monster:skill_1', None, skill_Bow_C) # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
+        game_world.add_collision_pair('boss:skill_1', None, skill_Bow_C)
+        game_world.add_object(skill_Bow_C, 1)
