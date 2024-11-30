@@ -247,7 +247,31 @@ class Skill_bow_C:
     def handle_collision(self, group, other):
         pass
 
-#monster
+#monster - 4프레임 으로 혓바닥 회수하기
+MONSTER_ATTACK_FRAMES_PER_ACTION = 4
+MOB_ACTION_PER_TIME = ACTION_PER_TIME / 0.75 # 몬스터.py 에 있는 액션 타임
+class Monster_Attack:
+    image = None
+
+    def __init__(self, x = 400, y = 300, dir = 1):
+        self.frame = 0
+        self.x, self.y, self.dir = x, y, dir
+
+    def draw(self):
+            draw_rectangle(*self.get_bb())
+
+    def update(self):
+        self.frame = (self.frame + MONSTER_ATTACK_FRAMES_PER_ACTION * MOB_ACTION_PER_TIME * game_framework.frame_time)
+        self.x -= self.dir * 10
+        if int(self.frame) == MONSTER_ATTACK_FRAMES_PER_ACTION - 1:
+            game_world.remove_object(self)
+
+    def get_bb(self):
+        return (self.x - 20, self.y - 20,
+                    self.x + 20, self.y + 20)
+
+    def handle_collision(self, group, other):
+        pass
 
 #boss
 #찌르기 계열
