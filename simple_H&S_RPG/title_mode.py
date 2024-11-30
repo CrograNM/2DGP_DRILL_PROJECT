@@ -22,7 +22,7 @@ def init():
     global panel_sword, panel_bow
     global start_button
     global sword_button, sword_A
-    global bow_button, bow_A
+    global bow_button, bow_A, bow_B, bow_C
 
     global sword_choose, bow_choose
 
@@ -31,6 +31,8 @@ def init():
 
     sword_A = Sword_A(100 + 175, HEIGHT - 150, 100, 100)
     bow_A = Bow_A(100 + 175, HEIGHT - 300, 100, 100)
+    bow_B = Bow_B(100 + 175 + 125, HEIGHT - 300, 100, 100)
+    bow_C = Bow_C(100 + 175 + 125 + 125, HEIGHT - 300, 100, 100)
 
     sword_choose = 'A'
     bow_choose = 'A'
@@ -73,9 +75,17 @@ def draw():
                        bow_button.x + 50, bow_button.y + 50, 3)
         panel_bow.draw()
         bow_A.draw()
+        bow_B.draw()
+        bow_C.draw()
         if bow_choose == 'A':
             draw_thick_rectangle(bow_A.x - 50, bow_A.y - 50,
                                  bow_A.x + 50, bow_A.y + 50, 3)
+        elif bow_choose == 'B':
+            draw_thick_rectangle(bow_B.x - 50, bow_B.y - 50,
+                                 bow_B.x + 50, bow_B.y + 50, 3)
+        else:
+            draw_thick_rectangle(bow_C.x - 50, bow_C.y - 50,
+                                 bow_C.x + 50, bow_C.y + 50, 3)
     update_canvas()
 
 def handle_events():

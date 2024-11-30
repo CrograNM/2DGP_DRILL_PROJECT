@@ -69,6 +69,22 @@ class Bow_Button(Button):
     def draw(self):
         self.image.draw(self.x, self.y)
 
+class Bow_B(Button):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
+        self.image = load_image('resource/title_mode/bow_B.png')
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+class Bow_C(Button):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
+        self.image = load_image('resource/title_mode/bow_C.png')
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
 class Bow_A(Button):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
