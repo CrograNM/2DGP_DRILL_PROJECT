@@ -14,7 +14,8 @@ import title_mode
 import pause_mode
 import result_mode
 
-BOSS_APPEAR_TIME = 60 # 1초 : 테스트용, 나중에 30초, 60초 등으로 설정
+BOSS_APPEAR_TIME = 60   # 1초 : 테스트용, 나중에 30초, 60초 등으로 설정
+MAX_MOB_COUNT = 1   # 최대 10마리까지만 스폰
 
 # 전역 변수 추가
 pause_time = 0
@@ -40,7 +41,7 @@ def spawn_monster():
     if current_time - last_spawn_time >= 0.2:
         # 현재 몬스터 개수 확인
         monsters = [obj for obj in game_world.objects_at_depth(1) if isinstance(obj, Monster)]
-        if len(monsters) < 10:  # 최대 10마리까지만 스폰
+        if len(monsters) < MAX_MOB_COUNT:
             new_monster = Monster(server.player)
             game_world.add_object(new_monster, 1)  # 포그라운드 깊이에 추가
             game_world.add_collision_pair('player:monster', server.player, new_monster)

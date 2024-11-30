@@ -77,6 +77,7 @@ class Attack:
     def enter(mob, e):
         mob.current_state = 'Attack'
         mob.frame = 0
+        mob.attack_count = 0
         pass
 
     @staticmethod
@@ -90,8 +91,9 @@ class Attack:
             mob.ax = mob.x + (mob.face_dir * (FRAMES_PER_ACTION_ATTACK - 1) / 2 * 12) - (mob.face_dir * int(mob.frame)%4 * 12)
         else :
             mob.ax = mob.x + (mob.face_dir * int(mob.frame) * 12)
-        #if int(mob.frame) == 4:
-            #mob.monster_attack(1)
+        if int(mob.frame) == 4 and mob.attack_count == 0:
+            mob.monster_attack(1)
+            mob.attack_count += 1
         if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
             #mob.monster_attack(1)
