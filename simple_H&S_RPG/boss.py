@@ -2,7 +2,6 @@ from random import randint
 from pico2d import *
 
 import server
-from player import Player
 from state_machine import mob_close, mob_attack_end, boss_1_start, boss_3_start
 from state_machine import StateMachine
 import game_framework
@@ -186,13 +185,6 @@ class Boss:
         return self.x - MONSTER_SIZE*0.7, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE*0.7, self.y + MONSTER_SIZE*0.5
 
     def handle_collision(self, group, other):
-        # fill here
-        # if group == 'boss:skill_1':
-        #     self.hp -= self.player.dmg
-        #     if self.hp <= 0:
-        #         game_world.remove_object(self)
-        #         server.boss_dead = True
-        #         #server.kill_count += 1
         if group == 'boss:skill_1':
             if other not in self.hit_by_skills or not self.hit_by_skills[other]:
                 self.hp -= self.player.dmg

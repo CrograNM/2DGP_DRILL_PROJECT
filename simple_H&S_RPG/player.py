@@ -1,7 +1,4 @@
-from pico2d import *
 from state_machine import *
-import game_framework
-import game_world
 from skill import *
 import server
 
@@ -532,6 +529,7 @@ class Player:
             self.image_Jump = load_image('resource/player/bow_Jump.png')
             self.image_Hurt = load_image('resource/player/bow_Hurt.png')
             self.image_Death = load_image('resource/player/bow_Death.png')
+
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
@@ -619,6 +617,7 @@ class Player:
 
         self.state_machine.update()
         self.time = get_time()
+
         # 캐릭터 이동 거리 제한
         if self.x < 10:
             self.x = 10
@@ -626,7 +625,6 @@ class Player:
             self.x = 1270
 
     def handle_event(self, event):
-        #if self.current_state != 'Attack':
         self.state_machine.add_event(('INPUT', event))
         pass
 
@@ -643,13 +641,6 @@ class Player:
         #KILL
         self.font.draw(WIDTH - 100, HEIGHT - 35, f'kill: {server.kill_count}', (255, 0, 0))
 
-        # 카메라 비활성화
-        # global sx          
-        # global sy
-        # sx = self.x - server.background.window_left
-        # sy = self.y - server.background.window_bottom
-        # draw_rectangle(sx - 10, sy - 10, sx + 10, sy + 10)
-
     def get_bb(self):
         if self.current_state != 'Attack':
             return self.x - PLAYER_SIZE*0.7, self.y - PLAYER_SIZE, self.x + PLAYER_SIZE*0.7, self.y + PLAYER_SIZE*0.5
@@ -657,7 +648,6 @@ class Player:
             return 0, 0, 0, 0
 
     def handle_collision(self, group, other):
-        # fill here
         if self.invulnerable:
             return False  # 무적 상태라면 충돌 처리하지 않음
 

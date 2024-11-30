@@ -1,7 +1,7 @@
 # world = [] # 단일 계층 구조
-
 # world[0] : 백그라운드 객체들 - 맨 아래에 그릴 객체들
 # world[1] : 포그라운드 객체들 - 위에 그려야 할 객체들
+
 world = [ [], [], [], [], []]
 
 def clear_all():
@@ -69,7 +69,6 @@ def handle_collisions():
                 if collide(a, b):
                     a.handle_collision(group, b)
                     b.handle_collision(group, a)
-
 
 def objects_at_depth(depth):
     # 특정 depth의 객체 리스트 반환

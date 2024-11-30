@@ -154,9 +154,6 @@ class Monster:
         self.hp_max = 100
         self.hp = 100
         self.font = load_font('resource/ENCR10B.TTF', 16)
-
-        # self.image_Run = load_image('monster_Run.png')
-        # self.image_Attack = load_image('monster_Attack.png')
         self.current_state = None
 
         self.player = player  # player 참조
@@ -168,7 +165,6 @@ class Monster:
                 Run: {mob_close : Attack, hurt_start:Hit},
                 Attack: {mob_attack_end : Run, hurt_start:Hit},
                 Hit: {time_out : Run}
-                # ,Attack: {}, Hit: {}
             }
         )
         self.hit_by_skills = {} #스킬 객체를 키로, 충돌 상태를 값으로 저장
@@ -185,7 +181,6 @@ class Monster:
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
         self.font.draw(self.x - 20, self.y + 30, f'{self.hp}', (255, 0, 0))
-        #draw_rectangle(self.ax - 5, self.ay - 5, self.ax + 5, self.ay + 5)
 
     def get_bb(self):
         if self.current_state == 'Run' or 'Hit':

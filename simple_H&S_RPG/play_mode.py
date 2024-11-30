@@ -5,17 +5,15 @@ import time
 import server
 
 from player import Player
-from ground import Ground
 from background import Background
 from monster import Monster
 from boss import Boss
 
-import title_mode
 import pause_mode
 import result_mode
 
 BOSS_APPEAR_TIME = 60   # 1초 : 테스트용, 나중에 30초, 60초 등으로 설정
-MAX_MOB_COUNT = 1   # 최대 10마리까지만 스폰
+MAX_MOB_COUNT = 10   # 최대 10마리까지만 스폰
 
 # 전역 변수 추가
 pause_time = 0
@@ -29,8 +27,6 @@ def spawn_boss():
     game_world.add_collision_pair('player:boss_skill', server.player, None)
     game_world.add_collision_pair('player:boss_skill_!!!', server.player, None) #강한 공격
     game_world.add_collision_pair('boss:skill_1', boss, None)
-    # game_world.add_collision_pair('boss:skill_bow_B', boss, None)
-    # game_world.add_collision_pair('boss:skill_bow_B_explode', boss, None)
 
 last_spawn_time = 0
 def spawn_monster():
@@ -47,8 +43,6 @@ def spawn_monster():
             game_world.add_collision_pair('player:monster', server.player, new_monster)
             game_world.add_collision_pair('player:monster_attack', server.player, None)
             game_world.add_collision_pair('monster:skill_1', new_monster, None)
-            # game_world.add_collision_pair('monster:skill_bow_B', new_monster, None)
-            # game_world.add_collision_pair('monster:skill_bow_B_explode', new_monster, None)
         last_spawn_time = current_time
 
 def handle_events():

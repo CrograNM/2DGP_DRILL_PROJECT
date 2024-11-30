@@ -68,7 +68,6 @@ class Sword_B(Button):
     def draw(self):
         self.image.draw(self.x, self.y)
 
-
 class Bow_Button(Button):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
