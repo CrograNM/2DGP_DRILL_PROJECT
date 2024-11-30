@@ -21,6 +21,7 @@ ATTACK_SPEED_PPS = RUN_SPEED_PPS * 10
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 SWORD_ATTACK_ACTION_PER_TIME = ACTION_PER_TIME * 5
+SWORD_ATTACK_B_ACTION_PER_TIME = ACTION_PER_TIME * 2
 BOW_ATTACK_ACTION_PER_TIME = ACTION_PER_TIME * 2
 FRAMES_PER_ACTION_IDLE = 4
 FRAMES_PER_ACTION_RUN = 6
@@ -196,8 +197,11 @@ class Attack_Sword_I:
     @staticmethod
     def do(player):
 
-        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
-        player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        if server.weapon_ABC == 'A':
+            player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
+            player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        else :
+            player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_B_ACTION_PER_TIME * game_framework.frame_time)
         # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
         # player.move(dx)
 
@@ -208,12 +212,20 @@ class Attack_Sword_I:
 
     @staticmethod
     def draw(player):
-        if player.face_dir == 1:
-            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+        if server.weapon_ABC == 'A':
+            if player.face_dir == 1:
+                player.image_SquatAttack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                      0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+            else:
+                player.image_SquatAttack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                      0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
         else:
-            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+            if player.face_dir == 1:
+                player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                      0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+            else:
+                player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                      0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
 
 class Attack_Sword_R:
     @staticmethod
@@ -232,8 +244,11 @@ class Attack_Sword_R:
     @staticmethod
     def do(player):
 
-        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
-        player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        if server.weapon_ABC == 'A':
+            player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
+            player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        else:
+            player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_B_ACTION_PER_TIME * game_framework.frame_time)
         # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
         # player.move(dx)
 
@@ -244,12 +259,20 @@ class Attack_Sword_R:
 
     @staticmethod
     def draw(player):
-        if player.face_dir == 1:
-            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+        if server.weapon_ABC == 'A':
+            if player.face_dir == 1:
+                player.image_SquatAttack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                      0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+            else:
+                player.image_SquatAttack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                      0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
         else:
-            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
-                                                  0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+            if player.face_dir == 1:
+                player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                        0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+            else:
+                player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                        0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
 
 class Attack_Bow:
     @staticmethod
@@ -309,7 +332,8 @@ class Player:
 
         self.image_Idle = load_image('resource/player/sword_Idle.png')
         self.image_Run = load_image('resource/player/sword_Run.png')
-        self.image_Attack = load_image('resource/player/sword_SquatAttack.png')
+        self.image_Attack = load_image('resource/player/sword_Attack.png')
+        self.image_SquatAttack = load_image('resource/player/sword_SquatAttack.png')
         self.image_Jump = load_image('resource/player/sword_Jump.png')
         if server.weapon == 'Bow':
             self.image_Idle = load_image('resource/player/bow_Idle.png')
