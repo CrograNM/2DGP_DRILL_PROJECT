@@ -2,6 +2,12 @@
 #상태 이벤트 e = (종류, 실제값) 튜플로 정의
 from sdl2 import *
 
+def boss_1_start(e):
+    return e[0] == 'BOSS_1_START'
+
+def boss_3_start(e):
+    return e[0] == 'BOSS_3_START'
+
 def death_start(e):
     return e[0] == 'DEATH_START'
 

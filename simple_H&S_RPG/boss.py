@@ -3,7 +3,7 @@ from pico2d import *
 
 import server
 from player import Player
-from state_machine import mob_close, mob_attack_end
+from state_machine import mob_close, mob_attack_end, boss_1_start, boss_3_start
 from state_machine import StateMachine
 import game_framework
 import game_world
@@ -51,8 +51,12 @@ class Idle:
 
         # 충분히 거리가 가까워지면 공격 모션을 진행
         if mob.delayCount > 100: #300 - 1번 스킬
+            p = randint(1, 100)
             mob.delayCount = 0
-            mob.state_machine.add_event(('MOB_CLOSE', 0))
+            if p <= 50:
+                mob.state_machine.add_event(('BOSS_1_START', 0))
+            else :
+                mob.state_machine.add_event(('BOSS_3_START', 0))
 
     @staticmethod
     def draw(mob):
@@ -68,10 +72,9 @@ class Attack_1:
     def enter(mob, e):
         mob.current_state = 'Attack_1'
         mob.frame = 0
-
-        # 스킬
-        #mob.boss_1(1)
-        mob.boss_3(1)
+        mob.skill_type = randint(1, 100)
+        if mob.skill_type <= 50:
+            mob.boss_1(1)
         pass
 
     @staticmethod
@@ -83,6 +86,8 @@ class Attack_1:
         mob.frame = mob.frame + FRAMES_PER_ACTION_ATTACK * ACTION_PER_TIME * game_framework.frame_time
         if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
+            if mob.skill_type > 50:
+                mob.boss_2(1)
             #mob.boss_2(1)
 
 
@@ -92,9 +97,34 @@ class Attack_1:
             mob.images['Attack_1'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 50, 0, 'h', mob.x - 60, mob.y, 110 * 4, 50 * 4)
         else:
             mob.images['Attack_1'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 50, 0, ' ', mob.x - 60, mob.y, 110 * 4, 50 * 4)
+class Attack_3:
+    @staticmethod
+    def enter(mob, e):
+        mob.current_state = 'Attack_3'
+        mob.frame = 0
+        pass
+
+    @staticmethod
+    def exit(mob, e):
+        pass
+
+    @staticmethod
+    def do(mob):
+        mob.frame = mob.frame + FRAMES_PER_ACTION_ATTACK * ACTION_PER_TIME * game_framework.frame_time
+        if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
+            mob.boss_3(1)
+            mob.state_machine.add_event(('MOB_ATTACK_END', 0))
+            #mob.boss_2(1)
 
 
-animation_names = ['Idle', 'Attack_1']
+    @staticmethod
+    def draw(mob):
+        if mob.face_dir == -1:
+            mob.images['Attack_3'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 60, 0, 'h', mob.x - 60, mob.y + 20, 110 * 4, 60 * 4)
+        else:
+            mob.images['Attack_3'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 60, 0, ' ', mob.x - 60, mob.y + 20, 110 * 4, 60 * 4)
+
+animation_names = ['Idle', 'Attack_1', 'Attack_3']
 # 100, 86, frames = 4
 
 class Boss:
@@ -116,7 +146,8 @@ class Boss:
         self.dir = 0
         self.face_dir = -1
         self.action = 0
-        self.hp = 100
+        self.hp = 1000
+        self.skill_type = 0
 
         self.font = load_font('resource/ENCR10B.TTF', 16)
         # self.image_Run = load_image('monster_Run.png')
@@ -129,8 +160,9 @@ class Boss:
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {mob_close : Attack_1},
-                Attack_1: {mob_attack_end : Idle}
+                Idle: {boss_1_start : Attack_1, boss_3_start : Attack_3},
+                Attack_1: {mob_attack_end : Idle},
+                Attack_3: {mob_attack_end : Idle}
                 # ,Attack: {}, Hit: {}
             }
         )
