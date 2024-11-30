@@ -203,6 +203,12 @@ class Attack_Sword_I:
 
     @staticmethod
     def exit(player, e):
+        if right_down(e) or left_up(e):
+            player.dir = 1
+            player.face_dir = 1
+        elif left_down(e) or right_up(e):
+            player.dir = -1
+            player.face_dir = -1
         pass
 
     @staticmethod
@@ -510,9 +516,11 @@ class Player:
                     Jump_run: {right_up: Jump, left_up: Jump, right_down: Jump, left_down: Jump,
                                jump_end: Run},
                     Attack_Sword_I: {time_out: Idle,
-                                        right_down : Attack_Sword_R, left_down : Attack_Sword_R},
+                                        right_down : Attack_Sword_R, left_down : Attack_Sword_R,
+                                        right_up: Attack_Sword_R, left_up: Attack_Sword_R },
                     Attack_Sword_R: {time_out: Run,
-                                        right_up : Attack_Sword_I, left_up : Attack_Sword_I},
+                                        right_up : Attack_Sword_I, left_up : Attack_Sword_I,
+                                        right_down: Attack_Sword_R, left_down: Attack_Sword_R},
                     Hurt: {right_down: Hurt_run, left_down: Hurt_run, right_up: Hurt_run, left_up: Hurt_run,
                             time_out: Idle, death_start : Death},
                     Hurt_run: {right_up: Hurt, left_up: Hurt, right_down: Hurt, left_down: Hurt,
