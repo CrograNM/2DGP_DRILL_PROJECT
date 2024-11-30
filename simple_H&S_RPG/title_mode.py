@@ -105,6 +105,8 @@ def handle_events():
             if server.weapon == 'Sword':
                 if sword_A.is_clicked(x, y):
                     sword_choose = 'A'
+                elif sword_B.is_clicked(x, y):
+                    sword_choose = 'B'
             elif server.weapon == 'Bow':
                 if bow_A.is_clicked(x, y):
                     bow_choose = 'A'
