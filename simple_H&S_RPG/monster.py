@@ -7,6 +7,7 @@ from state_machine import mob_close, mob_attack_end, time_out, hurt_start
 from state_machine import StateMachine
 import game_framework
 import game_world
+from skill import Monster_Attack
 
 # Monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -89,6 +90,8 @@ class Attack:
             mob.ax = mob.x + (mob.face_dir * (FRAMES_PER_ACTION_ATTACK - 1) / 2 * 12) - (mob.face_dir * int(mob.frame)%4 * 12)
         else :
             mob.ax = mob.x + (mob.face_dir * int(mob.frame) * 12)
+        if int(mob.frame) == 4:
+            mob.monster_attack(1)
         if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
 
@@ -189,12 +192,6 @@ class Monster:
             return self.ax - 5, self.ay - 5, self.ax + 5, self.ay + 5
 
     def handle_collision(self, group, other):
-        # fill here
-        # if group == 'monster:skill_1':
-        #     self.hp -= self.player.dmg
-        #     if self.hp <= 0:
-        #         game_world.remove_object(self)
-        #         server.kill_count += 1
         if self.current_state == 'Run' or 'Attack':
             if group == 'monster:skill_1':
                 if other not in self.hit_by_skills or not self.hit_by_skills[other]:
@@ -204,4 +201,8 @@ class Monster:
                 if self.hp <= 0:
                     game_world.remove_object(self)
                     server.kill_count += 1
-        pass
+
+    def monster_attack(self, num):
+        monster_attack = Monster_Attack(self.x + self.dir * 50, self.y - 10, self.dir)
+        game_world.add_collision_pair('player:monster_attack', None, monster_attack)
+        game_world.add_object(monster_attack, 1)

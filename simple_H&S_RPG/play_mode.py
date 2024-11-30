@@ -44,6 +44,7 @@ def spawn_monster():
             new_monster = Monster(server.player)
             game_world.add_object(new_monster, 1)  # 포그라운드 깊이에 추가
             game_world.add_collision_pair('player:monster', server.player, new_monster)
+            game_world.add_collision_pair('player:monster_attack', server.player, None)
             game_world.add_collision_pair('monster:skill_1', new_monster, None)
             # game_world.add_collision_pair('monster:skill_bow_B', new_monster, None)
             # game_world.add_collision_pair('monster:skill_bow_B_explode', new_monster, None)
