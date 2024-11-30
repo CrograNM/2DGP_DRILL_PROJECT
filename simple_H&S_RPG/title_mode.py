@@ -90,6 +90,7 @@ def draw():
 
 def handle_events():
     events = get_events()
+    global sword_choose, bow_choose
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
@@ -97,6 +98,17 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
             x, y = event.x, (HEIGHT - event.y)  # Pico2D에서 y축 방향 보정
+            if server.weapon == 'Sword':
+                if sword_A.is_clicked(x, y):
+                    sword_choose = 'A'
+            elif server.weapon == 'Bow':
+                if bow_A.is_clicked(x, y):
+                    bow_choose = 'A'
+                elif bow_B.is_clicked(x, y):
+                    bow_choose = 'B'
+                elif bow_C.is_clicked(x, y):
+                    bow_choose = 'C'
+
             if start_button.is_clicked(x, y):
                 print("Start button clicked")
                 server.kill_count = 0
