@@ -10,6 +10,7 @@ WIDTH = 1280
 HEIGHT = 720
 
 server.weapon = 'Sword'
+server.weapon_ABC = 'A'
 
 def draw_thick_rectangle(x1, y1, x2, y2, thickness):
     for i in range(thickness):
@@ -105,15 +106,20 @@ def handle_events():
             if server.weapon == 'Sword':
                 if sword_A.is_clicked(x, y):
                     sword_choose = 'A'
+                    server.weapon_ABC = 'A'
                 elif sword_B.is_clicked(x, y):
                     sword_choose = 'B'
+                    server.weapon_ABC = 'B'
             elif server.weapon == 'Bow':
                 if bow_A.is_clicked(x, y):
                     bow_choose = 'A'
+                    server.weapon_ABC = 'A'
                 elif bow_B.is_clicked(x, y):
                     bow_choose = 'B'
+                    server.weapon_ABC = 'B'
                 elif bow_C.is_clicked(x, y):
                     bow_choose = 'C'
+                    server.weapon_ABC = 'C'
 
             if start_button.is_clicked(x, y):
                 print("Start button clicked")

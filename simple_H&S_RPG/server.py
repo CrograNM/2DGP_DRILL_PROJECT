@@ -4,6 +4,7 @@
 player = None
 background = None
 weapon = None
+weapon_ABC = None
 time = None
 start_time = 0
 kill_count = 0

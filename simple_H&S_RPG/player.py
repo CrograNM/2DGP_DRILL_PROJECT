@@ -272,7 +272,12 @@ class Attack_Bow:
 
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
-            player.skill_Bow_B(1)
+            if server.weapon_ABC == 'A':
+                player.skill_2(1)
+            elif server.weapon_ABC == 'B':
+                player.skill_Bow_B(1)
+            #elif server.weapon_ABC == 'C':
+                #player.skill_Bow_C(1)
             pass
 
     @staticmethod
