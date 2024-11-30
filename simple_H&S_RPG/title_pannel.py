@@ -14,15 +14,15 @@ class Background:
         pass
 
 class Pannel:
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
         self.image = load_image('resource/pause_mode/pause.png')
 
     def draw(self):
-        self.image.draw(self.x, self.y, 400, 300)
-
-    def update(self):
-        pass
+        self.image.draw(self.x, self.y, self.width, self.height)
 
 # Button 클래스 수정
 class Button:

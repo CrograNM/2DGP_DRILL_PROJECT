@@ -19,10 +19,15 @@ def init():
     server.time = 0
 
     global background
+    global panel_sword, panel_bow
     global start_button
     global sword_button
     global bow_button
 
+    panel_sword = Pannel(400, HEIGHT - 150, 400, 200)
+    panel_bow = Pannel(400, HEIGHT - 300, 400, 200)
+
+    #====================================================================
     background = Background()
     game_world.add_object(background, 3)
 
@@ -50,9 +55,11 @@ def draw():
     if server.weapon == 'Sword':
         draw_thick_rectangle(sword_button.x - 50, sword_button.y - 50,
                        sword_button.x + 50, sword_button.y + 50, 3)
+        panel_sword.draw()
     elif server.weapon == 'Bow' :
         draw_thick_rectangle(bow_button.x - 50, bow_button.y - 50,
                        bow_button.x + 50, bow_button.y + 50, 3)
+        panel_bow.draw()
     update_canvas()
 
 def handle_events():
