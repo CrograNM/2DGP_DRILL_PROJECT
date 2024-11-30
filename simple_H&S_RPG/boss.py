@@ -50,7 +50,7 @@ class Idle:
         mob.frame = (mob.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
 
         # 충분히 거리가 가까워지면 공격 모션을 진행
-        if mob.delayCount > 100: #300 - 1번 스킬
+        if mob.delayCount > 300: #300 - 1번 스킬
             mob.delayCount = 0
             mob.state_machine.add_event(('MOB_CLOSE', 0))
 
@@ -171,7 +171,6 @@ class Boss:
         pass
 
     def boss_1(self, num):
-        boss_1 = Boss_1(self.x + self.dir*180, self.y + 60, self.dir)
-        game_world.add_collision_pair('player:boss_1', None, boss_1)
-        game_world.add_collision_pair('player:boss_1', None, boss_1)
+        boss_1 = Boss_1(self.x + self.dir*130, self.y + 60, self.dir)
+        game_world.add_collision_pair('player:boss_skill', None, boss_1)
         game_world.add_object(boss_1, 1)
