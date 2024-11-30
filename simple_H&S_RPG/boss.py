@@ -70,8 +70,7 @@ class Attack_1:
         mob.frame = 0
 
         # 스킬
-        mob.boss_1(1)
-
+        #mob.boss_1(1)
         pass
 
     @staticmethod
@@ -83,6 +82,7 @@ class Attack_1:
         mob.frame = mob.frame + FRAMES_PER_ACTION_ATTACK * ACTION_PER_TIME * game_framework.frame_time
         if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
+            mob.boss_2(1)
 
 
     @staticmethod
@@ -174,3 +174,8 @@ class Boss:
         boss_1 = Boss_1(self.x + self.dir*130, self.y + 60, self.dir)
         game_world.add_collision_pair('player:boss_skill', None, boss_1)
         game_world.add_object(boss_1, 1)
+
+    def boss_2(self, num):
+        boss_2 = Boss_2(self.x + self.dir * 180, self.y - 10, self.dir)
+        game_world.add_collision_pair('player:boss_skill', None, boss_2)
+        game_world.add_object(boss_2, 1)
