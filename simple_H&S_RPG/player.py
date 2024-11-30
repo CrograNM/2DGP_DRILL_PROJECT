@@ -338,7 +338,7 @@ class Hurt:
         # player.move(dx)
 
         if int(player.frame) == FRAMES_PER_ACTION_HURT - 1:
-            player.hp -= 10
+            #player.hp -= 10
             player.state_machine.add_event(('TIME_OUT', 0))
             pass
 
@@ -364,6 +364,8 @@ class Player:
         self.hp_max = 100
         self.hp = 100
         self.dmg = 10
+        self.invulnerable = False  # 무적 상태 여부
+        self.invulnerable_start_time = 0  # 무적 상태 시작 시간
 
         # UI 리소스
         self.font = load_font('resource/ENCR10B.TTF', 16)
@@ -404,7 +406,7 @@ class Player:
                                         right_down : Attack_Sword_R, left_down : Attack_Sword_R, hurt_start:Hurt},
                     Attack_Sword_R: {time_out: Run,
                                         right_up : Attack_Sword_I, left_up : Attack_Sword_I, hurt_start:Hurt},
-                    Hurt: {time_out: Idle, right_down: Run, left_down: Run, left_up: Run, right_up: Run}
+                    Hurt: {time_out: Idle}
                 }
             )
         elif server.weapon == 'Bow':
@@ -423,7 +425,20 @@ class Player:
                 }
             )
 
+    def take_damage(self, damage):
+        #플레이어가 피해를 입었을 때 호출
+        if not self.invulnerable:  # 무적 상태가 아니면 피해 적용
+            self.hp -= damage
+            self.invulnerable = True  # 무적 상태로 전환
+            self.invulnerable_start_time = get_time()
+
     def update(self):
+        current_time = get_time()
+
+        # 무적 상태 해제 체크
+        if self.invulnerable and current_time - self.invulnerable_start_time > 2:
+            self.invulnerable = False
+
         self.y += self.gravity
 
         self.state_machine.update()
@@ -471,9 +486,13 @@ class Player:
 
     def handle_collision(self, group, other):
         # fill here
+        if self.invulnerable:
+            return False  # 무적 상태라면 충돌 처리하지 않음
+
         if self.current_state != 'Hurt':
             if group == 'player:monster':
-                 self.state_machine.add_event(('HURT_START', 0))
+                self.take_damage(10)
+                self.state_machine.add_event(('HURT_START', 0))
         pass
 
     def skill_1(self, num):
