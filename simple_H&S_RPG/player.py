@@ -335,6 +335,10 @@ class Hurt:
 
     @staticmethod
     def do(player):
+        if player.y <= on_ground:
+            player.gravity = 0
+            player.y = on_ground
+
         player.frame = (player.frame + FRAMES_PER_ACTION_HURT * ACTION_PER_TIME * game_framework.frame_time)
         player.x -= player.face_dir * RUN_SPEED_PPS * game_framework.frame_time
         # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
@@ -370,6 +374,10 @@ class Death:
 
     @staticmethod
     def do(player):
+        if player.y <= on_ground:
+            player.gravity = 0
+            player.y = on_ground
+
         player.frame = (player.frame + FRAMES_PER_ACTION_DEATH * ACTION_PER_TIME * game_framework.frame_time)
         if int(player.frame) >= FRAMES_PER_ACTION_DEATH - 1:
             player.frame = FRAMES_PER_ACTION_DEATH - 1

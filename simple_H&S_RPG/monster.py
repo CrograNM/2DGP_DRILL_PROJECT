@@ -140,6 +140,8 @@ class Monster:
                 # ,Attack: {}, Hit: {}
             }
         )
+        self.hit_by_skills = {} #스킬 객체를 키로, 충돌 상태를 값으로 저장
+
     def update(self):
         self.state_machine.update()
 
@@ -163,9 +165,17 @@ class Monster:
 
     def handle_collision(self, group, other):
         # fill here
+        # if group == 'monster:skill_1':
+        #     self.hp -= self.player.dmg
+        #     if self.hp <= 0:
+        #         game_world.remove_object(self)
+        #         server.kill_count += 1
         if group == 'monster:skill_1':
-            self.hp -= self.player.dmg
-            if self.hp <= 0:
-                game_world.remove_object(self)
-                server.kill_count += 1
+            if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                self.hp -= self.player.dmg
+                self.hit_by_skills[other] = True  # 충돌 상태 업데이트
+
+                if self.hp <= 0:
+                    game_world.remove_object(self)
+                    server.kill_count += 1
         pass
