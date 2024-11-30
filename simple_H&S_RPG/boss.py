@@ -7,6 +7,7 @@ from state_machine import mob_close, mob_attack_end
 from state_machine import StateMachine
 import game_framework
 import game_world
+from skill import Boss_1, Boss_2
 
 # Monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -49,7 +50,7 @@ class Idle:
         mob.frame = (mob.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
 
         # 충분히 거리가 가까워지면 공격 모션을 진행
-        if mob.delayCount > 300:
+        if mob.delayCount > 100: #300 - 1번 스킬
             mob.delayCount = 0
             mob.state_machine.add_event(('MOB_CLOSE', 0))
 
@@ -62,11 +63,15 @@ class Idle:
 
         pass
 
-class Attack:
+class Attack_1:
     @staticmethod
     def enter(mob, e):
-        mob.current_state = 'Attack'
+        mob.current_state = 'Attack_1'
         mob.frame = 0
+
+        # 스킬
+        mob.boss_1(1)
+
         pass
 
     @staticmethod
@@ -83,12 +88,12 @@ class Attack:
     @staticmethod
     def draw(mob):
         if mob.face_dir == -1:
-            mob.images['Attack'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 50, 0, 'h', mob.x - 60, mob.y, 110 * 4, 50 * 4)
+            mob.images['Attack_1'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 50, 0, 'h', mob.x - 60, mob.y, 110 * 4, 50 * 4)
         else:
-            mob.images['Attack'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 50, 0, ' ', mob.x - 60, mob.y, 110 * 4, 50 * 4)
+            mob.images['Attack_1'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 50, 0, ' ', mob.x - 60, mob.y, 110 * 4, 50 * 4)
 
 
-animation_names = ['Idle', 'Attack']
+animation_names = ['Idle', 'Attack_1']
 # 100, 86, frames = 4
 
 class Boss:
@@ -123,8 +128,8 @@ class Boss:
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {mob_close : Attack},
-                Attack: {mob_attack_end : Idle}
+                Idle: {mob_close : Attack_1},
+                Attack_1: {mob_attack_end : Idle}
                 # ,Attack: {}, Hit: {}
             }
         )
@@ -164,3 +169,9 @@ class Boss:
                     game_world.remove_object(self)
                     server.boss_dead = True
         pass
+
+    def boss_1(self, num):
+        boss_1 = Boss_1(self.x + self.dir*180, self.y - 10, self.dir)
+        game_world.add_collision_pair('player:boss_1', None, boss_1)
+        game_world.add_collision_pair('player:boss_1', None, boss_1)
+        game_world.add_object(boss_1, 1)

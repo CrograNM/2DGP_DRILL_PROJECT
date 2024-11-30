@@ -65,7 +65,7 @@ class Skill_sword_B:
         self.frame = 0
         self.damage = 50
         if Skill_sword_B.image == None:
-            Skill_sword_B.image = load_image('resource/skill/sword_B.png')
+            Skill_sword_B.image = load_image('resource/skill/sword_B_2.png')
         self.x, self.y, self.dir = x, y, dir
 
     def draw(self):
@@ -239,6 +239,83 @@ class Skill_bow_C:
         if int(self.frame) >= 2:
             return (self.x - skill_bow_C_width / 2, self.y - skill_bow_C_height / 2,
                     self.x + skill_bow_C_width / 2, self.y + skill_bow_C_height / 2)
+        else :
+            return 0,0,0,0
+
+
+    def handle_collision(self, group, other):
+        pass
+
+#boss
+class Boss_1:
+    image = None
+
+    def __init__(self, x = 400, y = 300, dir = 1):
+        self.frame = 0
+        self.damage = 50
+        self.count = 0
+        if Boss_1.image == None:
+            Boss_1.image = load_image('resource/skill/boss_1.png')
+        self.x, self.y, self.dir = x, y, dir
+
+    def draw(self):
+        if self.dir == 1:
+            self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, 0, '',
+                                           self.x, self.y, skill_lightening_height, skill_lightening_width)
+            draw_rectangle(*self.get_bb())
+        else :
+            self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, 0, 'h',
+                                           self.x, self.y, skill_lightening_height, skill_lightening_width)
+            draw_rectangle(*self.get_bb())
+
+    def update(self):
+        self.frame = (self.frame + LIGHTENING_FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
+        if int(self.frame) == LIGHTENING_FRAMES_PER_ACTION - 1:
+            self.frame = 0
+            self.count += 1
+            self.x += self.dir * 200
+            if self.count >= 2:
+                game_world.remove_object(self)
+
+    def get_bb(self):
+        if int(self.frame) == 2:
+            return (self.x - skill_lightening_height / 2, self.y - skill_lightening_width / 2,
+                    self.x + skill_lightening_height / 2, self.y + skill_lightening_width / 2)
+        else :
+            return 0,0,0,0
+
+
+    def handle_collision(self, group, other):
+        pass
+class Boss_2:
+    image = None
+
+    def __init__(self, x = 400, y = 300, dir = 1):
+        self.frame = 0
+        self.damage = 50
+        if Boss_2.image == None:
+            Boss_2.image = load_image('resource/skill/sword_B_3.png')
+        self.x, self.y, self.dir = x, y, dir
+
+    def draw(self):
+        if self.dir == 1:
+            self.image.clip_composite_draw(int(self.frame) * 100, 0 * 100, 100, 100, 0, '',
+                                           self.x, self.y, skill_sword_B_width, skill_sword_B_height)
+            draw_rectangle(*self.get_bb())
+        else :
+            self.image.clip_composite_draw(int(self.frame) * 100, 0 * 100, 100, 100, 0, 'h',
+                                           self.x, self.y, skill_sword_B_width, skill_sword_B_height)
+            draw_rectangle(*self.get_bb())
+
+    def update(self):
+        self.frame = (self.frame + SWORD_B_FRAMES_PER_ACTION * SWORD_ATTACK_B_ACTION_PER_TIME * game_framework.frame_time)
+        if int(self.frame) == SWORD_B_FRAMES_PER_ACTION - 1:
+            game_world.remove_object(self)
+
+    def get_bb(self):
+        if int(self.frame) == 2:
+            return (self.x - skill_sword_B_width / 2, self.y - skill_sword_B_height / 2,
+                    self.x + skill_sword_B_width / 2, self.y + skill_sword_B_height / 2)
         else :
             return 0,0,0,0
 

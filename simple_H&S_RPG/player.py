@@ -405,7 +405,7 @@ class Player:
         self.current_state = None
 
         self.hp_max = 100
-        self.hp = 10
+        self.hp = 100
         self.dmg = 50
         self.invulnerable = False  # 무적 상태 여부
         self.invulnerable_start_time = 0  # 무적 상태 시작 시간
