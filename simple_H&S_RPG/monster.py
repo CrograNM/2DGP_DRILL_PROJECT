@@ -3,7 +3,7 @@ from pico2d import *
 
 import server
 from player import Player
-from state_machine import mob_close, mob_attack_end
+from state_machine import mob_close, mob_attack_end, time_out, hurt_start
 from state_machine import StateMachine
 import game_framework
 import game_world
@@ -20,8 +20,9 @@ TIME_PER_ACTION = 0.75
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION_RUN = 12
 FRAMES_PER_ACTION_ATTACK = 9
+FRAMES_PER_ACTION_HIT = 5
 
-MONSTER_SIZE = 48
+MONSTER_SIZE = 48  #72
 # sx, sy = 0 , 0
 WIDTH = 1280
 HEIGHT = 720
@@ -98,8 +99,31 @@ class Attack:
         else:
             mob.images['Attack'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
 
+class Hit:
+    @staticmethod
+    def enter(mob, e):
+        mob.current_state = 'Hit'
+        mob.frame = 0
+        pass
 
-animation_names = ['Run', 'Attack']
+    @staticmethod
+    def exit(mob, e):
+        pass
+
+    @staticmethod
+    def do(mob):
+        mob.frame = mob.frame + FRAMES_PER_ACTION_HIT * ACTION_PER_TIME * game_framework.frame_time
+        if int(mob.frame) == FRAMES_PER_ACTION_HIT - 1:
+            mob.state_machine.add_event(('TIME_OUT', 0))
+
+    @staticmethod
+    def draw(mob):
+        if mob.face_dir == -1:
+            mob.images['Hit'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
+        else:
+            mob.images['Hit'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
+
+animation_names = ['Run', 'Attack', 'Hit']
 
 class Monster:
     images = None
@@ -135,8 +159,9 @@ class Monster:
         self.state_machine.start(Run)
         self.state_machine.set_transitions(
             {
-                Run: {mob_close : Attack},
-                Attack: {mob_attack_end : Run}
+                Run: {mob_close : Attack, hurt_start:Hit},
+                Attack: {mob_attack_end : Run, hurt_start:Hit},
+                Hit: {time_out : Run}
                 # ,Attack: {}, Hit: {}
             }
         )
@@ -157,7 +182,7 @@ class Monster:
         #draw_rectangle(self.ax - 5, self.ay - 5, self.ax + 5, self.ay + 5)
 
     def get_bb(self):
-        if self.current_state == 'Run':
+        if self.current_state == 'Run' or 'Hit':
             return self.x - MONSTER_SIZE*0.7, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE*0.7, self.y + MONSTER_SIZE*0.5
         elif self.current_state == 'Attack':
             # 애니메이션에 따라 크기, 위치 변경이 필요함
@@ -170,11 +195,12 @@ class Monster:
         #     if self.hp <= 0:
         #         game_world.remove_object(self)
         #         server.kill_count += 1
-        if group == 'monster:skill_1':
-            if other not in self.hit_by_skills or not self.hit_by_skills[other]:
-                self.hp -= self.player.dmg
-                self.hit_by_skills[other] = True  # 충돌 상태 업데이트
-
+        if self.current_state == 'Run' or 'Attack':
+            if group == 'monster:skill_1':
+                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                    self.hp -= self.player.dmg
+                    self.hit_by_skills[other] = True  # 충돌 상태 업데이트
+                    self.state_machine.add_event(('HURT_START', 0))
                 if self.hp <= 0:
                     game_world.remove_object(self)
                     server.kill_count += 1
