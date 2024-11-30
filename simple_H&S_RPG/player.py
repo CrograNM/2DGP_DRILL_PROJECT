@@ -27,6 +27,7 @@ FRAMES_PER_ACTION_IDLE = 4
 FRAMES_PER_ACTION_RUN = 6
 FRAMES_PER_ACTION_ATTACK = 6
 FRAMES_PER_ACTION_JUMP = 8
+FRAMES_PER_ACTION_HURT = 4
 
 PLAYER_SIZE = 42
 sx, sy = 0 , 0
@@ -318,6 +319,38 @@ class Attack_Bow:
             player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
                                                     0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
 
+class Hurt:
+    @staticmethod
+    def enter(player, e):
+        player.current_state = 'Hurt'
+        player.frame = 0
+        player.dir = player.face_dir
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+        player.frame = (player.frame + FRAMES_PER_ACTION_HURT * ACTION_PER_TIME * game_framework.frame_time)
+        # player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        # player.move(dx)
+
+        if int(player.frame) == FRAMES_PER_ACTION_HURT - 1:
+            player.hp -= 10
+            player.state_machine.add_event(('TIME_OUT', 0))
+            pass
+
+    @staticmethod
+    def draw(player):
+        if player.face_dir == 1:
+            player.image_Hurt.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                    0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+        else:
+            player.image_Hurt.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                    0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+
 class Player:
     def __init__(self):
         self.weapon = server.weapon
@@ -341,11 +374,13 @@ class Player:
         self.image_Attack = load_image('resource/player/sword_Attack.png')
         self.image_SquatAttack = load_image('resource/player/sword_SquatAttack.png')
         self.image_Jump = load_image('resource/player/sword_Jump.png')
+        self.image_Hurt = load_image('resource/player/sword_Hurt.png')
         if server.weapon == 'Bow':
             self.image_Idle = load_image('resource/player/bow_Idle.png')
             self.image_Run = load_image('resource/player/bow_Run.png')
             self.image_Attack = load_image('resource/player/bow_Attack.png')
             self.image_Jump = load_image('resource/player/bow_Jump.png')
+            self.image_Hurt = load_image('resource/player/bow_Hurt.png')
 
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
@@ -359,16 +394,17 @@ class Player:
                 {   #상태 변환 테이블 : 더블 Dict로 구현
                     Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run,
                            alt_down : Jump,
-                           ctrl_down : Attack_Sword_I}, #ctrl_down : Idle
+                           ctrl_down : Attack_Sword_I, hurt_start:Hurt}, #ctrl_down : Idle
                     Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
                           alt_down: Jump_run,
-                          ctrl_down : Attack_Sword_R},
-                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle},
-                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run},
+                          ctrl_down : Attack_Sword_R, hurt_start:Hurt},
+                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle, hurt_start:Hurt},
+                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run, hurt_start:Hurt},
                     Attack_Sword_I: {time_out: Idle,
-                                        right_down : Attack_Sword_R, left_down : Attack_Sword_R},
+                                        right_down : Attack_Sword_R, left_down : Attack_Sword_R, hurt_start:Hurt},
                     Attack_Sword_R: {time_out: Run,
-                                        right_up : Attack_Sword_I, left_up : Attack_Sword_I}
+                                        right_up : Attack_Sword_I, left_up : Attack_Sword_I, hurt_start:Hurt},
+                    Hurt: {time_out: Idle, right_down: Run, left_down: Run, left_up: Run, right_up: Run}
                 }
             )
         elif server.weapon == 'Bow':
@@ -382,7 +418,8 @@ class Player:
                           ctrl_down: Attack_Bow, ctrl_up: Attack_Bow},
                     Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle},
                     Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run},
-                    Attack_Bow: {time_out: Idle}
+                    Attack_Bow: {time_out: Idle},
+                    Hurt: {time_out: Idle}
                 }
             )
 
@@ -434,8 +471,9 @@ class Player:
 
     def handle_collision(self, group, other):
         # fill here
-        # if group == 'player:monster_attack':
-        #     self.hp -= 10
+        if self.current_state != 'Hurt':
+            if group == 'player:monster':
+                 self.state_machine.add_event(('HURT_START', 0))
         pass
 
     def skill_1(self, num):

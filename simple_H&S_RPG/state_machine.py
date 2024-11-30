@@ -2,6 +2,9 @@
 #상태 이벤트 e = (종류, 실제값) 튜플로 정의
 from sdl2 import *
 
+def hurt_start(e):
+    return e[0] == 'HURT_START'
+
 def jump_end(e):
     return e[0] == 'JUMP_END'
 
