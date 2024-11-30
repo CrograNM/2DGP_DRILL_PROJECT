@@ -114,6 +114,7 @@ class Run:
 class Jump_run:
     @staticmethod
     def enter(player, e):
+        player.current_state = 'Jump'
         if right_down(e):
             player.face_dir = 1
             player.dir = 1
@@ -150,6 +151,7 @@ class Jump_run:
 class Jump:
     @staticmethod
     def enter(player, e):
+        player.current_state = 'Jump'
         if right_down(e):
             player.face_dir = 1
         elif left_down(e):
@@ -333,7 +335,7 @@ class Hurt:
     @staticmethod
     def do(player):
         player.frame = (player.frame + FRAMES_PER_ACTION_HURT * ACTION_PER_TIME * game_framework.frame_time)
-        # player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        player.x -= player.face_dir * RUN_SPEED_PPS * game_framework.frame_time
         # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
         # player.move(dx)
 
@@ -403,9 +405,9 @@ class Player:
                     Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle, hurt_start:Hurt},
                     Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run, hurt_start:Hurt},
                     Attack_Sword_I: {time_out: Idle,
-                                        right_down : Attack_Sword_R, left_down : Attack_Sword_R, hurt_start:Hurt},
+                                        right_down : Attack_Sword_R, left_down : Attack_Sword_R},
                     Attack_Sword_R: {time_out: Run,
-                                        right_up : Attack_Sword_I, left_up : Attack_Sword_I, hurt_start:Hurt},
+                                        right_up : Attack_Sword_I, left_up : Attack_Sword_I},
                     Hurt: {time_out: Idle}
                 }
             )
@@ -489,7 +491,7 @@ class Player:
         if self.invulnerable:
             return False  # 무적 상태라면 충돌 처리하지 않음
 
-        if self.current_state != 'Hurt':
+        if self.current_state == 'Idle' or 'Run' or 'Jump':
             if group == 'player:monster':
                 self.take_damage(10)
                 self.state_machine.add_event(('HURT_START', 0))
