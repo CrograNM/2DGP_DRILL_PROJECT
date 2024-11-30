@@ -51,12 +51,11 @@ class Idle:
             player.face_dir = -1
         elif left_down(e) or right_up(e):
             player.face_dir = 1
-
         player.frame = 0
-        player.start_time = get_time()
 
     @staticmethod
     def exit(player, e):
+        player.frame = 0
         pass
 
     @staticmethod
@@ -67,8 +66,6 @@ class Idle:
             player.gravity = 0
             player.y = on_ground
         player.frame = (player.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
-        # if get_time() - player.start_time > 3:
-        #     player.state_machine.add_event(('TIME_OUT', 0))
 
     @staticmethod
     def draw(player):
@@ -103,8 +100,6 @@ class Run:
             player.y = on_ground
         player.frame = (player.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
         player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
-        # dx = player.dir * RUN_SPEED_PPS * game_framework.frame_time  # 이동 거리 계산
-        # player.move(dx)  # 수정된 move 메서드 호출
 
     @staticmethod
     def draw(player):
@@ -224,8 +219,6 @@ class Attack_Sword_I:
             player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
         else :
             player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_B_ACTION_PER_TIME * game_framework.frame_time)
-        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # player.move(dx)
 
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
@@ -274,14 +267,11 @@ class Attack_Sword_R:
 
     @staticmethod
     def do(player):
-
         if server.weapon_ABC == 'A':
             player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
             player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
         else:
             player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_B_ACTION_PER_TIME * game_framework.frame_time)
-        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # player.move(dx)
 
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
@@ -326,9 +316,6 @@ class Attack_Bow_I:
     def do(player):
 
         player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * BOW_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
-        # player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # player.move(dx)
 
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
@@ -368,12 +355,7 @@ class Attack_Bow_R:
 
     @staticmethod
     def do(player):
-
         player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * BOW_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
-        # player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # player.move(dx)
-
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
             if server.weapon_ABC == 'A':
@@ -420,8 +402,6 @@ class Hurt:
 
         player.frame = (player.frame + FRAMES_PER_ACTION_HURT * ACTION_PER_TIME * game_framework.frame_time)
         player.x -= player.face_dir * RUN_SPEED_PPS * game_framework.frame_time
-        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # player.move(dx)
 
         if int(player.frame) == FRAMES_PER_ACTION_HURT - 1:
             #player.hp -= 10
@@ -467,8 +447,6 @@ class Hurt_run:
 
         player.frame = (player.frame + FRAMES_PER_ACTION_HURT * ACTION_PER_TIME * game_framework.frame_time)
         player.x -= player.face_dir * RUN_SPEED_PPS * game_framework.frame_time
-        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # player.move(dx)
 
         if int(player.frame) == FRAMES_PER_ACTION_HURT - 1:
             #player.hp -= 10
@@ -647,10 +625,6 @@ class Player:
         elif self.x > 1280 - 10:
             self.x = 1270
 
-        # 카메라 비활성화
-        # self.x = clamp(10.0, self.x, server.background.w - 10.0)
-        # self.y = clamp(20.0, self.y, server.background.h - 10.0)
-
     def handle_event(self, event):
         #if self.current_state != 'Attack':
         self.state_machine.add_event(('INPUT', event))
@@ -689,25 +663,35 @@ class Player:
 
         if self.current_state == 'Idle' or 'Run' or 'Jump':
             if group == 'player:monster':
-                self.take_damage(10)
-                self.frame = 0
-                self.state_machine.add_event(('HURT_START', 0))
+                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                    self.hit_by_skills[other] = True
+                    self.take_damage(10)
+                    self.frame = 0
+                    self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:monster_attack':
-                self.take_damage(10)
-                self.frame = 0
-                self.state_machine.add_event(('HURT_START', 0))
+                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                    self.hit_by_skills[other] = True
+                    self.take_damage(10)
+                    self.frame = 0
+                    self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss':
-                self.take_damage(10)
-                self.frame = 0
-                self.state_machine.add_event(('HURT_START', 0))
+                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                    self.hit_by_skills[other] = True
+                    self.take_damage(10)
+                    self.frame = 0
+                    self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss_skill':
-                self.take_damage(20)
-                self.frame = 0
-                self.state_machine.add_event(('HURT_START', 0))
+                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                    self.hit_by_skills[other] = True
+                    self.take_damage(20)
+                    self.frame = 0
+                    self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss_skill_!!!':
-                self.take_damage(50)
-                self.frame = 0
-                self.state_machine.add_event(('HURT_START', 0))
+                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                    self.hit_by_skills[other] = True
+                    self.take_damage(50)
+                    self.frame = 0
+                    self.state_machine.add_event(('HURT_START', 0))
         pass
 
     def skill_1(self, num):
