@@ -547,6 +547,9 @@ class Player:
             if group == 'player:monster':
                 self.take_damage(10)
                 self.state_machine.add_event(('HURT_START', 0))
+            elif group == 'player:boss':
+                self.take_damage(10)
+                self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss_skill':
                 self.take_damage(20)
                 self.state_machine.add_event(('HURT_START', 0))

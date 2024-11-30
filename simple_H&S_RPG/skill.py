@@ -299,11 +299,11 @@ class Boss_2:
 
     def draw(self):
         if self.dir == 1:
-            self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, radians(90), 'h',
+            self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, radians(270), 'h',
                                            self.x, self.y, skill_lightening_height, skill_lightening_width)
             draw_rectangle(*self.get_bb())
         else :
-            self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, radians(90), ' ',
+            self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, radians(270), ' ',
                                            self.x, self.y, skill_lightening_height, skill_lightening_width)
             draw_rectangle(*self.get_bb())
 

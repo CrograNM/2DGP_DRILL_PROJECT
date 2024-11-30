@@ -176,6 +176,6 @@ class Boss:
         game_world.add_object(boss_1, 1)
 
     def boss_2(self, num):
-        boss_2 = Boss_2(self.x + self.dir * 180, self.y - 10, self.dir)
+        boss_2 = Boss_2(self.x + self.dir * 180, self.y - 60, self.dir)
         game_world.add_collision_pair('player:boss_skill', None, boss_2)
         game_world.add_object(boss_2, 1)
