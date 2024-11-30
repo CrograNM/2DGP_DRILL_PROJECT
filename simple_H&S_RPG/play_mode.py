@@ -88,7 +88,8 @@ def update():
             server.spawn_boss_count += 1
     if server.boss_dead == True:
         game_framework.push_mode(result_mode)
-
+    elif server.player_dead == True:
+        game_framework.push_mode(result_mode)
     game_world.update()
     game_world.handle_collisions()
     delay(0.01)

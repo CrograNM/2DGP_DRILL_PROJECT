@@ -127,6 +127,7 @@ def handle_events():
                 server.spawn_boss_count = 0
                 server.start_time = get_time()
                 server.boss_dead = False
+                server.player_dead = False
                 server.skill_1_using = False
                 game_world.clear_all()
                 game_framework.change_mode(play_mode)
