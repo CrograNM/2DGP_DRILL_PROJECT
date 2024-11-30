@@ -118,17 +118,17 @@ class Skill_bow_B:
                     self.x + skill_bow_width / 2, self.y + 10)
 
     def handle_collision(self, group, other):
-        if group == 'monster:skill_bow_B':
-            game_world.remove_object(self)
-            skill = Skill_bow(self.x, self.y)
+        if group == 'monster:skill_1' or 'boss:skill_1':
+            skill = Skill_bow_B_explode(self.x, self.y)
             # game_world.add_collision_pair('zombie:ball', None, ball)
-            game_world.add_collision_pair('monster:skill_bow_B_explode', None, skill)  # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
-            game_world.add_collision_pair('boss:skill_bow_B_explode', None, skill)
+            game_world.add_collision_pair('monster:skill_1', None, skill)  # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
+            game_world.add_collision_pair('boss:skill_1', None, skill)
             game_world.add_object(skill, 1)
+            game_world.remove_object(self)
         pass
 
-skill_bow_explode_width = 48
-skill_bow_explode_height = 48
+skill_bow_explode_width = 100
+skill_bow_explode_height = 100
 BOW_EXPLODE_FRAMES_PER_ACTION = 8
 class Skill_bow_B_explode:
     image = None
@@ -156,7 +156,7 @@ class Skill_bow_B_explode:
             game_world.remove_object(self)
 
     def get_bb(self):
-        if int(self.frame) == 4:
+        if int(self.frame) != 10:
             return (self.x - skill_bow_explode_width / 2, self.y - skill_bow_explode_height / 2,
                     self.x + skill_bow_explode_width / 2, self.y + skill_bow_explode_height / 2)
         else :

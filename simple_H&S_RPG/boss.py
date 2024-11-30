@@ -148,7 +148,9 @@ class Boss:
     def handle_collision(self, group, other):
         # fill here
         if group == 'boss:skill_1':
-            game_world.remove_object(self)
-            # server.kill_count += 1
-            server.boss_dead = True
+            self.hp -= self.player.dmg
+            if self.hp <= 0:
+                game_world.remove_object(self)
+                server.boss_dead = True
+                #server.kill_count += 1
         pass

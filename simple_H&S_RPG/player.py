@@ -2,7 +2,7 @@ from pico2d import *
 from state_machine import *
 import game_framework
 import game_world
-from skill import Skill_lightening, Skill_bow
+from skill import *
 import server
 
 WIDTH = 1280
@@ -272,7 +272,7 @@ class Attack_Bow:
 
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
-            player.skill_2(1)
+            player.skill_Bow_B(1)
             pass
 
     @staticmethod
@@ -418,8 +418,8 @@ class Player:
         game_world.add_object(skill_2, 1)
 
     def skill_Bow_B(self, num):
-        skill_Bow_B = Skill_bow(self.x + self.dir*20, self.y - 20, self.dir)
+        skill_Bow_B = Skill_bow_B(self.x + self.dir*20, self.y - 20, self.dir)
         # game_world.add_collision_pair('zombie:ball', None, ball)
-        game_world.add_collision_pair('monster:skill_bow_B', None, skill_Bow_B) # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
-        game_world.add_collision_pair('boss:skill_bow_B', None, skill_Bow_B)
+        game_world.add_collision_pair('monster:skill_1', None, skill_Bow_B) # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
+        game_world.add_collision_pair('boss:skill_1', None, skill_Bow_B)
         game_world.add_object(skill_Bow_B, 1)
