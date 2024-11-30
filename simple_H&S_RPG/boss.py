@@ -96,7 +96,7 @@ class Attack_1:
         if mob.face_dir == -1:
             mob.images['Attack_1'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 50, 0, 'h', mob.x - 60, mob.y, 110 * 4, 50 * 4)
         else:
-            mob.images['Attack_1'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 50, 0, ' ', mob.x - 60, mob.y, 110 * 4, 50 * 4)
+            mob.images['Attack_1'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 50, 0, ' ', mob.x + 60, mob.y, 110 * 4, 50 * 4)
 class Attack_3:
     @staticmethod
     def enter(mob, e):
@@ -122,7 +122,7 @@ class Attack_3:
         if mob.face_dir == -1:
             mob.images['Attack_3'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 60, 0, 'h', mob.x - 60, mob.y + 20, 110 * 4, 60 * 4)
         else:
-            mob.images['Attack_3'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 60, 0, ' ', mob.x - 60, mob.y + 20, 110 * 4, 60 * 4)
+            mob.images['Attack_3'].clip_composite_draw(int(mob.frame) * 110, 0, 110, 60, 0, ' ', mob.x + 60, mob.y + 20, 110 * 4, 60 * 4)
 
 animation_names = ['Idle', 'Attack_1', 'Attack_3']
 # 100, 86, frames = 4
