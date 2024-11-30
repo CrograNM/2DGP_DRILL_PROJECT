@@ -302,10 +302,10 @@ class Attack_Bow_I:
 
     @staticmethod
     def exit(player, e):
-        if left_up(e):
+        if right_down(e) or left_up(e):
             player.dir = 1
             player.face_dir = 1
-        elif right_up(e):
+        elif left_down(e) or right_up(e):
             player.dir = -1
             player.face_dir = -1
         pass
@@ -342,10 +342,10 @@ class Attack_Bow_R:
 
     @staticmethod
     def exit(player, e):
-        if right_down(e):
+        if right_down(e) or left_up(e):
             player.dir = 1
             player.face_dir = 1
-        elif left_down(e):
+        elif left_down(e) or right_up(e):
             player.dir = -1
             player.face_dir = -1
         pass
