@@ -26,6 +26,8 @@ def spawn_boss():
     game_world.add_object(boss, 1)  # 포그라운드 깊이에 추가
     game_world.add_collision_pair('player:boss', server.player, boss)
     game_world.add_collision_pair('boss:skill_1', boss, None)
+    game_world.add_collision_pair('boss:skill_bow_B', boss, None)
+    game_world.add_collision_pair('boss:skill_bow_B_explode', boss, None)
 
 last_spawn_time = 0
 def spawn_monster():
@@ -41,6 +43,8 @@ def spawn_monster():
             game_world.add_object(new_monster, 1)  # 포그라운드 깊이에 추가
             game_world.add_collision_pair('player:monster', server.player, new_monster)
             game_world.add_collision_pair('monster:skill_1', new_monster, None)
+            game_world.add_collision_pair('monster:skill_bow_B', new_monster, None)
+            game_world.add_collision_pair('monster:skill_bow_B_explode', new_monster, None)
         last_spawn_time = current_time
 
 def handle_events():
