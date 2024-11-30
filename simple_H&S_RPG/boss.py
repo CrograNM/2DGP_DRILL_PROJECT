@@ -50,12 +50,12 @@ class Idle:
         mob.frame = (mob.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
 
         # 충분히 거리가 가까워지면 공격 모션을 진행
-        if mob.delayCount > 100: #300 - 1번 스킬
+        if mob.delayCount > 200: #200번 idle 반복 되면 패턴 사용
             p = randint(1, 100)
             mob.delayCount = 0
-            if p <= 50:
+            if p <= 70: #70% 확률로 기본 스킬
                 mob.state_machine.add_event(('BOSS_1_START', 0))
-            else :
+            else :      #30% 확률로 강력 스킬
                 mob.state_machine.add_event(('BOSS_3_START', 0))
 
     @staticmethod
