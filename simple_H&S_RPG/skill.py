@@ -273,8 +273,8 @@ class Boss_1:
         if int(self.frame) == LIGHTENING_FRAMES_PER_ACTION - 1:
             self.frame = 0
             self.count += 1
-            self.x += self.dir * 200
-            if self.count >= 2:
+            self.x += self.dir * 80
+            if self.count >= 3:
                 game_world.remove_object(self)
 
     def get_bb(self):

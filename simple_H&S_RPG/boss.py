@@ -171,7 +171,7 @@ class Boss:
         pass
 
     def boss_1(self, num):
-        boss_1 = Boss_1(self.x + self.dir*180, self.y - 10, self.dir)
+        boss_1 = Boss_1(self.x + self.dir*180, self.y + 60, self.dir)
         game_world.add_collision_pair('player:boss_1', None, boss_1)
         game_world.add_collision_pair('player:boss_1', None, boss_1)
         game_world.add_object(boss_1, 1)
