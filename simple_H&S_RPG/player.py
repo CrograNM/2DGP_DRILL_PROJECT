@@ -77,6 +77,7 @@ class Run:
     @staticmethod
     def enter(player, e):
         player.current_state = 'Run'
+        player.dir = player.face_dir
         if right_down(e) or left_up(e):
             player.dir = 1
             player.face_dir = 1

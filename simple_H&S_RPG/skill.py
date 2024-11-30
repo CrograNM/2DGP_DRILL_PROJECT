@@ -196,7 +196,7 @@ class Skill_bow_B_explode:
             game_world.remove_object(self)
 
     def get_bb(self):
-        if int(self.frame) != 10:
+        if int(self.frame) == 2:
             return (self.x - skill_bow_explode_width / 2, self.y - skill_bow_explode_height / 2,
                     self.x + skill_bow_explode_width / 2, self.y + skill_bow_explode_height / 2)
         else :
@@ -236,7 +236,7 @@ class Skill_bow_C:
             game_world.remove_object(self)
 
     def get_bb(self):
-        if int(self.frame) >= 2:
+        if int(self.frame) == 2:
             return (self.x - skill_bow_C_width / 2, self.y - skill_bow_C_height / 2,
                     self.x + skill_bow_C_width / 2, self.y + skill_bow_C_height / 2)
         else :
