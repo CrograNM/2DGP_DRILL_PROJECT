@@ -371,14 +371,10 @@ class Death:
     @staticmethod
     def do(player):
         player.frame = (player.frame + FRAMES_PER_ACTION_DEATH * ACTION_PER_TIME * game_framework.frame_time)
-        # player.x -= player.face_dir * RUN_SPEED_PPS * game_framework.frame_time
-        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
-        # player.move(dx)
-
-        if int(player.frame) == FRAMES_PER_ACTION_DEATH - 1:
-            #player.hp -= 10
+        if int(player.frame) >= FRAMES_PER_ACTION_DEATH - 1:
+            player.frame = FRAMES_PER_ACTION_DEATH - 1
             server.player_dead = True
-            player.state_machine.add_event(('TIME_OUT', 0))
+            #player.state_machine.add_event(('TIME_OUT', 0))
             pass
 
     @staticmethod
@@ -451,7 +447,7 @@ class Player:
                     Attack_Sword_R: {time_out: Run,
                                         right_up : Attack_Sword_I, left_up : Attack_Sword_I},
                     Hurt: {time_out: Idle, death_start : Death},
-                    Death: {time_out: Idle}
+                    Death: {}
                 }
             )
         elif server.weapon == 'Bow':
@@ -459,14 +455,19 @@ class Player:
                 {  # 상태 변환 테이블 : 더블 Dict로 구현
                     Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run,
                            alt_down: Jump,
-                           ctrl_down: Attack_Bow, ctrl_up: Attack_Bow},  # ctrl_down : Idle
+                           ctrl_down: Attack_Bow, ctrl_up: Attack_Bow,
+                           hurt_start:Hurt},  # ctrl_down : Idle
                     Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
                           alt_down: Jump_run,
-                          ctrl_down: Attack_Bow, ctrl_up: Attack_Bow},
-                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle},
-                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run},
+                          ctrl_down: Attack_Bow, ctrl_up: Attack_Bow,
+                          hurt_start:Hurt},
+                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle,
+                           hurt_start:Hurt},
+                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run,
+                               hurt_start:Hurt},
                     Attack_Bow: {time_out: Idle},
-                    Hurt: {time_out: Idle}
+                    Hurt: {time_out: Idle, death_start: Death},
+                    Death: {}
                 }
             )
 
