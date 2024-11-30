@@ -445,7 +445,7 @@ class Player:
         game_world.add_object(skill_1, 1)
 
     def skill_Sword_B(self, num):
-        skill_Sword_B = Skill_sword_B(self.x + self.dir*180, self.y - 10, self.dir)
+        skill_Sword_B = Skill_sword_B(self.x + self.dir*150, self.y + 100, self.dir)
         game_world.add_collision_pair('monster:skill_1', None, skill_Sword_B)
         game_world.add_collision_pair('boss:skill_1', None, skill_Sword_B)
         game_world.add_object(skill_Sword_B, 1)
