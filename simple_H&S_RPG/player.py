@@ -81,11 +81,9 @@ class Run:
     def enter(player, e):
         player.current_state = 'Run'
         if right_down(e) or left_up(e):
-            player.result_dir = 1
             player.dir = 1
             player.face_dir = 1
         elif left_down(e) or right_up(e):
-            player.result_dir = -1
             player.dir = -1
             player.face_dir = -1
 
@@ -164,6 +162,12 @@ class Jump:
 
     @staticmethod
     def exit(player, e):
+        if right_down(e) or left_up(e):
+            player.dir = 1
+            player.face_dir = 1
+        elif left_down(e) or right_up(e):
+            player.dir = -1
+            player.face_dir = -1
         pass
 
     @staticmethod
@@ -249,6 +253,12 @@ class Attack_Sword_R:
 
     @staticmethod
     def exit(player, e):
+        if right_down(e) or left_up(e):
+            player.dir = 1
+            player.face_dir = 1
+        elif left_down(e) or right_up(e):
+            player.dir = -1
+            player.face_dir = -1
         pass
 
     @staticmethod
@@ -326,11 +336,60 @@ class Hurt:
     @staticmethod
     def enter(player, e):
         player.current_state = 'Hurt'
-        player.frame = 0
         player.dir = player.face_dir
 
     @staticmethod
     def exit(player, e):
+        if right_down(e) or left_up(e):
+            player.dir = 1
+            player.face_dir = 1
+        elif left_down(e) or right_up(e):
+            player.dir = -1
+            player.face_dir = -1
+        pass
+
+    @staticmethod
+    def do(player):
+        if player.y <= on_ground:
+            player.gravity = 0
+            player.y = on_ground
+
+        player.frame = (player.frame + FRAMES_PER_ACTION_HURT * ACTION_PER_TIME * game_framework.frame_time)
+        player.x -= player.face_dir * RUN_SPEED_PPS * game_framework.frame_time
+        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        # player.move(dx)
+
+        if int(player.frame) == FRAMES_PER_ACTION_HURT - 1:
+            #player.hp -= 10
+            if player.hp <= 0:
+                player.state_machine.add_event(('DEATH_START', 0))
+            else:
+                player.state_machine.add_event(('TIME_OUT', 0))
+            pass
+
+    @staticmethod
+    def draw(player):
+        if player.face_dir == 1:
+            player.image_Hurt.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                    0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+        else:
+            player.image_Hurt.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                    0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+
+class Hurt_run:
+    @staticmethod
+    def enter(player, e):
+        player.current_state = 'Hurt'
+        player.dir = player.face_dir
+
+    @staticmethod
+    def exit(player, e):
+        if right_down(e) or left_up(e):
+            player.dir = 1
+            player.face_dir = 1
+        elif left_down(e) or right_up(e):
+            player.dir = -1
+            player.face_dir = -1
         pass
 
     @staticmethod
@@ -445,16 +504,19 @@ class Player:
                     Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
                           alt_down: Jump_run,
                           ctrl_down : Attack_Sword_R,
-                          hurt_start:Hurt},
-                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle,
-                           hurt_start:Hurt},
-                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run,
-                               hurt_start:Hurt},
+                          hurt_start:Hurt_run},
+                    Jump: {right_down: Jump_run, left_down: Jump_run, right_up: Jump_run, left_up: Jump_run,
+                           jump_end: Idle},
+                    Jump_run: {right_up: Jump, left_up: Jump, right_down: Jump, left_down: Jump,
+                               jump_end: Run},
                     Attack_Sword_I: {time_out: Idle,
                                         right_down : Attack_Sword_R, left_down : Attack_Sword_R},
                     Attack_Sword_R: {time_out: Run,
                                         right_up : Attack_Sword_I, left_up : Attack_Sword_I},
-                    Hurt: {time_out: Idle, death_start : Death},
+                    Hurt: {right_down: Hurt_run, left_down: Hurt_run,
+                            time_out: Idle, death_start : Death},
+                    Hurt_run: {right_up: Hurt, left_up: Hurt,
+                            time_out: Run, death_start: Death},
                     Death: {}
                 }
             )
@@ -468,13 +530,14 @@ class Player:
                     Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
                           alt_down: Jump_run,
                           ctrl_down: Attack_Bow, ctrl_up: Attack_Bow,
-                          hurt_start:Hurt},
-                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle,
-                           hurt_start:Hurt},
-                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run,
-                               hurt_start:Hurt},
+                          hurt_start:Hurt_run},
+                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle},
+                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run},
                     Attack_Bow: {time_out: Idle},
-                    Hurt: {time_out: Idle, death_start: Death},
+                    Hurt: {right_down: Hurt_run, left_down: Hurt_run,
+                           time_out: Idle, death_start: Death},
+                    Hurt_run: {right_up: Hurt, left_up: Hurt,
+                               time_out: Run, death_start: Death},
                     Death: {}
                 }
             )
@@ -546,15 +609,19 @@ class Player:
         if self.current_state == 'Idle' or 'Run' or 'Jump':
             if group == 'player:monster':
                 self.take_damage(10)
+                self.frame = 0
                 self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss':
                 self.take_damage(10)
+                self.frame = 0
                 self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss_skill':
                 self.take_damage(20)
+                self.frame = 0
                 self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss_skill_!!!':
                 self.take_damage(50)
+                self.frame = 0
                 self.state_machine.add_event(('HURT_START', 0))
         pass
 
