@@ -13,6 +13,17 @@ class Background:
     def update(self):
         pass
 
+class Pannel:
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.image = load_image('resource/pause_mode/pause.png')
+
+    def draw(self):
+        self.image.draw(self.x, self.y, 400, 300)
+
+    def update(self):
+        pass
+
 # Button 클래스 수정
 class Button:
     def __init__(self, x, y, width, height):
@@ -37,6 +48,14 @@ class Sword_Button(Button):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
         self.image = load_image('resource/title_mode/sword_button_100_100_2.png')
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+class Sword_A(Button):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
+        self.image = load_image('resource/title_mode/sword_A.png')
 
     def draw(self):
         self.image.draw(self.x, self.y)

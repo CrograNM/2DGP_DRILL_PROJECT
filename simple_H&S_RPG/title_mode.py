@@ -4,7 +4,7 @@ import game_framework
 import game_world
 import play_mode
 import server
-from title_pannel import Background, Start_Button, Sword_Button, Bow_Button
+from title_pannel import *
 
 WIDTH = 1280
 HEIGHT = 720
