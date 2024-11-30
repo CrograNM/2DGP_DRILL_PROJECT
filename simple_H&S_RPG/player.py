@@ -300,7 +300,45 @@ class Attack_Sword_R:
                 player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
                                                         0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
 
-class Attack_Bow:
+class Attack_Bow_I:
+    @staticmethod
+    def enter(player, e):
+        player.current_state = 'Attack'
+        player.frame = 0
+        player.dir = player.face_dir
+
+    @staticmethod
+    def exit(player, e):
+        pass
+
+    @staticmethod
+    def do(player):
+
+        player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * BOW_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
+        # player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        # dx = player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
+        # player.move(dx)
+
+        if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
+            player.state_machine.add_event(('TIME_OUT', 0))
+            if server.weapon_ABC == 'A':
+                player.skill_2(1)
+            elif server.weapon_ABC == 'B':
+                player.skill_Bow_B(1)
+            elif server.weapon_ABC == 'C':
+                player.skill_Bow_C(1)
+            pass
+
+    @staticmethod
+    def draw(player):
+        if player.face_dir == 1:
+            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                    0, '', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+        else:
+            player.image_Attack.clip_composite_draw(int(player.frame) * PLAYER_SIZE, 0, PLAYER_SIZE, PLAYER_SIZE,
+                                                    0, 'h', player.x, player.y, PLAYER_SIZE * 2, PLAYER_SIZE * 2)
+
+class Attack_Bow_R:
     @staticmethod
     def enter(player, e):
         player.current_state = 'Attack'
@@ -533,18 +571,25 @@ class Player:
                 {  # 상태 변환 테이블 : 더블 Dict로 구현
                     Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run,
                            alt_down: Jump,
-                           ctrl_down: Attack_Bow, ctrl_up: Attack_Bow,
+                           ctrl_down: Attack_Bow_I, ctrl_up: Attack_Bow_I,
                            hurt_start:Hurt},  # ctrl_down : Idle
                     Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle,
                           alt_down: Jump_run,
-                          ctrl_down: Attack_Bow, ctrl_up: Attack_Bow,
+                          ctrl_down: Attack_Bow_R, ctrl_up: Attack_Bow_R,
                           hurt_start:Hurt_run},
-                    Jump: {right_down: Jump_run, left_down: Jump_run, jump_end: Idle},
-                    Jump_run: {right_up: Jump, left_up: Jump, jump_end: Run},
-                    Attack_Bow: {time_out: Idle},
-                    Hurt: {right_down: Hurt_run, left_down: Hurt_run,
+                    Jump: {right_down: Jump_run, left_down: Jump_run, right_up: Jump_run, left_up: Jump_run,
+                           jump_end: Idle},
+                    Jump_run: {right_up: Jump, left_up: Jump, right_down: Jump, left_down: Jump,
+                               jump_end: Run},
+                    Attack_Bow_I: {time_out: Idle,
+                                     right_down: Attack_Bow_R, left_down: Attack_Bow_R,
+                                     right_up: Attack_Bow_R, left_up: Attack_Bow_R},
+                    Attack_Bow_R: {time_out: Run,
+                                     right_up: Attack_Bow_I, left_up: Attack_Bow_I,
+                                     right_down: Attack_Bow_I, left_down: Attack_Bow_I},
+                    Hurt: {right_down: Hurt_run, left_down: Hurt_run, right_up: Hurt_run, left_up: Hurt_run,
                            time_out: Idle, death_start: Death},
-                    Hurt_run: {right_up: Hurt, left_up: Hurt,
+                    Hurt_run: {right_up: Hurt, left_up: Hurt, right_down: Hurt, left_down: Hurt,
                                time_out: Run, death_start: Death},
                     Death: {}
                 }
