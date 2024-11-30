@@ -206,6 +206,6 @@ class Monster:
                     server.kill_count += 1
 
     def monster_attack(self, num):
-        monster_attack = Monster_Attack(self.x + self.dir * 80, self.y - 20, self.dir)
+        monster_attack = Monster_Attack(self.x + self.dir * 87, self.y - 20, self.dir)
         game_world.add_collision_pair('player:monster_attack', None, monster_attack)
         game_world.add_object(monster_attack, 1)

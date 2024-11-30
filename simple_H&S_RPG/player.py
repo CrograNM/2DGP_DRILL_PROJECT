@@ -63,6 +63,9 @@ class Idle:
     def do(player):
         if player.y == on_ground:
             player.gravity = 0
+        elif player.y < on_ground:
+            player.gravity = 0
+            player.y = on_ground
         player.frame = (player.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
         # if get_time() - player.start_time > 3:
         #     player.state_machine.add_event(('TIME_OUT', 0))
@@ -95,7 +98,9 @@ class Run:
     def do(player):
         if player.y == on_ground:
             player.gravity = 0
-
+        elif player.y < on_ground:
+            player.gravity = 0
+            player.y = on_ground
         player.frame = (player.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
         player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
         # dx = player.dir * RUN_SPEED_PPS * game_framework.frame_time  # 이동 거리 계산
@@ -674,6 +679,10 @@ class Player:
 
         if self.current_state == 'Idle' or 'Run' or 'Jump':
             if group == 'player:monster':
+                self.take_damage(10)
+                self.frame = 0
+                self.state_machine.add_event(('HURT_START', 0))
+            elif group == 'player:monster_attack':
                 self.take_damage(10)
                 self.frame = 0
                 self.state_machine.add_event(('HURT_START', 0))
