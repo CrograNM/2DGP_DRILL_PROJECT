@@ -520,7 +520,7 @@ class Player:
                                         right_up: Attack_Sword_R, left_up: Attack_Sword_R },
                     Attack_Sword_R: {time_out: Run,
                                         right_up : Attack_Sword_I, left_up : Attack_Sword_I,
-                                        right_down: Attack_Sword_R, left_down: Attack_Sword_R},
+                                        right_down: Attack_Sword_I, left_down: Attack_Sword_I},
                     Hurt: {right_down: Hurt_run, left_down: Hurt_run, right_up: Hurt_run, left_up: Hurt_run,
                             time_out: Idle, death_start : Death},
                     Hurt_run: {right_up: Hurt, left_up: Hurt, right_down: Hurt, left_down: Hurt,
