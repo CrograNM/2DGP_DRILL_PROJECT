@@ -606,6 +606,7 @@ class Player:
                     Death: {}
                 }
             )
+        self.hit_by_skills = {}  # 스킬 객체를 키로, 충돌 상태를 값으로 저장
 
     def take_damage(self, damage):
         #플레이어가 피해를 입었을 때 호출

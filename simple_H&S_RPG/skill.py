@@ -17,6 +17,7 @@ skill_bow_width = 48
 skill_bow_height = 48
 arrow_velocity = 10
 
+# player
 # sx, sy = 0 , 0
 class Skill_lightening:
     image = None
@@ -245,6 +246,8 @@ class Skill_bow_C:
 
     def handle_collision(self, group, other):
         pass
+
+#monster
 
 #boss
 #찌르기 계열
