@@ -249,7 +249,7 @@ class Skill_bow_C:
 
 #monster - 4프레임 으로 혓바닥 회수하기
 MONSTER_ATTACK_FRAMES_PER_ACTION = 4
-MOB_ACTION_PER_TIME = ACTION_PER_TIME / 0.75 # 몬스터.py 에 있는 액션 타임
+MOB_ACTION_PER_TIME = 1.0 / 0.75 # 몬스터.py 에 있는 액션 타임
 class Monster_Attack:
     image = None
 
@@ -262,13 +262,13 @@ class Monster_Attack:
 
     def update(self):
         self.frame = (self.frame + MONSTER_ATTACK_FRAMES_PER_ACTION * MOB_ACTION_PER_TIME * game_framework.frame_time)
-        self.x -= self.dir * 10
+        self.x -= self.dir * 2
         if int(self.frame) == MONSTER_ATTACK_FRAMES_PER_ACTION - 1:
             game_world.remove_object(self)
 
     def get_bb(self):
-        return (self.x - 20, self.y - 20,
-                    self.x + 20, self.y + 20)
+        return (self.x - 10, self.y - 10,
+                    self.x + 10, self.y + 10)
 
     def handle_collision(self, group, other):
         pass
