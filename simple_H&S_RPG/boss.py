@@ -7,7 +7,7 @@ from state_machine import mob_close, mob_attack_end
 from state_machine import StateMachine
 import game_framework
 import game_world
-from skill import Boss_1, Boss_2
+from skill import Boss_1, Boss_2, Boss_3
 
 # Monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -50,7 +50,7 @@ class Idle:
         mob.frame = (mob.frame + FRAMES_PER_ACTION_IDLE * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_IDLE
 
         # 충분히 거리가 가까워지면 공격 모션을 진행
-        if mob.delayCount > 300: #300 - 1번 스킬
+        if mob.delayCount > 100: #300 - 1번 스킬
             mob.delayCount = 0
             mob.state_machine.add_event(('MOB_CLOSE', 0))
 
@@ -71,6 +71,7 @@ class Attack_1:
 
         # 스킬
         #mob.boss_1(1)
+        mob.boss_3(1)
         pass
 
     @staticmethod
@@ -82,7 +83,7 @@ class Attack_1:
         mob.frame = mob.frame + FRAMES_PER_ACTION_ATTACK * ACTION_PER_TIME * game_framework.frame_time
         if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
-            mob.boss_2(1)
+            #mob.boss_2(1)
 
 
     @staticmethod
@@ -179,3 +180,8 @@ class Boss:
         boss_2 = Boss_2(self.x + self.dir * 180, self.y - 60, self.dir)
         game_world.add_collision_pair('player:boss_skill', None, boss_2)
         game_world.add_object(boss_2, 1)
+
+    def boss_3(self, num):
+        boss_3 = Boss_3(self.x + self.dir * 200, self.y + 50, self.dir)
+        game_world.add_collision_pair('player:boss_skill_!!!', None, boss_3)
+        game_world.add_object(boss_3, 1)

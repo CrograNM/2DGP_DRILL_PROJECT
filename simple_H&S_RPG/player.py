@@ -405,7 +405,7 @@ class Player:
         self.current_state = None
 
         self.hp_max = 100
-        self.hp = 100
+        self.hp = 10000
         self.dmg = 50
         self.invulnerable = False  # 무적 상태 여부
         self.invulnerable_start_time = 0  # 무적 상태 시작 시간
@@ -552,6 +552,9 @@ class Player:
                 self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss_skill':
                 self.take_damage(20)
+                self.state_machine.add_event(('HURT_START', 0))
+            elif group == 'player:boss_skill_!!!':
+                self.take_damage(50)
                 self.state_machine.add_event(('HURT_START', 0))
         pass
 

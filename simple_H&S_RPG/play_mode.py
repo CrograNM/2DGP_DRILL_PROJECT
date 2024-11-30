@@ -26,6 +26,7 @@ def spawn_boss():
     game_world.add_object(boss, 1)  # 포그라운드 깊이에 추가
     game_world.add_collision_pair('player:boss', server.player, boss)
     game_world.add_collision_pair('player:boss_skill', server.player, None)
+    game_world.add_collision_pair('player:boss_skill_!!!', server.player, None) #강한 공격
     game_world.add_collision_pair('boss:skill_1', boss, None)
     # game_world.add_collision_pair('boss:skill_bow_B', boss, None)
     # game_world.add_collision_pair('boss:skill_bow_B_explode', boss, None)
