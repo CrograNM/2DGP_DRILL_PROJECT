@@ -187,7 +187,10 @@ class Attack_Sword_I:
         if server.skill_1_using == False:
             player.frame = 0
             player.dir = player.face_dir
-            player.skill_1(1)
+            if server.weapon_ABC == 'A':
+                player.skill_1(1)
+            else:
+                player.skill_Sword_B(1)
             server.skill_1_using = True
 
     @staticmethod
@@ -234,7 +237,10 @@ class Attack_Sword_R:
         if server.skill_1_using == False:
             player.frame = 0
             player.dir = player.face_dir
-            player.skill_1(1)
+            if server.weapon_ABC == 'A':
+                player.skill_1(1)
+            else:
+                player.skill_Sword_B(1)
             server.skill_1_using = True
 
     @staticmethod
@@ -434,28 +440,30 @@ class Player:
 
     def skill_1(self, num):
         skill_1 = Skill_lightening(self.x + self.dir*180, self.y - 10, self.dir)
-        # game_world.add_collision_pair('zombie:ball', None, ball)
         game_world.add_collision_pair('monster:skill_1', None, skill_1)
         game_world.add_collision_pair('boss:skill_1', None, skill_1)
         game_world.add_object(skill_1, 1)
 
+    def skill_Sword_B(self, num):
+        skill_Sword_B = Skill_sword_B(self.x + self.dir*180, self.y - 10, self.dir)
+        game_world.add_collision_pair('monster:skill_1', None, skill_Sword_B)
+        game_world.add_collision_pair('boss:skill_1', None, skill_Sword_B)
+        game_world.add_object(skill_Sword_B, 1)
+
     def skill_2(self, num):
         skill_2 = Skill_bow(self.x + self.dir*20, self.y - 20, self.dir)
-        # game_world.add_collision_pair('zombie:ball', None, ball)
         game_world.add_collision_pair('monster:skill_1', None, skill_2) # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
         game_world.add_collision_pair('boss:skill_1', None, skill_2)
         game_world.add_object(skill_2, 1)
 
     def skill_Bow_B(self, num):
         skill_Bow_B = Skill_bow_B(self.x + self.dir*20, self.y - 20, self.dir)
-        # game_world.add_collision_pair('zombie:ball', None, ball)
         game_world.add_collision_pair('monster:skill_1', None, skill_Bow_B) # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
         game_world.add_collision_pair('boss:skill_1', None, skill_Bow_B)
         game_world.add_object(skill_Bow_B, 1)
 
     def skill_Bow_C(self, num):
         skill_Bow_C = Skill_bow_C(self.x + self.dir*180, self.y - 10, self.dir)
-        # game_world.add_collision_pair('zombie:ball', None, ball)
         game_world.add_collision_pair('monster:skill_1', None, skill_Bow_C) # 추후 충돌체크 그룹 변경 : 무기별 차이 두기
         game_world.add_collision_pair('boss:skill_1', None, skill_Bow_C)
         game_world.add_object(skill_Bow_C, 1)
