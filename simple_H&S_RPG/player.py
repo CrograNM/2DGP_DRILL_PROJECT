@@ -411,7 +411,10 @@ class Hurt:
 
     @staticmethod
     def do(player):
-        if player.y <= on_ground:
+        player.gravity -= 1
+        if player.y == on_ground:
+            player.gravity = 0
+        elif player.y < on_ground:
             player.gravity = 0
             player.y = on_ground
 
@@ -455,7 +458,10 @@ class Hurt_run:
 
     @staticmethod
     def do(player):
-        if player.y <= on_ground:
+        player.gravity -= 1
+        if player.y == on_ground:
+            player.gravity = 0
+        elif player.y < on_ground:
             player.gravity = 0
             player.y = on_ground
 
@@ -567,9 +573,11 @@ class Player:
                           ctrl_down : Attack_Sword_R,
                           hurt_start:Hurt_run},
                     Jump: {right_down: Jump_run, left_down: Jump_run, right_up: Jump_run, left_up: Jump_run,
-                           jump_end: Idle},
+                           jump_end: Idle,
+                           hurt_start:Hurt},
                     Jump_run: {right_up: Jump, left_up: Jump, right_down: Jump, left_down: Jump,
-                               jump_end: Run},
+                               jump_end: Run,
+                               hurt_start:Hurt_run},
                     Attack_Sword_I: {time_out: Idle,
                                         right_down : Attack_Sword_R, left_down : Attack_Sword_R,
                                         right_up: Attack_Sword_R, left_up: Attack_Sword_R },
@@ -595,9 +603,11 @@ class Player:
                           ctrl_down: Attack_Bow_R, ctrl_up: Attack_Bow_R,
                           hurt_start:Hurt_run},
                     Jump: {right_down: Jump_run, left_down: Jump_run, right_up: Jump_run, left_up: Jump_run,
-                           jump_end: Idle},
+                           jump_end: Idle,
+                           hurt_start: Hurt},
                     Jump_run: {right_up: Jump, left_up: Jump, right_down: Jump, left_down: Jump,
-                               jump_end: Run},
+                               jump_end: Run,
+                               hurt_start: Hurt_run},
                     Attack_Bow_I: {time_out: Idle,
                                      right_down: Attack_Bow_R, left_down: Attack_Bow_R,
                                      right_up: Attack_Bow_R, left_up: Attack_Bow_R},
