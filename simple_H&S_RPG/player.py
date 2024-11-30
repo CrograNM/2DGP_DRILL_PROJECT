@@ -86,6 +86,7 @@ class Run:
 
     @staticmethod
     def exit(player, e):
+        player.frame = 0
         pass
 
     @staticmethod
@@ -296,15 +297,14 @@ class Attack_Bow_I:
     @staticmethod
     def enter(player, e):
         player.current_state = 'Attack'
-        player.frame = 0
         player.dir = player.face_dir
 
     @staticmethod
     def exit(player, e):
-        if right_down(e) or left_up(e):
+        if left_up(e):
             player.dir = 1
             player.face_dir = 1
-        elif left_down(e) or right_up(e):
+        elif right_up(e):
             player.dir = -1
             player.face_dir = -1
         pass
@@ -337,15 +337,14 @@ class Attack_Bow_R:
     @staticmethod
     def enter(player, e):
         player.current_state = 'Attack'
-        player.frame = 0
         player.dir = player.face_dir
 
     @staticmethod
     def exit(player, e):
-        if right_down(e) or left_up(e):
+        if right_down(e):
             player.dir = 1
             player.face_dir = 1
-        elif left_down(e) or right_up(e):
+        elif left_down(e):
             player.dir = -1
             player.face_dir = -1
         pass
