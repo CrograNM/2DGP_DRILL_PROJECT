@@ -52,7 +52,7 @@ class Idle:
         if mob.delayCount > 200: #200번 idle 반복 되면 패턴 사용
             p = randint(1, 100)
             mob.delayCount = 0
-            if p <= 70: #70% 확률로 기본 스킬
+            if p <= 10: #70% 확률로 기본 스킬
                 mob.state_machine.add_event(('BOSS_1_START', 0))
             else :      #30% 확률로 강력 스킬
                 mob.state_machine.add_event(('BOSS_3_START', 0))
