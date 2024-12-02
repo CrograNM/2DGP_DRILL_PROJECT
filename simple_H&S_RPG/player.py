@@ -668,11 +668,9 @@ class Player:
                     self.frame = 0
                     self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss':
-                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
-                    self.hit_by_skills[other] = True
-                    self.take_damage(10)
-                    self.frame = 0
-                    self.state_machine.add_event(('HURT_START', 0))
+                self.take_damage(10)
+                self.frame = 0
+                self.state_machine.add_event(('HURT_START', 0))
             elif group == 'player:boss_skill':
                 if other not in self.hit_by_skills or not self.hit_by_skills[other]:
                     self.hit_by_skills[other] = True
