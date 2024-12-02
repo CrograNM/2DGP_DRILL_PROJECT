@@ -610,7 +610,7 @@ class Player:
         current_time = get_time()
 
         # 무적 상태 해제 체크
-        if self.invulnerable and current_time - self.invulnerable_start_time > 2:
+        if self.invulnerable and current_time - self.invulnerable_start_time > 1.25:
             self.invulnerable = False
 
         self.y += self.gravity

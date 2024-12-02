@@ -1,4 +1,4 @@
-from pico2d import get_events, clear_canvas, update_canvas, draw_rectangle, get_time
+from pico2d import get_events, clear_canvas, update_canvas, draw_rectangle, get_time, load_wav
 from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT
 import game_framework
 import game_world
@@ -18,6 +18,9 @@ def draw_thick_rectangle(x1, y1, x2, y2, thickness):
 
 def init():
     server.time = 0
+    server.weapon = 'Sword'
+    server.weapon_ABC = 'A'
+
     global background
     global panel_sword, panel_bow
     global start_button
