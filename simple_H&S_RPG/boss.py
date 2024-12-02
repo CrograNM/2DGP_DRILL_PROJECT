@@ -128,6 +128,8 @@ animation_names = ['Idle', 'Attack_1', 'Attack_3']
 
 class Boss:
     images = None
+    hit_sound_sword = None
+    hit_sound_bow = None
 
     def load_images(self):
         if Boss.images == None:
@@ -147,6 +149,13 @@ class Boss:
         self.action = 0
         self.hp = 1000
         self.skill_type = 0
+
+        if not Boss.hit_sound_sword:
+            Boss.hit_sound_sword = load_wav('resource/sounds/hit_sword.wav')
+            Boss.hit_sound_sword.set_volume(16)
+
+            Boss.hit_sound_bow = load_wav('resource/sounds/hit_arrow.wav')
+            Boss.hit_sound_bow.set_volume(16)
 
         self.font = load_font('resource/ENCR10B.TTF', 16)
         # self.image_Run = load_image('monster_Run.png')
@@ -188,11 +197,13 @@ class Boss:
             if other not in self.hit_by_skills or not self.hit_by_skills[other]:
                 self.hp -= self.player.dmg
                 self.hit_by_skills[other] = True  # 충돌 상태 업데이트
-
+                if server.weapon == 'Sword':
+                    Boss.hit_sound_sword.play()
+                else:
+                    Boss.hit_sound_bow.play()
                 if self.hp <= 0:
                     game_world.remove_object(self)
                     server.boss_dead = True
-        pass
 
     def boss_1(self, num):
         boss_1 = Boss_1(self.x + self.dir*130, self.y + 60, self.dir)

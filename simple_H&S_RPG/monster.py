@@ -212,10 +212,8 @@ class Monster:
                     self.state_machine.add_event(('HURT_START', 0))
                     if server.weapon == 'Sword':
                         Monster.hit_sound_sword.play()
-                        pass
                     else:
                         Monster.hit_sound_bow.play()
-                        pass
                 if self.hp <= 0:
                     game_world.remove_object(self)
                     server.kill_count += 1
