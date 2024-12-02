@@ -13,7 +13,6 @@ class Pannel:
     def update(self):
         pass
 
-# Button 클래스 수정
 class Button:
     def __init__(self, x, y, width, height):
         self.x = x
@@ -28,7 +27,6 @@ class Button:
     def update(self):
         pass
 
-
 class Resume_Button(Button):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
@@ -36,7 +34,6 @@ class Resume_Button(Button):
 
     def draw(self):
         self.image.draw(self.x, self.y)
-
 
 class Back_Button(Button):
     def __init__(self, x, y, width, height):

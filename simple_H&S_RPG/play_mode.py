@@ -3,12 +3,10 @@ import game_world
 import game_framework
 import time
 import server
-
 from player import Player
 from background import Background
 from monster import Monster
 from boss import Boss
-
 import pause_mode
 import result_mode
 
@@ -39,7 +37,7 @@ def spawn_monster():
         monsters = [obj for obj in game_world.objects_at_depth(1) if isinstance(obj, Monster)]
         if len(monsters) < MAX_MOB_COUNT:
             new_monster = Monster(server.player)
-            game_world.add_object(new_monster, 1)  # 포그라운드 깊이에 추가
+            game_world.add_object(new_monster, 1)
             game_world.add_collision_pair('player:monster', server.player, new_monster)
             game_world.add_collision_pair('player:monster_attack', server.player, None)
             game_world.add_collision_pair('monster:skill_1', new_monster, None)
@@ -54,7 +52,6 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             Button_sound.play()
             game_framework.push_mode(pause_mode)
-            # game_framework.change_mode(title_mode)
         else:
             server.player.handle_event(event)
 
@@ -105,14 +102,12 @@ def draw():
 def pause():
     global pause_time
     pause_time = current_time()  # 일시정지 시점 저장
-    pass
 
 def resume():
     global pause_time, paused_duration
     if pause_time != 0:
         paused_duration += current_time() - pause_time  # 누적 일시정지 시간 계산
         pause_time = 0
-    pass
 
 # 시간을 보정하여 반환하는 함수
 def get_adjusted_time():

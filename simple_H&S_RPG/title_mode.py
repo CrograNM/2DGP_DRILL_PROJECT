@@ -1,5 +1,5 @@
-from pico2d import load_image, get_events, clear_canvas, update_canvas, draw_rectangle, get_time
-from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT
+from pico2d import get_events, clear_canvas, update_canvas, draw_rectangle, get_time
+from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT
 import game_framework
 import game_world
 import play_mode
@@ -18,22 +18,21 @@ def draw_thick_rectangle(x1, y1, x2, y2, thickness):
 
 def init():
     server.time = 0
-
     global background
     global panel_sword, panel_bow
     global start_button
     global sword_button, sword_A, sword_B
     global bow_button, bow_A, bow_B, bow_C
-
     global Button_sound, start_Button_sound
+    global sword_choose, bow_choose
+
+    sword_choose = 'A'
+    bow_choose = 'A'
+
     Button_sound = load_wav('resource/sounds/button_click.wav')
     Button_sound.set_volume(128)
     start_Button_sound = load_wav('resource/sounds/button_start.wav')
     start_Button_sound.set_volume(32)
-
-    global sword_choose, bow_choose
-    sword_choose = 'A'
-    bow_choose = 'A'
 
     panel_sword = Pannel(400, HEIGHT - 150, 400, 200)
     panel_bow = Pannel(400, HEIGHT - 300, 400, 200)

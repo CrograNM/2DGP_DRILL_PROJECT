@@ -28,7 +28,6 @@ FRAMES_PER_ACTION_HURT = 4
 FRAMES_PER_ACTION_DEATH = 8
 
 PLAYER_SIZE = 42
-sx, sy = 0 , 0
 
 # 전역 변수 추가
 pause_time = 0
@@ -60,7 +59,6 @@ class Idle:
     @staticmethod
     def exit(player, e):
         player.frame = 0
-        pass
 
     @staticmethod
     def do(player):
@@ -95,8 +93,6 @@ class Run:
     @staticmethod
     def exit(player, e):
         player.frame = 0
-        #player.stop_sound()
-        pass
 
     @staticmethod
     def do(player):
@@ -131,7 +127,6 @@ class Jump_run:
             player.dir = -1
         if alt_down(e):
             player.gravity = gravity_set
-        pass
 
     @staticmethod
     def exit(player, e):
@@ -169,7 +164,6 @@ class Jump:
         if alt_down(e):
             player.gravity = gravity_set
         player.dir = 0
-        pass
 
     @staticmethod
     def exit(player, e):
@@ -179,7 +173,6 @@ class Jump:
         elif left_down(e) or right_up(e):
             player.dir = -1
             player.face_dir = -1
-        pass
 
     @staticmethod
     def do(player):
@@ -222,7 +215,6 @@ class Attack_Sword_I:
         elif left_down(e):
             player.dir = -1
             player.face_dir = -1
-        pass
 
     @staticmethod
     def do(player):
@@ -235,7 +227,6 @@ class Attack_Sword_I:
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
             server.skill_1_using = False
-            pass
 
     @staticmethod
     def draw(player):
@@ -277,7 +268,6 @@ class Attack_Sword_R:
         elif left_down(e):
             player.dir = -1
             player.face_dir = -1
-        pass
 
     @staticmethod
     def do(player):
@@ -290,7 +280,6 @@ class Attack_Sword_R:
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
             server.skill_1_using = False
-            pass
 
     @staticmethod
     def draw(player):
@@ -325,13 +314,10 @@ class Attack_Bow_I:
         elif left_down(e):
             player.dir = -1
             player.face_dir = -1
-        pass
 
     @staticmethod
     def do(player):
-
         player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * BOW_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
-
         if int(player.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             player.state_machine.add_event(('TIME_OUT', 0))
             if server.weapon_ABC == 'A':
@@ -340,7 +326,6 @@ class Attack_Bow_I:
                 player.skill_Bow_B(1)
             elif server.weapon_ABC == 'C':
                 player.skill_Bow_C(1)
-            pass
 
     @staticmethod
     def draw(player):
@@ -367,7 +352,6 @@ class Attack_Bow_R:
         elif left_down(e):
             player.dir = -1
             player.face_dir = -1
-        pass
 
     @staticmethod
     def do(player):
@@ -380,7 +364,6 @@ class Attack_Bow_R:
                 player.skill_Bow_B(1)
             elif server.weapon_ABC == 'C':
                 player.skill_Bow_C(1)
-            pass
 
     @staticmethod
     def draw(player):
@@ -404,8 +387,6 @@ class Hurt:
             player.face_dir = 1
         elif left_down(e) or right_up(e):
             player.dir = -1
-            player.face_dir = -1
-        pass
 
     @staticmethod
     def do(player):
@@ -415,17 +396,13 @@ class Hurt:
         elif player.y < on_ground:
             player.gravity = 0
             player.y = on_ground
-
         player.frame = (player.frame + FRAMES_PER_ACTION_HURT * ACTION_PER_TIME * game_framework.frame_time)
         player.x -= player.face_dir * RUN_SPEED_PPS * game_framework.frame_time
-
         if int(player.frame) == FRAMES_PER_ACTION_HURT - 1:
-            #player.hp -= 10
             if player.hp <= 0:
                 player.state_machine.add_event(('DEATH_START', 0))
             else:
                 player.state_machine.add_event(('TIME_OUT', 0))
-            pass
 
     @staticmethod
     def draw(player):
@@ -450,7 +427,6 @@ class Hurt_run:
         elif left_down(e) or right_up(e):
             player.dir = -1
             player.face_dir = -1
-        pass
 
     @staticmethod
     def do(player):
@@ -470,7 +446,6 @@ class Hurt_run:
                 player.state_machine.add_event(('DEATH_START', 0))
             else:
                 player.state_machine.add_event(('TIME_OUT', 0))
-            pass
 
     @staticmethod
     def draw(player):
@@ -502,8 +477,6 @@ class Death:
         if int(player.frame) >= FRAMES_PER_ACTION_DEATH - 1:
             player.frame = FRAMES_PER_ACTION_DEATH - 1
             server.player_dead = True
-            #player.state_machine.add_event(('TIME_OUT', 0))
-            pass
 
     @staticmethod
     def draw(player):
@@ -534,6 +507,7 @@ class Player:
         # 리소스
         self.font = load_font('resource/ENCR10B.TTF', 16)
         self.ui_hp = load_image('resource/ui/HP.png')
+
         self.hit_sound = load_wav('resource/sounds/hit_arrow.wav')
         self.hit_sound.set_volume(32)
         self.jump_sound = load_wav('resource/sounds/action_jump.wav')
@@ -546,6 +520,7 @@ class Player:
         self.image_Jump = load_image('resource/player/sword_Jump.png')
         self.image_Hurt = load_image('resource/player/sword_Hurt.png')
         self.image_Death = load_image('resource/player/sword_Death.png')
+
         if server.weapon == 'Bow':
             self.image_Idle = load_image('resource/player/bow_Idle.png')
             self.image_Run = load_image('resource/player/bow_Run.png')
@@ -554,6 +529,7 @@ class Player:
             self.image_Hurt = load_image('resource/player/bow_Hurt.png')
             self.image_Death = load_image('resource/player/bow_Death.png')
 
+        # 상태 머신
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
@@ -624,11 +600,10 @@ class Player:
         self.hit_by_skills = {}  # 스킬 객체를 키로, 충돌 상태를 값으로 저장
 
     def take_damage(self, damage):
-        #플레이어가 피해를 입었을 때 호출
-        if not self.invulnerable:  # 무적 상태가 아니면 피해 적용
+        if not self.invulnerable:       # 무적 상태가 아니면 피해 적용
             self.hit_sound.play()
             self.hp -= damage
-            self.invulnerable = True  # 무적 상태로 전환
+            self.invulnerable = True    # 무적 상태로 전환
             self.invulnerable_start_time = get_time()
 
     def update(self):
@@ -655,15 +630,9 @@ class Player:
 
     def draw(self):
         self.state_machine.draw()
-        #draw_rectangle(*self.get_bb())
-
-        #UI
-        #HP
         self.ui_hp.draw(100, HEIGHT - 50, 200, 100)
         self.font.draw(100 + 10, HEIGHT - 17, f'HP: {self.hp}', (255, 0, 0))
-        #TIME
         self.font.draw(WIDTH - 100, HEIGHT - 17, f'time: {server.time}', (0, 0, 255))
-        #KILL
         self.font.draw(WIDTH - 100, HEIGHT - 35, f'kill: {server.kill_count}', (255, 0, 0))
 
     def get_bb(self):

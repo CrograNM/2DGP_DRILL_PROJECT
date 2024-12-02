@@ -1,8 +1,6 @@
 from random import randint
 from pico2d import *
-
 import server
-from player import Player
 from state_machine import mob_close, mob_attack_end, time_out, hurt_start
 from state_machine import StateMachine
 import game_framework
@@ -24,7 +22,6 @@ FRAMES_PER_ACTION_ATTACK = 9
 FRAMES_PER_ACTION_HIT = 5
 
 MONSTER_SIZE = 48  #72
-# sx, sy = 0 , 0
 WIDTH = 1280
 HEIGHT = 720
 
@@ -39,7 +36,6 @@ class Run:
             mob.dir = -1  # player가 왼쪽에 있을 때
             mob.face_dir = -1
         mob.frame = 0
-        pass
 
     @staticmethod
     def exit(mob, e):
@@ -49,19 +45,16 @@ class Run:
     def do(mob):
         mob.frame = (mob.frame + FRAMES_PER_ACTION_RUN * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION_RUN
         mob.ax = mob.x
-
         # 충분히 거리가 가까워지면 공격 모션을 진행
         if mob.player.x - 80 < mob.x < mob.player.x + 80:
             mob.state_machine.add_event(('MOB_CLOSE', 0))
         else:
-            # player.x 위치를 추적하여 mob.dir 설정
             if mob.player.x > mob.x:
                 mob.dir = 1  # player가 오른쪽에 있을 때
                 mob.face_dir = 1
             elif mob.player.x < mob.x:
                 mob.dir = -1  # player가 왼쪽에 있을 때
                 mob.face_dir = -1
-
             mob.x += mob.dir * RUN_SPEED_PPS * game_framework.frame_time
 
     @staticmethod
@@ -70,7 +63,6 @@ class Run:
             mob.images['Run'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, '', mob.x - 20, mob.y, 144, 96)
         else:
             mob.images['Run'].clip_composite_draw(int(mob.frame) * 72, 0, 72, 48, 0, 'h', mob.x + 20, mob.y, 144, 96)
-        pass
 
 class Attack:
     @staticmethod
@@ -78,7 +70,6 @@ class Attack:
         mob.current_state = 'Attack'
         mob.frame = 0
         mob.attack_count = 0
-        pass
 
     @staticmethod
     def exit(mob, e):
@@ -97,7 +88,6 @@ class Attack:
             mob.attack_count += 1
         if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
             mob.state_machine.add_event(('MOB_ATTACK_END', 0))
-            #mob.monster_attack(1)
 
     @staticmethod
     def draw(mob):
@@ -111,7 +101,6 @@ class Hit:
     def enter(mob, e):
         mob.current_state = 'Hit'
         mob.frame = 0
-        pass
 
     @staticmethod
     def exit(mob, e):
@@ -143,35 +132,27 @@ class Monster:
             Monster.images = {}
             for name in animation_names:
                 Monster.images[name] = load_image("resource/monster/monster_"+ name + ".png")
-                # Monster.images['Attack'] = load_image('monster_Attack.png')
 
     def __init__(self, player):
         if not Monster.atk_sound:
             Monster.atk_sound = load_wav('resource/sounds/mob_slap.wav')
             Monster.atk_sound.set_volume(16)
-
             Monster.hit_sound_sword = load_wav('resource/sounds/hit_sword.wav')
             Monster.hit_sound_sword.set_volume(16)
-
             Monster.hit_sound_bow = load_wav('resource/sounds/hit_arrow.wav')
             Monster.hit_sound_bow.set_volume(16)
 
         self.x, self.y = WIDTH//2 + randint(WIDTH//4,WIDTH//2), 108
         self.ax, self.ay = self.x, self.y - 20
         self.load_images()
-        self.delayCount = 0
         self.frame = 0
         self.dir = 0
         self.face_dir = 1
-        self.action = 0
-
         self.hp_max = 100
         self.hp = self.hp_max
         self.font = load_font('resource/ENCR10B.TTF', 16)
         self.current_state = None
-
         self.player = player  # player 참조
-
         self.state_machine = StateMachine(self)
         self.state_machine.start(Run)
         self.state_machine.set_transitions(

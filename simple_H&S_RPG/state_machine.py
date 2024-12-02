@@ -1,5 +1,3 @@
-#이벤트 체크 함수를 정의
-#상태 이벤트 e = (종류, 실제값) 튜플로 정의
 from sdl2 import *
 
 def boss_1_start(e):
@@ -67,7 +65,6 @@ class StateMachine:
     def start(self, state):
         self.cur_state = state # 시작 상태를 받아서, 현재 상태로 만듬
         self.cur_state.enter(self.obj, ('START', 0))
-        pass
 
     def add_event(self, e):  # e : 튜플로 받아온 event 파라미터.
         self.event_q.append(e)
@@ -76,9 +73,8 @@ class StateMachine:
         self.transitions = transitions
 
     def update(self):
-        self.cur_state.do(self.obj) # 최초엔 idle, idle의 do를 진행한다.
-        #do가 끝난 후에 혹시 event가 있는지 확인
-        if self.event_q: # list는 멤버가 존재하면 True다. (파이썬 문법)
+        self.cur_state.do(self.obj)
+        if self.event_q:            # list는 멤버가 존재하면 True다. (파이썬 문법)
             e = self.event_q.pop(0) # list의 맨 앞에서 꺼낸다. (큐 자료구조)
             self.handle_event(e)
 

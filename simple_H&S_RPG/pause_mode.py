@@ -1,5 +1,5 @@
-from pico2d import load_image, get_events, clear_canvas, update_canvas, load_wav
-from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT
+from pico2d import get_events, clear_canvas, update_canvas, load_wav
+from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT
 import game_framework
 import game_world
 import title_mode
@@ -13,8 +13,8 @@ def init():
     global pannel
     global back_button
     global resume_button
-
     global Button_sound, start_Button_sound
+
     Button_sound = load_wav('resource/sounds/button_click.wav')
     Button_sound.set_volume(128)
     start_Button_sound = load_wav('resource/sounds/button_start.wav')

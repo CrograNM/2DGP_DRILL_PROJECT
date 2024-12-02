@@ -1,9 +1,7 @@
-from pico2d import load_image, get_events, clear_canvas, update_canvas, load_font
-from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT
+from pico2d import get_events, clear_canvas, update_canvas, load_font
+from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT
 import game_framework
 import game_world
-import play_mode
-# import play_boss_mode
 import server
 import title_mode
 from pause_pannel import Pannel, Back_Button

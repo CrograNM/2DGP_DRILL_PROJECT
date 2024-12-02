@@ -1,4 +1,4 @@
-from pico2d import load_image, load_music, load_wav
+from pico2d import load_image, load_music
 
 WIDTH = 1280
 HEIGHT = 720

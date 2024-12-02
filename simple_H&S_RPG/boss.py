@@ -123,6 +123,7 @@ class Boss:
             Boss.hit_sound_sword.set_volume(16)
             Boss.hit_sound_bow = load_wav('resource/sounds/hit_arrow.wav')
             Boss.hit_sound_bow.set_volume(16)
+
         self.x, self.y = WIDTH//2 + 450, 158
         self.ax, self.ay = self.x, self.y - 20
         self.load_images()
