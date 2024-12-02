@@ -314,7 +314,7 @@ class Monster_Attack:
 #찌르기 계열
 class Boss_1:
     image = None
-
+    sound = None
     def __init__(self, x = 400, y = 300, dir = 1):
         self.frame = 0
         self.damage = 50
@@ -322,6 +322,9 @@ class Boss_1:
         if Boss_1.image == None:
             Boss_1.image = load_image('resource/skill/boss_1.png')
         self.x, self.y, self.dir = x, y, dir
+        if not Boss_1.sound:
+            Boss_1.sound = load_wav('resource/sounds/sword_thunder.wav')
+            Boss_1.sound.set_volume(16)
 
     def draw(self):
         if self.dir == 1:
@@ -334,6 +337,8 @@ class Boss_1:
             draw_rectangle(*self.get_bb())
 
     def update(self):
+        if self.frame == 0:
+            Boss_1.sound.play()
         self.frame = (self.frame + LIGHTENING_FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
         if int(self.frame) == LIGHTENING_FRAMES_PER_ACTION - 1:
             self.frame = 0
