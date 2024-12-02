@@ -324,7 +324,7 @@ class Boss_1:
         self.x, self.y, self.dir = x, y, dir
         if not Boss_1.sound:
             Boss_1.sound = load_wav('resource/sounds/sword_thunder.wav')
-            Boss_1.sound.set_volume(16)
+            Boss_1.sound.set_volume(8)
 
     def draw(self):
         if self.dir == 1:
@@ -368,7 +368,7 @@ class Boss_2:
         self.x, self.y, self.dir = x, y, dir
         if not Boss_2.sound:
             Boss_2.sound = load_wav('resource/sounds/sword_thunder.wav')
-            Boss_2.sound.set_volume(16)
+            Boss_2.sound.set_volume(8)
 
     def draw(self):
         if self.dir == 1:

@@ -216,17 +216,17 @@ class Attack_Sword_I:
     @staticmethod
     def exit(player, e):
         player.attacking = False
-        if right_down(e) or left_up(e):
-            player.dir = 1
-            player.face_dir = 1
-        elif left_down(e) or right_up(e):
-            player.dir = -1
-            player.face_dir = -1
+        if int(player.frame) >= FRAMES_PER_ACTION_ATTACK - 1:
+            if right_down(e) or left_up(e):
+                player.dir = 1
+                player.face_dir = 1
+            elif left_down(e) or right_up(e):
+                player.dir = -1
+                player.face_dir = -1
         pass
 
     @staticmethod
     def do(player):
-
         if server.weapon_ABC == 'A':
             player.frame = (player.frame + FRAMES_PER_ACTION_ATTACK * SWORD_ATTACK_ACTION_PER_TIME * game_framework.frame_time)
             player.x += player.dir * ATTACK_SPEED_PPS * game_framework.frame_time
@@ -272,12 +272,13 @@ class Attack_Sword_R:
     @staticmethod
     def exit(player, e):
         player.attacking = False
-        if right_down(e) or left_up(e):
-            player.dir = 1
-            player.face_dir = 1
-        elif left_down(e) or right_up(e):
-            player.dir = -1
-            player.face_dir = -1
+        if int(player.frame) >= FRAMES_PER_ACTION_ATTACK - 1:
+            if right_down(e) or left_up(e):
+                player.dir = 1
+                player.face_dir = 1
+            elif left_down(e) or right_up(e):
+                player.dir = -1
+                player.face_dir = -1
         pass
 
     @staticmethod
