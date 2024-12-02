@@ -511,9 +511,11 @@ class Player:
         self.invulnerable = False  # 무적 상태 여부
         self.invulnerable_start_time = 0  # 무적 상태 시작 시간
 
-        # UI 리소스
+        # 리소스
         self.font = load_font('resource/ENCR10B.TTF', 16)
         self.ui_hp = load_image('resource/ui/HP.png')
+        self.hit_sound = load_wav('resource/sounds/hit_arrow.wav')
+        self.hit_sound.set_volume(32)
 
         self.image_Idle = load_image('resource/player/sword_Idle.png')
         self.image_Run = load_image('resource/player/sword_Run.png')
@@ -602,6 +604,7 @@ class Player:
     def take_damage(self, damage):
         #플레이어가 피해를 입었을 때 호출
         if not self.invulnerable:  # 무적 상태가 아니면 피해 적용
+            self.hit_sound.play()
             self.hp -= damage
             self.invulnerable = True  # 무적 상태로 전환
             self.invulnerable_start_time = get_time()

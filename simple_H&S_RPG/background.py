@@ -9,6 +9,10 @@ class Background:
         self.w = self.image.w
         self.h = self.image.h
 
+        self.bgm = load_music('resource/sounds/play_mode_bgm.mp3')
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
+
     def draw(self):
         self.window_left = clamp(0, int(server.player.x) - self.cw // 4 * 4, self.w - self.cw - 1)
         self.window_bottom = clamp(0, int(server.player.y) - self.ch // 2, self.h - self.ch - 1)
