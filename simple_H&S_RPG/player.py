@@ -37,6 +37,13 @@ paused_duration = 0
 on_ground = 103
 gravity_set = 15
 
+IDLE_STATE = 0
+RUN_STATE = 1
+JUMP_STATE = 2
+ATTACK_STATE = 3
+HURT_STATE = 4
+DEATH_STATE = 5
+
 class Idle:
     @staticmethod
     def enter(player, e):
@@ -88,6 +95,7 @@ class Run:
     @staticmethod
     def exit(player, e):
         player.frame = 0
+        #player.stop_sound()
         pass
 
     @staticmethod
@@ -112,6 +120,8 @@ class Run:
 class Jump_run:
     @staticmethod
     def enter(player, e):
+        if player.current_state != 'Jump':
+            player.jump_sound.play()
         player.current_state = 'Jump'
         if right_down(e):
             player.face_dir = 1
@@ -149,6 +159,8 @@ class Jump_run:
 class Jump:
     @staticmethod
     def enter(player, e):
+        if player.current_state != 'Jump':
+            player.jump_sound.play()
         player.current_state = 'Jump'
         if right_down(e):
             player.face_dir = 1
@@ -525,6 +537,8 @@ class Player:
         self.ui_hp = load_image('resource/ui/HP.png')
         self.hit_sound = load_wav('resource/sounds/hit_arrow.wav')
         self.hit_sound.set_volume(32)
+        self.jump_sound = load_wav('resource/sounds/action_jump.wav')
+        self.jump_sound.set_volume(128)
 
         self.image_Idle = load_image('resource/player/sword_Idle.png')
         self.image_Run = load_image('resource/player/sword_Run.png')
