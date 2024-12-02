@@ -4,6 +4,7 @@ import game_framework
 import game_world
 import title_mode
 from pause_pannel import Pannel, Back_Button, Resume_Button
+import server
 
 WIDTH = 1280
 HEIGHT = 720
@@ -59,6 +60,8 @@ def handle_events():
                 game_framework.pop_mode()
             elif back_button.is_clicked(x, y):
                 start_Button_sound.play()
+                server.weapon = 'Sword'
+                server.weapon_ABC = 'A'
                 print("Back button clicked")
                 game_world.clear()
                 game_framework.push_mode(title_mode)
