@@ -135,6 +135,8 @@ animation_names = ['Run', 'Attack', 'Hit']
 class Monster:
     images = None
     atk_sound = None
+    hit_sound_sword = None
+    hit_sound_bow = None
 
     def load_images(self):
         if Monster.images == None:
@@ -147,6 +149,12 @@ class Monster:
         if not Monster.atk_sound:
             Monster.atk_sound = load_wav('resource/sounds/mob_slap.wav')
             Monster.atk_sound.set_volume(16)
+
+            Monster.hit_sound_sword = load_wav('resource/sounds/hit_sword.wav')
+            Monster.hit_sound_sword.set_volume(16)
+
+            Monster.hit_sound_bow = load_wav('resource/sounds/hit_arrow.wav')
+            Monster.hit_sound_bow.set_volume(16)
 
         self.x, self.y = WIDTH//2 + randint(WIDTH//4,WIDTH//2), 108
         self.ax, self.ay = self.x, self.y - 20
@@ -202,6 +210,12 @@ class Monster:
                     self.hp -= self.player.dmg
                     self.hit_by_skills[other] = True  # 충돌 상태 업데이트
                     self.state_machine.add_event(('HURT_START', 0))
+                    if server.weapon == 'Sword':
+                        Monster.hit_sound_sword.play()
+                        pass
+                    else:
+                        Monster.hit_sound_bow.play()
+                        pass
                 if self.hp <= 0:
                     game_world.remove_object(self)
                     server.kill_count += 1
