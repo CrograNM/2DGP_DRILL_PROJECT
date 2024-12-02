@@ -190,6 +190,7 @@ class Jump:
 class Attack_Sword_I:
     @staticmethod
     def enter(player, e):
+        player.attacking = True
         player.current_state = 'Attack'
         if server.skill_1_using == False:
             player.frame = 0
@@ -202,6 +203,7 @@ class Attack_Sword_I:
 
     @staticmethod
     def exit(player, e):
+        player.attacking = False
         if right_down(e) or left_up(e):
             player.dir = 1
             player.face_dir = 1
@@ -244,6 +246,7 @@ class Attack_Sword_I:
 class Attack_Sword_R:
     @staticmethod
     def enter(player, e):
+        player.attacking = True
         player.current_state = 'Attack'
         if server.skill_1_using == False:
             player.frame = 0
@@ -256,6 +259,7 @@ class Attack_Sword_R:
 
     @staticmethod
     def exit(player, e):
+        player.attacking = False
         if right_down(e) or left_up(e):
             player.dir = 1
             player.face_dir = 1
@@ -297,11 +301,13 @@ class Attack_Sword_R:
 class Attack_Bow_I:
     @staticmethod
     def enter(player, e):
+        player.attacking = True
         player.current_state = 'Attack'
         player.dir = player.face_dir
 
     @staticmethod
     def exit(player, e):
+        player.attacking = False
         if right_down(e) or left_up(e):
             player.dir = 1
             player.face_dir = 1
@@ -337,11 +343,13 @@ class Attack_Bow_I:
 class Attack_Bow_R:
     @staticmethod
     def enter(player, e):
+        player.attacking = True
         player.current_state = 'Attack'
         player.dir = player.face_dir
 
     @staticmethod
     def exit(player, e):
+        player.attacking = False
         if right_down(e) or left_up(e):
             player.dir = 1
             player.face_dir = 1
@@ -510,6 +518,7 @@ class Player:
         self.dmg = 50
         self.invulnerable = False  # 무적 상태 여부
         self.invulnerable_start_time = 0  # 무적 상태 시작 시간
+        self.attacking = False
 
         # 리소스
         self.font = load_font('resource/ENCR10B.TTF', 16)
@@ -653,37 +662,36 @@ class Player:
     def handle_collision(self, group, other):
         if self.invulnerable:
             return False  # 무적 상태라면 충돌 처리하지 않음
-
-        if self.current_state == 'Idle' or 'Run' or 'Jump':
-            if group == 'player:monster':
-                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
-                    self.hit_by_skills[other] = True
-                    self.take_damage(10)
-                    self.frame = 0
-                    self.state_machine.add_event(('HURT_START', 0))
-            elif group == 'player:monster_attack':
-                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
-                    self.hit_by_skills[other] = True
-                    self.take_damage(10)
-                    self.frame = 0
-                    self.state_machine.add_event(('HURT_START', 0))
-            elif group == 'player:boss':
+        if self.attacking:
+            return False
+        if group == 'player:monster':
+            if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                self.hit_by_skills[other] = True
                 self.take_damage(10)
                 self.frame = 0
                 self.state_machine.add_event(('HURT_START', 0))
-            elif group == 'player:boss_skill':
-                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
-                    self.hit_by_skills[other] = True
-                    self.take_damage(20)
-                    self.frame = 0
-                    self.state_machine.add_event(('HURT_START', 0))
-            elif group == 'player:boss_skill_!!!':
-                if other not in self.hit_by_skills or not self.hit_by_skills[other]:
-                    self.hit_by_skills[other] = True
-                    self.take_damage(50)
-                    self.frame = 0
-                    self.state_machine.add_event(('HURT_START', 0))
-        pass
+        elif group == 'player:monster_attack':
+            if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                self.hit_by_skills[other] = True
+                self.take_damage(10)
+                self.frame = 0
+                self.state_machine.add_event(('HURT_START', 0))
+        elif group == 'player:boss':
+            self.take_damage(10)
+            self.frame = 0
+            self.state_machine.add_event(('HURT_START', 0))
+        elif group == 'player:boss_skill':
+            if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                self.hit_by_skills[other] = True
+                self.take_damage(20)
+                self.frame = 0
+                self.state_machine.add_event(('HURT_START', 0))
+        elif group == 'player:boss_skill_!!!':
+            if other not in self.hit_by_skills or not self.hit_by_skills[other]:
+                self.hit_by_skills[other] = True
+                self.take_damage(50)
+                self.frame = 0
+                self.state_machine.add_event(('HURT_START', 0))
 
     def skill_1(self, num):
         skill_1 = Skill_lightening(self.x + self.dir*180, self.y - 10, self.dir)
