@@ -193,7 +193,7 @@ class Monster:
 
     def draw(self):
         self.state_machine.draw()
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.font.draw(self.x - 20, self.y + 30, f'{self.hp}', (255, 0, 0))
 
     def get_bb(self):

@@ -178,7 +178,7 @@ class Boss:
     def draw(self):
         self.state_machine.draw()
         self.font.draw(self.x - 15, self.y + 100, f'{self.hp}', (255, 0, 0))
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         #draw_rectangle(self.ax - 5, self.ay - 5, self.ax + 5, self.ay + 5)
 
     def get_bb(self):

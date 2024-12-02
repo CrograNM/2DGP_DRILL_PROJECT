@@ -525,7 +525,7 @@ class Player:
         self.current_state = IDLE_STATE
 
         self.hp_max = 100
-        self.hp = 10000
+        self.hp = 100
         self.dmg = 50
         self.invulnerable = False  # 무적 상태 여부
         self.invulnerable_start_time = 0  # 무적 상태 시작 시간
@@ -655,7 +655,7 @@ class Player:
 
     def draw(self):
         self.state_machine.draw()
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
         #UI
         #HP

@@ -38,11 +38,11 @@ class Skill_lightening:
         if self.dir == 1:
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, radians(90), 'h',
                                            self.x, self.y, skill_lightening_height, skill_lightening_width)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
         else :
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, radians(90), ' ',
                                            self.x, self.y, skill_lightening_height, skill_lightening_width)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.frame == 0:
@@ -84,11 +84,11 @@ class Skill_sword_B:
         if self.dir == 1:
             self.image.clip_composite_draw(int(self.frame) * 100, 0 * 100, 100, 100, 0, '',
                                            self.x, self.y, skill_sword_B_width, skill_sword_B_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
         else :
             self.image.clip_composite_draw(int(self.frame) * 100, 0 * 100, 100, 100, 0, 'h',
                                            self.x, self.y, skill_sword_B_width, skill_sword_B_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.frame == 0:
@@ -126,11 +126,11 @@ class Skill_bow:
         if self.dir == 1:
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, 0, 'h',
                                            self.x, self.y, skill_bow_width, skill_bow_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
         else :
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, 0, ' ',
                                            self.x, self.y, skill_bow_width, skill_bow_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.frame == 0:
@@ -165,11 +165,11 @@ class Skill_bow_B:
         if self.dir == 1:
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, 0, 'h',
                                            self.x, self.y, skill_bow_width, skill_bow_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
         else :
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, 0, ' ',
                                            self.x, self.y, skill_bow_width, skill_bow_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.frame == 0:
@@ -214,11 +214,11 @@ class Skill_bow_B_explode:
         if self.dir == 1:
             self.image.clip_composite_draw(int(self.frame) * 48, 0 * 48, 48, 48, radians(90), 'h',
                                            self.x, self.y, skill_bow_explode_width, skill_bow_explode_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
         else :
             self.image.clip_composite_draw(int(self.frame) * 48, 0 * 48, 48, 48, radians(90), ' ',
                                            self.x, self.y, skill_bow_explode_width, skill_bow_explode_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.frame == 0:
@@ -260,11 +260,11 @@ class Skill_bow_C:
         if self.dir == 1:
             self.image.clip_composite_draw(int(self.frame) * 72, 0 * 72, 72, 72, 0, '',
                                            self.x, self.y, skill_bow_C_width, skill_bow_C_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
         else :
             self.image.clip_composite_draw(int(self.frame) * 72, 0 * 72, 72, 72, 0, 'h',
                                            self.x, self.y, skill_bow_C_width, skill_bow_C_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.frame == 0:
@@ -295,7 +295,8 @@ class Monster_Attack:
         self.x, self.y, self.dir = x, y, dir
 
     def draw(self):
-            draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
+        pass
 
     def update(self):
         self.frame = (self.frame + MONSTER_ATTACK_FRAMES_PER_ACTION * MOB_ACTION_PER_TIME * game_framework.frame_time)
@@ -330,11 +331,11 @@ class Boss_1:
         if self.dir == 1:
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, 0, '',
                                            self.x, self.y, skill_lightening_height, skill_lightening_width)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
         else :
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, 0, 'h',
                                            self.x, self.y, skill_lightening_height, skill_lightening_width)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.frame == 0:
@@ -374,11 +375,11 @@ class Boss_2:
         if self.dir == 1:
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, radians(270), 'h',
                                            self.x, self.y, skill_lightening_height, skill_lightening_width)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
         else :
             self.image.clip_composite_draw(int(self.frame) * 64, 0 * 160, 64, 160, radians(270), ' ',
                                            self.x, self.y, skill_lightening_height, skill_lightening_width)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.frame == 0:
@@ -417,11 +418,11 @@ class Boss_3:
         if self.dir == 1:
             self.image.clip_composite_draw(int(self.frame) * 100, 0 * 100, 100, 100, 0, '',
                                            self.x, self.y, skill_sword_B_width, skill_sword_B_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
         else :
             self.image.clip_composite_draw(int(self.frame) * 100, 0 * 100, 100, 100, 0, 'h',
                                            self.x, self.y, skill_sword_B_width, skill_sword_B_height)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.frame == 0:
