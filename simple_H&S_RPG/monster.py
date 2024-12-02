@@ -166,7 +166,7 @@ class Monster:
         self.action = 0
 
         self.hp_max = 100
-        self.hp = 100
+        self.hp = self.hp_max
         self.font = load_font('resource/ENCR10B.TTF', 16)
         self.current_state = None
 
@@ -194,7 +194,11 @@ class Monster:
     def draw(self):
         self.state_machine.draw()
         #draw_rectangle(*self.get_bb())
-        self.font.draw(self.x - 20, self.y + 30, f'{self.hp}', (255, 0, 0))
+        if self.hp != self.hp_max:
+            if self.face_dir == -1:
+                self.font.draw(self.x - 7, self.y - 62, f'{self.hp}', (255, 0, 0))
+            else:
+                self.font.draw(self.x - 13, self.y - 62, f'{self.hp}', (255, 0, 0))
 
     def get_bb(self):
         if self.current_state == 'Run' or 'Hit':
