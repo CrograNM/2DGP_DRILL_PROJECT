@@ -216,13 +216,12 @@ class Attack_Sword_I:
     @staticmethod
     def exit(player, e):
         player.attacking = False
-        if int(player.frame) >= FRAMES_PER_ACTION_ATTACK - 1:
-            if right_down(e) or left_up(e):
-                player.dir = 1
-                player.face_dir = 1
-            elif left_down(e) or right_up(e):
-                player.dir = -1
-                player.face_dir = -1
+        if right_down(e):
+            player.dir = 1
+            player.face_dir = 1
+        elif left_down(e):
+            player.dir = -1
+            player.face_dir = -1
         pass
 
     @staticmethod
@@ -272,13 +271,12 @@ class Attack_Sword_R:
     @staticmethod
     def exit(player, e):
         player.attacking = False
-        if int(player.frame) >= FRAMES_PER_ACTION_ATTACK - 1:
-            if right_down(e) or left_up(e):
-                player.dir = 1
-                player.face_dir = 1
-            elif left_down(e) or right_up(e):
-                player.dir = -1
-                player.face_dir = -1
+        if right_down(e):
+            player.dir = 1
+            player.face_dir = 1
+        elif left_down(e):
+            player.dir = -1
+            player.face_dir = -1
         pass
 
     @staticmethod
