@@ -149,6 +149,7 @@ class Skill_bow:
 
 class Skill_bow_B:
     image = None
+    sound = None
 
     def __init__(self, x = 400, y = 300, dir = 1):
         self.frame = 0
@@ -156,6 +157,9 @@ class Skill_bow_B:
         if Skill_bow_B.image == None:
             Skill_bow_B.image = load_image('resource/skill/skill_bow_48_48.png') #frame = 6
         self.x, self.y, self.dir = x, y, dir
+        if not Skill_bow.sound:
+            Skill_bow_B.sound = load_wav('resource/sounds/bow_shoot.wav')
+            Skill_bow_B.sound.set_volume(16)
 
     def draw(self):
         if self.dir == 1:
@@ -168,6 +172,8 @@ class Skill_bow_B:
             draw_rectangle(*self.get_bb())
 
     def update(self):
+        if self.frame == 0:
+            Skill_bow_B.sound.play()
         self.x += self.dir * arrow_velocity
         self.frame = (self.frame + ARROW_FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
         if int(self.frame) == ARROW_FRAMES_PER_ACTION - 1:
