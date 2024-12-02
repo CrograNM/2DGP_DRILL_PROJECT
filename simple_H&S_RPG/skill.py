@@ -359,13 +359,16 @@ class Boss_1:
         pass
 class Boss_2:
     image = None
-
+    sound = None
     def __init__(self, x = 400, y = 300, dir = 1):
         self.frame = 0
         self.damage = 50
         if Boss_2.image == None:
             Boss_2.image = load_image('resource/skill/boss_1.png')
         self.x, self.y, self.dir = x, y, dir
+        if not Boss_2.sound:
+            Boss_2.sound = load_wav('resource/sounds/sword_thunder.wav')
+            Boss_2.sound.set_volume(16)
 
     def draw(self):
         if self.dir == 1:
@@ -378,6 +381,8 @@ class Boss_2:
             draw_rectangle(*self.get_bb())
 
     def update(self):
+        if self.frame == 0:
+            Boss_2.sound.play()
         self.frame = (self.frame + LIGHTENING_FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
         if int(self.frame) == LIGHTENING_FRAMES_PER_ACTION - 1:
             game_world.remove_object(self)
@@ -396,6 +401,7 @@ class Boss_2:
 #휘두르기 계열 - 반피
 class Boss_3:
     image = None
+    sound = None
 
     def __init__(self, x = 400, y = 300, dir = 1):
         self.frame = 0
@@ -403,6 +409,9 @@ class Boss_3:
         if Boss_3.image == None:
             Boss_3.image = load_image('resource/skill/boss_3.png')
         self.x, self.y, self.dir = x, y, dir
+        if not Boss_3.sound:
+            Boss_3.sound = load_wav('resource/sounds/sword_slash.wav')
+            Boss_3.sound.set_volume(64)
 
     def draw(self):
         if self.dir == 1:
@@ -415,6 +424,8 @@ class Boss_3:
             draw_rectangle(*self.get_bb())
 
     def update(self):
+        if self.frame == 0:
+            Boss_3.sound.play()
         self.frame = (self.frame + SWORD_B_FRAMES_PER_ACTION * SWORD_ATTACK_B_ACTION_PER_TIME * game_framework.frame_time)
         if int(self.frame) == SWORD_B_FRAMES_PER_ACTION - 1:
             game_world.remove_object(self)
