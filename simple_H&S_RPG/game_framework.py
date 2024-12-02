@@ -6,10 +6,8 @@ stack = None
 def change_mode(mode):
     global stack
     if (len(stack) > 0):
-        # execute the current mode's finish function
-        stack[-1].finish()
-        # remove the current mode
-        stack.pop()
+        stack[-1].finish()  # execute the current mode's finish function
+        stack.pop()         # remove the current mode
     stack.append(mode)
     mode.init()
 
@@ -23,10 +21,8 @@ def push_mode(mode):
 def pop_mode():
     global stack
     if (len(stack) > 0):
-        # execute the current mode's finish function
-        stack[-1].finish()
-        # remove the current mode
-        stack.pop()
+        stack[-1].finish()  # execute the current mode's finish function
+        stack.pop()         # remove the current mode
 
     # execute resume function of the previous mode
     if (len(stack) > 0):

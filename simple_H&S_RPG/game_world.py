@@ -1,6 +1,3 @@
-# world = [] # 단일 계층 구조
-# world[0] : 백그라운드 객체들 - 맨 아래에 그릴 객체들
-# world[1] : 포그라운드 객체들 - 위에 그려야 할 객체들
 
 world = [ [], [], [], [], []]
 
@@ -33,7 +30,7 @@ def remove_object(o):
         if o in layer:
             layer.remove(o)
             remove_collision_object(o)
-            return # 지우는 미션은 달성, 다른 요소는 체크할 필요가 없다
+            return
     #print('에러: 존재하지 않은 객체를 지우려는 중') - 초기화에서 발생하긴 하는데, 걱정할 필요는 없음
 
 def clear():
@@ -43,12 +40,10 @@ def clear():
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
     left_b, bottom_b, right_b, top_b = b.get_bb()
-
     if left_a > right_b: return False
     if right_a < left_b: return False
     if top_a < bottom_b: return False
     if bottom_a > top_b: return False
-
     return True
 
 collision_pairs = {}
@@ -70,8 +65,7 @@ def handle_collisions():
                     b.handle_collision(group, a)
 
 def objects_at_depth(depth):
-    # 특정 depth의 객체 리스트 반환
-    if 0 <= depth < len(world):
+    if 0 <= depth < len(world): # 특정 depth의 객체 리스트 반환
         return world[depth]
     else:
         print(f"에러: 잘못된 depth 접근 - {depth}")
