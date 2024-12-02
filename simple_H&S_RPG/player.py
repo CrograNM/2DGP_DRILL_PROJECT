@@ -47,7 +47,7 @@ DEATH_STATE = 5
 class Idle:
     @staticmethod
     def enter(player, e):
-        player.current_state = 'Idle'
+        player.current_state = IDLE_STATE
         player.dir = 0
         if start_event(e):
             player.face_dir = -1
@@ -83,7 +83,7 @@ class Idle:
 class Run:
     @staticmethod
     def enter(player, e):
-        player.current_state = 'Run'
+        player.current_state = RUN_STATE
         player.dir = player.face_dir
         if right_down(e) or left_up(e):
             player.dir = 1
@@ -120,9 +120,9 @@ class Run:
 class Jump_run:
     @staticmethod
     def enter(player, e):
-        if player.current_state != 'Jump':
+        if player.current_state != JUMP_STATE:
             player.jump_sound.play()
-        player.current_state = 'Jump'
+        player.current_state = JUMP_STATE
         if right_down(e):
             player.face_dir = 1
             player.dir = 1
@@ -159,9 +159,9 @@ class Jump_run:
 class Jump:
     @staticmethod
     def enter(player, e):
-        if player.current_state != 'Jump':
+        if player.current_state != JUMP_STATE:
             player.jump_sound.play()
-        player.current_state = 'Jump'
+        player.current_state = JUMP_STATE
         if right_down(e):
             player.face_dir = 1
         elif left_down(e):
@@ -203,7 +203,7 @@ class Attack_Sword_I:
     @staticmethod
     def enter(player, e):
         player.attacking = True
-        player.current_state = 'Attack'
+        player.current_state = ATTACK_STATE
         if server.skill_1_using == False:
             player.frame = 0
             player.dir = player.face_dir
@@ -259,7 +259,7 @@ class Attack_Sword_R:
     @staticmethod
     def enter(player, e):
         player.attacking = True
-        player.current_state = 'Attack'
+        player.current_state = ATTACK_STATE
         if server.skill_1_using == False:
             player.frame = 0
             player.dir = player.face_dir
@@ -314,7 +314,7 @@ class Attack_Bow_I:
     @staticmethod
     def enter(player, e):
         player.attacking = True
-        player.current_state = 'Attack'
+        player.current_state = ATTACK_STATE
         player.dir = player.face_dir
 
     @staticmethod
@@ -356,7 +356,7 @@ class Attack_Bow_R:
     @staticmethod
     def enter(player, e):
         player.attacking = True
-        player.current_state = 'Attack'
+        player.current_state = ATTACK_STATE
         player.dir = player.face_dir
 
     @staticmethod
@@ -395,7 +395,7 @@ class Attack_Bow_R:
 class Hurt:
     @staticmethod
     def enter(player, e):
-        player.current_state = 'Hurt'
+        player.current_state = HURT_STATE
         player.dir = player.face_dir
 
     @staticmethod
@@ -440,7 +440,7 @@ class Hurt:
 class Hurt_run:
     @staticmethod
     def enter(player, e):
-        player.current_state = 'Hurt'
+        player.current_state = HURT_STATE
         player.dir = player.face_dir
 
     @staticmethod
@@ -485,7 +485,7 @@ class Hurt_run:
 class Death:
     @staticmethod
     def enter(player, e):
-        player.current_state = 'Death'
+        player.current_state = DEATH_STATE
         player.frame = 0
         player.dir = player.face_dir
 
@@ -523,7 +523,7 @@ class Player:
         self.frame = 0
         self.dir = 0
         self.face_dir = 1
-        self.current_state = None
+        self.current_state = IDLE_STATE
 
         self.hp_max = 100
         self.hp = 10000
