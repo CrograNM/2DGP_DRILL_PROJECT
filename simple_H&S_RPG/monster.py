@@ -201,11 +201,7 @@ class Monster:
                 self.font.draw(self.x - 13, self.y - 62, f'{self.hp}', (255, 0, 0))
 
     def get_bb(self):
-        if self.current_state == 'Run' or 'Hit':
-            return self.x - MONSTER_SIZE*0.7, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE*0.7, self.y + MONSTER_SIZE*0.5
-        elif self.current_state == 'Attack':
-            # 애니메이션에 따라 크기, 위치 변경이 필요함
-            return self.ax - 5, self.ay - 5, self.ax + 5, self.ay + 5
+        return self.x - MONSTER_SIZE*0.4, self.y - MONSTER_SIZE, self.x + MONSTER_SIZE*0.4, self.y + MONSTER_SIZE*0.08
 
     def handle_collision(self, group, other):
         if self.current_state == 'Run' or 'Attack':
