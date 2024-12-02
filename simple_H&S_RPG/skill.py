@@ -243,6 +243,7 @@ skill_bow_C_height = 72
 BOW_C_FRAMES_PER_ACTION = 8
 class Skill_bow_C:
     image = None
+    sound = None
 
     def __init__(self, x = 400, y = 300, dir = 1):
         self.frame = 0
@@ -250,6 +251,9 @@ class Skill_bow_C:
         if Skill_bow_C.image == None:
             Skill_bow_C.image = load_image('resource/skill/bow_C.png')
         self.x, self.y, self.dir = x, y, dir
+        if not Skill_bow.sound:
+            Skill_bow_C.sound = load_wav('resource/sounds/bow_lazer.wav')
+            Skill_bow_C.sound.set_volume(16)
 
     def draw(self):
         # 72 * 72, 8
@@ -263,6 +267,8 @@ class Skill_bow_C:
             draw_rectangle(*self.get_bb())
 
     def update(self):
+        if self.frame == 0:
+            Skill_bow_C.sound.play()
         self.frame = (self.frame + BOW_C_FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
         if int(self.frame) == BOW_C_FRAMES_PER_ACTION - 1:
             game_world.remove_object(self)
