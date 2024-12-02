@@ -68,6 +68,7 @@ SWORD_B_FRAMES_PER_ACTION = 6
 SWORD_ATTACK_B_ACTION_PER_TIME = ACTION_PER_TIME * 2
 class Skill_sword_B:
     image = None
+    sound = None
 
     def __init__(self, x = 400, y = 300, dir = 1):
         self.frame = 0
@@ -75,6 +76,9 @@ class Skill_sword_B:
         if Skill_sword_B.image == None:
             Skill_sword_B.image = load_image('resource/skill/sword_B_2.png')
         self.x, self.y, self.dir = x, y, dir
+        if not Skill_sword_B.sound:
+            Skill_sword_B.sound = load_wav('resource/sounds/sword_slash.wav')
+            Skill_sword_B.sound.set_volume(16)
 
     def draw(self):
         if self.dir == 1:
@@ -87,6 +91,8 @@ class Skill_sword_B:
             draw_rectangle(*self.get_bb())
 
     def update(self):
+        if self.frame == 0:
+            Skill_sword_B.sound.play()
         self.frame = (self.frame + SWORD_B_FRAMES_PER_ACTION * SWORD_ATTACK_B_ACTION_PER_TIME * game_framework.frame_time)
         if int(self.frame) == SWORD_B_FRAMES_PER_ACTION - 1:
             game_world.remove_object(self)
@@ -104,6 +110,7 @@ class Skill_sword_B:
 
 class Skill_bow:
     image = None
+    sound = None
 
     def __init__(self, x = 400, y = 300, dir = 1):
         self.frame = 0
@@ -111,6 +118,9 @@ class Skill_bow:
         if Skill_bow.image == None:
             Skill_bow.image = load_image('resource/skill/skill_bow_48_48.png') #frame = 6
         self.x, self.y, self.dir = x, y, dir
+        if not Skill_bow.sound:
+            Skill_bow.sound = load_wav('resource/sounds/bow_shoot.wav')
+            Skill_bow.sound.set_volume(16)
 
     def draw(self):
         if self.dir == 1:
@@ -123,6 +133,8 @@ class Skill_bow:
             draw_rectangle(*self.get_bb())
 
     def update(self):
+        if self.frame == 0:
+            Skill_bow.sound.play()
         self.x += self.dir * arrow_velocity
         self.frame = (self.frame + ARROW_FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
         if int(self.frame) == ARROW_FRAMES_PER_ACTION - 1:
