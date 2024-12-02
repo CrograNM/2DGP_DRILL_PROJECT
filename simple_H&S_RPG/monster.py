@@ -193,7 +193,7 @@ class Monster:
 
     def draw(self):
         self.state_machine.draw()
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         if self.hp != self.hp_max:
             if self.face_dir == -1:
                 self.font.draw(self.x - 7, self.y - 62, f'{self.hp}', (255, 0, 0))

@@ -12,8 +12,8 @@ from boss import Boss
 import pause_mode
 import result_mode
 
-BOSS_APPEAR_TIME = 10   # 1초 : 테스트용, 나중에 30초, 60초 등으로 설정
-MAX_MOB_COUNT = 1   # 최대 10마리까지만 스폰
+BOSS_APPEAR_TIME = 30   # 1초 : 테스트용, 나중에 30초, 60초 등으로 설정
+MAX_MOB_COUNT = 10   # 최대 10마리까지만 스폰
 
 # 전역 변수 추가
 pause_time = 0
