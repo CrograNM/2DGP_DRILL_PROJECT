@@ -6,8 +6,8 @@ HEIGHT = 720
 class Background:
     def __init__(self):
         self.image = load_image('resource/title_mode/background.png')
-        self.bgm = load_music('resource/sounds/play_mode_bgm.mp3')
-        self.bgm.set_volume(32)
+        self.bgm = load_music('resource/sounds/title_mode_bgm.mp3')
+        self.bgm.set_volume(64)
         self.bgm.repeat_play()
 
     def draw(self):
