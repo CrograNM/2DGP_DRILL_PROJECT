@@ -92,6 +92,7 @@ class Attack:
         else :
             mob.ax = mob.x + (mob.face_dir * int(mob.frame) * 12)
         if int(mob.frame) == 4 and mob.attack_count == 0:
+            mob.atk_sound.play()
             mob.monster_attack(1)
             mob.attack_count += 1
         if int(mob.frame) == FRAMES_PER_ACTION_ATTACK - 1:
@@ -133,6 +134,7 @@ animation_names = ['Run', 'Attack', 'Hit']
 
 class Monster:
     images = None
+    atk_sound = None
 
     def load_images(self):
         if Monster.images == None:
@@ -142,6 +144,10 @@ class Monster:
                 # Monster.images['Attack'] = load_image('monster_Attack.png')
 
     def __init__(self, player):
+        if not Monster.atk_sound:
+            Monster.atk_sound = load_wav('resource/sounds/mob_slap.wav')
+            Monster.atk_sound.set_volume(16)
+
         self.x, self.y = WIDTH//2 + randint(WIDTH//4,WIDTH//2), 108
         self.ax, self.ay = self.x, self.y - 20
         self.load_images()

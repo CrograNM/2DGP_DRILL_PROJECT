@@ -157,7 +157,7 @@ class Skill_bow_B:
         if Skill_bow_B.image == None:
             Skill_bow_B.image = load_image('resource/skill/skill_bow_48_48.png') #frame = 6
         self.x, self.y, self.dir = x, y, dir
-        if not Skill_bow.sound:
+        if not Skill_bow_B.sound:
             Skill_bow_B.sound = load_wav('resource/sounds/bow_shoot.wav')
             Skill_bow_B.sound.set_volume(16)
 
@@ -206,7 +206,7 @@ class Skill_bow_B_explode:
         if Skill_bow_B_explode.image == None:
             Skill_bow_B_explode.image = load_image('resource/skill/bow_B_explode.png')
         self.x, self.y, self.dir = x, y, dir
-        if not Skill_bow.sound:
+        if not Skill_bow_B_explode.sound:
             Skill_bow_B_explode.sound = load_wav('resource/sounds/bow_explode.wav')
             Skill_bow_B_explode.sound.set_volume(16)
 
@@ -251,7 +251,7 @@ class Skill_bow_C:
         if Skill_bow_C.image == None:
             Skill_bow_C.image = load_image('resource/skill/bow_C.png')
         self.x, self.y, self.dir = x, y, dir
-        if not Skill_bow.sound:
+        if not Skill_bow_C.sound:
             Skill_bow_C.sound = load_wav('resource/sounds/bow_lazer.wav')
             Skill_bow_C.sound.set_volume(16)
 
