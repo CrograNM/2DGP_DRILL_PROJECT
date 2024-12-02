@@ -20,12 +20,18 @@ arrow_velocity = 10
 # player
 class Skill_lightening:
     image = None
+    sound = None
 
     def __init__(self, x = 400, y = 300, dir = 1):
         self.frame = 0
         self.damage = 50
         if Skill_lightening.image == None:
             Skill_lightening.image = load_image('resource/skill/skill_lightening_2.png')
+
+        if not Skill_lightening.sound:
+            Skill_lightening.sound = load_wav('resource/sounds/sword_thunder.wav')
+            Skill_lightening.sound.set_volume(8)
+
         self.x, self.y, self.dir = x, y, dir
 
     def draw(self):
@@ -39,6 +45,8 @@ class Skill_lightening:
             draw_rectangle(*self.get_bb())
 
     def update(self):
+        if self.frame == 0:
+            Skill_lightening.sound.play()
         self.frame = (self.frame + LIGHTENING_FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
         if int(self.frame) == LIGHTENING_FRAMES_PER_ACTION - 1:
             game_world.remove_object(self)
