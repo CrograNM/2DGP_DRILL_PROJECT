@@ -198,6 +198,7 @@ skill_bow_explode_height = 100
 BOW_EXPLODE_FRAMES_PER_ACTION = 8
 class Skill_bow_B_explode:
     image = None
+    sound = None
     # 48 * 48, 8frame
     def __init__(self, x = 400, y = 300, dir = 1):
         self.frame = 0
@@ -205,6 +206,9 @@ class Skill_bow_B_explode:
         if Skill_bow_B_explode.image == None:
             Skill_bow_B_explode.image = load_image('resource/skill/bow_B_explode.png')
         self.x, self.y, self.dir = x, y, dir
+        if not Skill_bow.sound:
+            Skill_bow_B_explode.sound = load_wav('resource/sounds/bow_explode.wav')
+            Skill_bow_B_explode.sound.set_volume(16)
 
     def draw(self):
         if self.dir == 1:
@@ -217,6 +221,8 @@ class Skill_bow_B_explode:
             draw_rectangle(*self.get_bb())
 
     def update(self):
+        if self.frame == 0:
+            Skill_bow_B_explode.sound.play()
         self.frame = (self.frame + BOW_EXPLODE_FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
         if int(self.frame) == BOW_EXPLODE_FRAMES_PER_ACTION - 1:
             game_world.remove_object(self)
