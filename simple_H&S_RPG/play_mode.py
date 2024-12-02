@@ -47,10 +47,12 @@ def spawn_monster():
 
 def handle_events():
     events = get_events()
+    global Button_sound
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            Button_sound.play()
             game_framework.push_mode(pause_mode)
             # game_framework.change_mode(title_mode)
         else:
@@ -59,6 +61,9 @@ def handle_events():
 def init():
     global mode
     mode = 'monster'
+
+    global Button_sound
+    Button_sound = load_wav('resource/sounds/button_click.wav')
 
     server.background = Background()
     game_world.add_object(server.background, 0)

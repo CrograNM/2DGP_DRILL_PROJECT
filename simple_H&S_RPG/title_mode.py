@@ -25,6 +25,12 @@ def init():
     global sword_button, sword_A, sword_B
     global bow_button, bow_A, bow_B, bow_C
 
+    global Button_sound, start_Button_sound
+    Button_sound = load_wav('resource/sounds/button_click.wav')
+    Button_sound.set_volume(128)
+    start_Button_sound = load_wav('resource/sounds/button_start.wav')
+    start_Button_sound.set_volume(32)
+
     global sword_choose, bow_choose
     sword_choose = 'A'
     bow_choose = 'A'
@@ -96,6 +102,7 @@ def draw():
 def handle_events():
     events = get_events()
     global sword_choose, bow_choose
+    global Button_sound, start_Button_sound
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
@@ -105,23 +112,29 @@ def handle_events():
             x, y = event.x, (HEIGHT - event.y)  # Pico2D에서 y축 방향 보정
             if server.weapon == 'Sword':
                 if sword_A.is_clicked(x, y):
+                    Button_sound.play()
                     sword_choose = 'A'
                     server.weapon_ABC = 'A'
                 elif sword_B.is_clicked(x, y):
+                    Button_sound.play()
                     sword_choose = 'B'
                     server.weapon_ABC = 'B'
             elif server.weapon == 'Bow':
                 if bow_A.is_clicked(x, y):
+                    Button_sound.play()
                     bow_choose = 'A'
                     server.weapon_ABC = 'A'
                 elif bow_B.is_clicked(x, y):
+                    Button_sound.play()
                     bow_choose = 'B'
                     server.weapon_ABC = 'B'
                 elif bow_C.is_clicked(x, y):
+                    Button_sound.play()
                     bow_choose = 'C'
                     server.weapon_ABC = 'C'
 
             if start_button.is_clicked(x, y):
+                start_Button_sound.play()
                 print("Start button clicked")
                 server.kill_count = 0
                 server.spawn_boss_count = 0
@@ -133,9 +146,11 @@ def handle_events():
                 game_framework.change_mode(play_mode)
             else :
                 if sword_button.is_clicked(x, y):
+                    Button_sound.play()
                     print("Sword button clicked")
                     server.weapon = 'Sword'
                 elif bow_button.is_clicked(x, y):
+                    Button_sound.play()
                     print("Bow button clicked")
                     server.weapon = 'Bow'
 

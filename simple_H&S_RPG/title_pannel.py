@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import load_image, load_music, load_wav
 
 WIDTH = 1280
 HEIGHT = 720
@@ -6,6 +6,9 @@ HEIGHT = 720
 class Background:
     def __init__(self):
         self.image = load_image('resource/title_mode/background.png')
+        self.bgm = load_music('resource/sounds/play_mode_bgm.mp3')
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
 
     def draw(self):
         self.image.draw(WIDTH//2, HEIGHT//2)
